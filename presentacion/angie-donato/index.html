@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperturas · Angie Donato · Heurísticas y Metaheurísticas</title>
+<style>
+:root{--bg:#f0efe8;--paper:#fbfaf6;--ink:#17221c;--muted:#5c6a62;--line:#dfe3da;--green:#205b46;--accent:#3d5a98;--soft:#e7ecf7;--shadow:0 20px 65px rgba(16,30,20,.12)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+button,a{font:inherit}button{cursor:pointer}
+.topbar{max-width:1370px;margin:0 auto;padding:18px 22px 12px;display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:750;color:var(--green)}
+.brand-mark{width:37px;height:37px;display:grid;place-items:center;border-radius:10px;background:var(--green);color:#fff;font-size:15px}
+.brand small{display:block;font-weight:450;color:var(--muted);font-size:12px}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.actions button,.actions a,.methods button,.pager button{border:1px solid var(--line);border-radius:10px;padding:9px 13px;background:#fff;color:var(--ink);text-decoration:none;font-size:13px;font-weight:650}
+.actions button:hover,.actions a:hover,.methods button:hover,.pager button:hover{background:#e8eee9}
+.methods{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:1370px;margin:0 auto 15px;padding:0 20px}
+.methods button{display:flex;gap:8px;align-items:center}
+.methods button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.methods b{font-size:12px;border-radius:5px;background:rgba(0,0,0,.06);padding:2px 6px}
+.methods button[aria-selected="true"] b{background:rgba(255,255,255,.19)}
+.stage-wrap{max-width:1395px;margin:0 auto;padding:0 22px}
+.stage{width:100%;aspect-ratio:16/9;max-height:750px;min-height:590px;background:var(--paper);border:1px solid #e3e4dd;border-radius:22px;overflow:hidden;position:relative;box-shadow:var(--shadow);isolation:isolate}
+.stage::before{content:"";position:absolute;width:480px;height:480px;right:-175px;top:-205px;background:radial-gradient(circle,var(--soft),transparent 70%);z-index:-1}
+.slide{height:100%;padding:clamp(26px,4vw,61px) clamp(32px,5.5vw,88px) 35px;display:flex;flex-direction:column;gap:16px}
+.slide-meta{display:flex;align-items:center;justify-content:space-between;gap:15px;color:var(--muted);font-size:13px;font-weight:680;letter-spacing:.06em;text-transform:uppercase}
+.pill{display:inline-flex;gap:8px;align-items:center;border-radius:100px;padding:6px 13px;background:var(--soft);color:var(--accent);font-weight:780;letter-spacing:0}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.title{max-width:950px;font-size:clamp(30px,4.35vw,62px);line-height:1.05;letter-spacing:-.042em;margin:16px 0 0;font-weight:820}
+.lead{max-width:1000px;color:#394b40;font-size:clamp(17px,1.65vw,25px);line-height:1.35;margin:0}
+.slide-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.87fr);gap:clamp(20px,3vw,45px);flex:1;min-height:0;align-items:stretch;padding-top:clamp(10px,2vw,27px)}
+.bigidea{border-radius:22px;background:#e5ede6;border:1px solid #d0ded2;padding:clamp(19px,3vw,36px);display:flex;flex-direction:column;justify-content:space-between;gap:20px}
+.bigidea .mini{font-size:14px;text-transform:uppercase;letter-spacing:.09em;font-weight:800;color:var(--accent)}
+.bigidea .quote{font-weight:770;font-size:clamp(24px,2.6vw,40px);line-height:1.16;letter-spacing:-.028em}
+.bigidea .path{display:flex;gap:7px;align-items:center;flex-wrap:wrap;font-size:clamp(12px,1.2vw,17px);font-weight:800;color:var(--accent)}
+.bigidea .path span{display:inline-block;padding:8px 11px;border-radius:10px;background:#fff;min-width:36px;text-align:center}
+.detail{display:grid;grid-template-rows:repeat(3,minmax(0,1fr));gap:11px}
+.fact{border:1px solid var(--line);background:#fff;border-radius:17px;padding:clamp(12px,1.5vw,21px);display:grid;grid-template-columns:35px 1fr;gap:15px;align-items:center}
+.fact .number{height:35px;width:35px;display:grid;place-items:center;border-radius:10px;background:var(--soft);color:var(--accent);font-weight:800}
+.fact h3{margin:0 0 3px;font-size:clamp(15px,1.35vw,20px);line-height:1.13}
+.fact p{margin:0;color:#526158;font-size:clamp(12px,1.12vw,16px);line-height:1.38}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:15px;color:var(--muted);font-size:12px;font-weight:630;margin-top:auto}
+.bottom .handoff{color:var(--accent);font-size:14px;font-weight:760}
+.progress{display:flex;gap:6px}.progress i{display:block;width:30px;height:5px;border-radius:10px;background:#d5dfd6}.progress i.on{background:var(--accent)}
+.controlbar{max-width:1370px;margin:12px auto 20px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.controlbar p{font-size:13px;color:var(--muted);margin:0}
+.pager{display:flex;gap:8px;align-items:center}.pager strong{font-variant-numeric:tabular-nums;font-size:13px;min-width:50px;text-align:center}.pager button[disabled]{opacity:.3;cursor:default}
+.notes{max-width:1325px;margin:12px auto 36px;padding:20px 24px;border-radius:15px;background:#fff;border:1px solid var(--line);display:none}
+.notes.show{display:block}.notes h2{margin:0 0 5px;font-size:17px}.notes p{margin:0;color:#48564d;white-space:pre-line}
+kbd{display:inline-block;border:1px solid #cfd6ce;background:#fff;border-radius:5px;padding:0 4px;font-family:inherit}
+@media(max-width:900px){.stage{min-height:620px;aspect-ratio:auto}.slide-body{grid-template-columns:1fr;gap:12px;padding-top:7px}.bigidea{gap:9px;padding:18px}.bigidea .quote{font-size:24px}.detail{grid-template-columns:repeat(3,1fr);grid-template-rows:none}.fact{grid-template-columns:1fr;align-content:start;gap:5px;padding:11px}.fact h3{font-size:14px}.fact p{font-size:12px}.slide{padding:26px 28px 24px}.title{font-size:34px;margin:4px 0 0}.lead{font-size:17px}.bottom{font-size:11px}}
+@media(max-width:600px){.stage{min-height:795px}.slide{padding:22px 18px}.title{font-size:30px}.slide-body{grid-template-columns:1fr}.detail{grid-template-columns:1fr;grid-template-rows:repeat(3,minmax(0,1fr))}.fact{grid-template-columns:25px 1fr;gap:11px}.fact .number{width:25px;height:25px}.bigidea .quote{font-size:22px}.bottom .handoff{font-size:11px}.slide-meta{font-size:10px}.topbar{padding:12px}.methods{padding:0 10px}.methods button{font-size:12px;padding:7px 9px}}
+.stage:fullscreen{width:100vw;height:100vh;max-height:none;min-height:0;border-radius:0;border:0}
+@media print{.topbar,.methods,.controlbar,.notes{display:none!important}.stage{border:0;box-shadow:none;border-radius:0;max-height:none;min-height:0;aspect-ratio:16/9}.stage-wrap{padding:0;max-width:none}.slide{page-break-after:always}}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
+ <div class="actions">
+  <a href="../carolina/index.html">Análisis crítico · Carolina</a>
+  <a href="../angie-loango/index.html">Componentes · Angie Loango</a>
+  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
+  <button id="fullBtn" type="button">Pantalla completa (F)</button>
+ </div>
+</header>
+<nav class="methods" aria-label="Escoger algoritmo">
+ <button data-method="local" aria-selected="true"><b>A</b> Búsqueda Local</button>
+ <button data-method="tabu" aria-selected="false"><b>B</b> Búsqueda Tabú</button>
+ <button data-method="ga" aria-selected="false"><b>C</b> Algoritmo Genético</button>
+ <button data-method="aco" aria-selected="false"><b>D</b> Colonia de Hormigas</button>
+</nav>
+<main class="stage-wrap">
+ <section class="stage" id="stage" aria-live="polite">
+  <article class="slide">
+   <div class="slide-meta"><span class="pill" id="category"><span class="dot"></span> Apertura</span><span id="eyebrow">ANGIE DONATO · 3 MINUTOS</span></div>
+   <h1 class="title" id="title"></h1>
+   <p class="lead" id="lead"></p>
+   <div class="slide-body">
+    <div class="bigidea"><span class="mini" id="mini"></span><div class="quote" id="quote"></div><div class="path" id="path"></div></div>
+    <div class="detail" id="facts"></div>
+   </div>
+   <div class="bottom"><span>Optimización · Ciencia de Datos · Guion del equipo</span><span class="handoff" id="handoff"></span><span class="progress" id="progress"></span></div>
+  </article>
+ </section>
+</main>
+<div class="controlbar">
+ <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
+ <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
+</div>
+<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
+<script>
+(function () {
+ 'use strict';
+ var all={
+ local:{name:'Búsqueda Local',accent:'#3d5a98',soft:'#e7ecf7',slides:[
+ {title:'¿Por qué buscar buenas rutas sin probarlas todas?',lead:'El agente viajero busca el recorrido más corto que visite todas las ciudades y regrese al inicio.',mini:'El desafío de optimización',quote:'Una solución útil ahora puede valer más que esperar a comprobar todas las posibilidades.',path:['A','B','C','D','E','A'],facts:[['Método exacto','Busca una solución óptima con garantía, cuando se aplica al problema y termina.'],['Heurística','Busca una buena respuesta en un tiempo razonable, sin garantía de óptimo global.'],['20 ciudades','Con distancias simétricas hay 19!/2 ≈ 6 × 10¹⁶ recorridos distintos.']],notes:'Buenos días. Nos correspondió Búsqueda Local. Pensemos en el agente viajero: necesitamos visitar varias ciudades y volver al punto de partida usando la menor distancia posible. Si intentáramos comparar todas las rutas, el número crece rápidamente: con 20 ciudades, incluso fijando el inicio y considerando las rutas inversas equivalentes, hay aproximadamente seis por diez a la dieciséis opciones. Por eso diferenciamos un método exacto, que ofrece garantías de optimalidad, de una heurística, que intenta encontrar una buena solución sin revisar todas las posibilidades.'},
+ {title:'Búsqueda Local: cambiar un poco para mejorar',lead:'Parte de una solución completa y explora pequeñas modificaciones cercanas.',mini:'Origen e intuición',quote:'Como subir una montaña en la niebla: solo vemos los próximos pasos.',path:['Ruta inicial','Vecino','Mejor ruta'],facts:[['Historia','No tiene un único autor; es una familia clásica de métodos de mejora.'],['Antecedente','Croes publicó 2-opt en 1958; Lin–Kernighan desarrolló otra técnica para rutas en 1973.'],['Movimiento','Se pueden intercambiar ciudades, insertarlas o modificar aristas de una ruta.']],notes:'Búsqueda Local es una heurística de mejora: no construye todo desde cero cada vez, sino que toma una solución completa y prueba cambios pequeños. No tiene un creador único. En el agente viajero, técnicas conocidas son 2-opt, de Croes en 1958, y Lin–Kernighan, de 1973. Para imaginársela, piensen en una persona que sube una montaña con niebla: observa solamente los pasos que tiene al lado y se mueve hacia uno mejor.'},
+ {title:'Una solución, un vecindario y un límite',lead:'La Búsqueda Local mejora una trayectoria; puede detenerse antes de alcanzar el mejor recorrido posible.',mini:'Dónde encaja',quote:'Es una heurística de mejora, no una estrategia general de exploración.',path:['Una solución','Mejor vecino','Óptimo local'],facts:[['Una sola solución','En cada momento conserva una solución actual que intenta mejorar.'],['Óptimo local','Ningún movimiento del vecindario elegido mejora la solución actual.'],['Después','Una metaheurística como Tabú añade estrategias para seguir explorando.']],handoff:'Continúa Angie Loango: componentes y pseudocódigo',notes:'La gran diferencia con un algoritmo genético o con la colonia de hormigas es que la Búsqueda Local trabaja con una sola solución a la vez. Es una heurística de mejora, mientras que una metaheurística aporta reglas generales para guiar o ampliar la exploración. Su principal límite es el óptimo local: una solución mejor que todas sus vecinas, pero no necesariamente la mejor de todo el problema. Ahora Angie Loango explica la representación, la función objetivo, el vecindario y cómo funciona el algoritmo.'}
+ ]},
+ tabu:{name:'Búsqueda Tabú',accent:'#a8620a',soft:'#fbf0df',slides:[
+ {title:'La Búsqueda Local tiene un problema: puede atascarse',lead:'Cuando ningún vecino es mejor, una búsqueda local estricta se detiene, aunque existan mejores soluciones lejos de allí.',mini:'El problema que queremos superar',quote:'Para encontrar un camino mejor, a veces hay que aceptar un paso peor.',path:['37','22','23','20'],facts:[['Método exacto','Intenta llegar al óptimo con garantía, si dispone del tiempo y los recursos.'],['Heurística','Prioriza encontrar buenas soluciones sin garantizar que sean las mejores.'],['Metaheurística','Añade estrategias para explorar más allá de una mejora inmediata.']],notes:'Buenos días. Nos correspondió Búsqueda Tabú. Recordemos el problema de la Búsqueda Local: solo acepta cambios mejores, por eso puede detenerse en un óptimo local. En el ejemplo compartido, encontrar un costo 22 no implica haber alcanzado el mejor recorrido. La idea de Tabú es justamente no detenerse ahí: a veces conviene aceptar un movimiento que empeora momentáneamente para poder llegar a otra región con mejores soluciones.'},
+ {title:'Fred Glover propuso usar memoria para explorar',lead:'La Búsqueda Tabú se introdujo en 1986 como una estrategia para superar el estancamiento.',mini:'Origen e inspiración',quote:'Como salir de un laberinto recordando los caminos por donde ya pasamos.',path:['Recordar','Evitar ciclos','Explorar'],facts:[['Origen','Fred Glover, 1986.'],['Inspiración','La memoria: recordar movimientos recientes para evitar deshacerlos inmediatamente.'],['Clasificación','Metaheurística de trayectoria: avanza con una sola solución actual.']],notes:'Fred Glover propuso la Búsqueda Tabú en 1986. A diferencia de los métodos inspirados en la biología, aquí la intuición es la memoria humana: si estamos en un laberinto, recordar dónde ya estuvimos ayuda a no recorrer las mismas vueltas una y otra vez. Es una metaheurística porque guía una búsqueda local con reglas adicionales, aunque conserva una sola solución actual y la va desplazando por el espacio de posibilidades.'},
+ {title:'No olvidar lo mejor, pero sí permitir empeorar',lead:'La solución actual puede empeorar; la mejor solución encontrada se guarda aparte.',mini:'La idea central',quote:'La lista tabú evita regresar inmediatamente por el mismo movimiento.',path:['Actual','Movimiento permitido','Mejor histórica'],facts:[['Lista tabú','Memoria corta de atributos o movimientos recientes.'],['Escape','Puede aceptar un vecino peor para abandonar el óptimo local.'],['Aspiración','Una prohibición puede levantarse si el movimiento mejora el mejor resultado histórico.']],handoff:'Continúa Angie Loango: memoria y pseudocódigo',notes:'La diferencia fundamental frente a la Búsqueda Local es que Tabú no exige mejorar en todos los pasos. Escoge un movimiento permitido aunque el costo suba temporalmente. Pero si aceptara empeorar y luego devolverse, quedaría atrapada en un ciclo. Por eso usa una lista tabú que recuerda movimientos recientes. También conserva la mejor solución histórica, ya que la actual puede ser peor. Angie Loango explicará la tenencia de esa memoria, la aspiración y el pseudocódigo.'}
+ ]},
+ ga:{name:'Algoritmo Genético',accent:'#2c7a3f',soft:'#e4f2e7',slides:[
+ {title:'¿Y si buscamos con muchas soluciones a la vez?',lead:'Algunos problemas tienen tantas combinaciones que conviene explorar varias alternativas, no una sola trayectoria.',mini:'El problema de exploración',quote:'La idea no es mejorar un único recorrido, sino hacer evolucionar varias posibilidades.',path:['Población','Generación','Nueva población'],facts:[['Exacto','Un método exacto busca garantías de optimalidad, normalmente con un costo computacional mayor en problemas difíciles.'],['Heurística','Encuentra soluciones útiles sin prometer el óptimo global.'],['Metaheurística','Coordina estrategias generales para explorar soluciones y evitar el estancamiento.']],notes:'Buenos días. Nos tocó Algoritmo Genético. En problemas combinatorios como el agente viajero, probar todas las soluciones puede ser inviable. Una heurística busca respuestas útiles sin garantizar el óptimo. Un algoritmo genético va más allá de mejorar una única solución: mantiene varias al mismo tiempo y las va cambiando. Por eso es una metaheurística de tipo poblacional.'},
+ {title:'John Holland llevó la evolución a la computación',lead:'En la década de 1970 formalizó los algoritmos genéticos, inspirados en la evolución natural.',mini:'Origen e inspiración',quote:'Las soluciones mejor adaptadas tienden a dejar descendencia; aparecen combinaciones y mutaciones.',path:['Padres','Cruce','Hijos'],facts:[['Pionero','John Holland, trabajos de los años setenta y libro de 1975.'],['Inspiración','La evolución natural: selección, herencia y mutación.'],['Analogía','Cada solución es un individuo; su calidad determina su aptitud.']],notes:'El algoritmo genético fue desarrollado por John Holland en los años setenta, y su libro de 1975 ayudó a formalizarlo. Se inspira en la evolución: los individuos mejor adaptados tienen más posibilidades de reproducirse, los hijos heredan características de los padres y ocasionalmente aparecen mutaciones. En optimización, cada individuo representa una posible solución del problema y una función de aptitud mide qué tan buena es.'},
+ {title:'No sigue una ruta: hace evolucionar una población',lead:'En cada generación se seleccionan padres, se combinan y se introducen pequeños cambios para mantener diversidad.',mini:'Dónde encaja',quote:'La exploración ocurre en varias zonas del espacio de soluciones a la vez.',path:['Seleccionar','Cruzar y mutar','Evaluar'],facts:[['Población','Varias soluciones candidatas, en lugar de una sola.'],['Operadores','Selección, cruce y mutación crean nuevas soluciones.'],['Riesgo','La convergencia prematura ocurre si la población pierde diversidad muy pronto.']],handoff:'Continúa Angie Loango: genes y operadores',notes:'Aquí está la diferencia frente a Búsqueda Local y Tabú: aquellas tienen una solución actual; el Genético mantiene una población. Primero evalúa la aptitud de los individuos, luego selecciona candidatos a ser padres, los cruza para crear hijos y puede mutar algunos rasgos. Repite el proceso a lo largo de generaciones. La mutación ayuda a no quedarse con individuos demasiado parecidos. Angie Loango explicará qué son cromosomas, genes y alelos, además de los operadores de selección y cruce.'}
+ ]},
+ aco:{name:'Colonia de Hormigas',accent:'#a33a5b',soft:'#f8e6ec',slides:[
+ {title:'¿Cómo encontrar buenas rutas sin un director central?',lead:'En el agente viajero, necesitamos decidir qué ciudad visitar después y construir rutas completas.',mini:'El problema de rutas',quote:'Muchas exploraciones pequeñas pueden producir una buena solución colectiva.',path:['Ciudad','Siguiente ciudad','Ruta completa'],facts:[['Método exacto','Puede certificar el mejor recorrido, pero el número de combinaciones crece rápidamente.'],['Heurística','Aprovecha información del problema para hallar rutas prometedoras.'],['Metaheurística','Usa una estrategia de exploración que aprende de soluciones anteriores.']],notes:'Buenos días. Nos correspondió Optimización por Colonia de Hormigas. Pensemos en el agente viajero, donde debemos construir una ruta que visite varias ciudades y regrese al inicio. Si las ciudades aumentan, aparecen muchísimas combinaciones. Una heurística busca recorridos útiles sin la garantía de un método exacto. La colonia de hormigas es una metaheurística que usa múltiples agentes que construyen rutas y aprenden colectivamente de cuáles funcionaron mejor.'},
+ {title:'Marco Dorigo se inspiró en las hormigas reales',lead:'Propuso Ant System en 1992: un método inspirado en señales colectivas de feromona.',mini:'Origen e inspiración',quote:'Las hormigas dejan señales en los caminos; los recorridos favorecidos atraen a otras.',path:['Caminar','Depositar feromona','Reforzar'],facts:[['Origen','Marco Dorigo, tesis doctoral de 1992.'],['Feromona','Una señal que ayuda a conservar información sobre recorridos utilizados.'],['Evaporación','Las señales se debilitan con el tiempo y permiten olvidar caminos poco convenientes.']],notes:'La propuesta se debe a Marco Dorigo, en 1992, con una primera versión llamada Ant System. Se inspiró en las hormigas reales: al caminar dejan feromonas, sustancias químicas que influyen en las decisiones de otras hormigas. Los caminos que reciben más uso pueden quedar reforzados, mientras que la feromona de los demás se evapora. El resultado es una forma de coordinación colectiva sin un director central.'},
+ {title:'Una metaheurística poblacional y constructiva',lead:'Cada hormiga crea una solución desde cero; la colonia refuerza las aristas presentes en buenos recorridos.',mini:'Dónde encaja',quote:'No hereda rutas como el Genético: construye nuevas rutas guiada por feromona y distancia.',path:['Construir','Evaluar','Actualizar feromona'],facts:[['Poblacional','Varias hormigas crean rutas durante una iteración.'],['Constructiva','Cada hormiga elige la siguiente ciudad hasta completar la ruta.'],['Exploración','La elección es probabilística: una arista poco atractiva aún puede elegirse.']],handoff:'Continúa Angie Loango: probabilidades y feromona',notes:'A diferencia de Búsqueda Local y Tabú, que modifican una ruta existente, ACO es una metaheurística constructiva: cada hormiga va decidiendo paso a paso qué ciudad visitar. También es poblacional porque muchas hormigas producen recorridos. Y a diferencia del Algoritmo Genético, no combina dos padres; usa señales de feromona y la cercanía entre ciudades para elegir probabilísticamente el siguiente paso. Angie Loango explicará la fórmula de transición, los parámetros alfa y beta y cómo se actualiza la feromona.'}
+ ]}
+ };
+ var method='local',i=0;
+ var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
+ function render(){
+  var group=all[method],s=group.slides[i];document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
+  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
+  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
+  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='fact';var number=document.createElement('div');number.className='number';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];var p=document.createElement('p');p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
+  nodes.handoff.textContent=s.handoff||'';nodes.progress.replaceChildren();group.slides.forEach(function(_,n){var v=document.createElement('i');if(n<=i)v.className='on';nodes.progress.appendChild(v)});
+  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
+  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
+  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
+ }
+ function choose(m){if(!all[m])return;method=m;i=0;render()}
+ function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
+ function prev(){if(i>0){i--;render()}}
+ document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
+ document.getElementById('nextBtn').addEventListener('click',next);
+ document.getElementById('prevBtn').addEventListener('click',prev);
+ document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
+ document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
+ document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
+  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
+  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
+  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
+ });
+ var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash){method=hash[1];i=Number(hash[2])-1}
+ render();
+})();
+</script>
+</body>
+</html>

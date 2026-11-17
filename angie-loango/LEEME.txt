@@ -1,8 +1,0 @@
-PRESENTACION DE ANGIE LOANGO — SOLO SU PARTE
-
-1. Abre Angie_Loango_Presentacion.html con Chrome o Safari.
-2. Las cuatro pestañas corresponden a Búsqueda Local, Búsqueda Tabú, Genético y ACO.
-3. Las flechas del teclado permiten avanzar y retroceder; F activa pantalla completa.
-4. Código Python real en algoritmos.py. Ejecuta: python3 pruebas_algoritmos.py
-5. No contiene el index.html ni las secciones de los demás integrantes.
-6. El HTML es autónomo: no requiere conexión ni archivos adicionales.
