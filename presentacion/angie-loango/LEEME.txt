@@ -1,0 +1,9 @@
+Sección de Angie Loango — Componentes y pseudocódigo
+
+Abrir: presentacion/angie-loango/index.html en Chrome o Safari.
+Usa las flechas del teclado para navegar; F para pantalla completa.
+
+Los archivos loango.js, algoritmos.py y pruebas_algoritmos.py se mantienen juntos en esta carpeta. No es necesario instalarlos para presentar el HTML.
+Para comprobar los algoritmos Python: cd presentacion/angie-loango && python3 pruebas_algoritmos.py
+
+Esta carpeta es el espacio de edición de Angie Loango. Para integrar cambios, trabajar en una rama propia y abrir un Pull Request.
