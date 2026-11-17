@@ -160,10 +160,6 @@
   .closer .q { font-size: 2rem; line-height: 1; color: var(--m); font-family: Georgia, serif; }
   .closer p { margin: 0; font-size: 1.08rem; font-weight: 600; }
 
-  details.notes { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
-  details.notes summary { cursor: pointer; padding: 12px 18px; font-weight: 600; color: var(--muted); }
-  details.notes .body { padding: 0 18px 14px; border-top: 1px solid var(--border); padding-top: 12px; }
-  details.notes .body p { font-size: .95rem; }
 
   /* Ideas clave */
   .ideas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
@@ -194,15 +190,13 @@
   .faq .tags { margin-left: auto; display: flex; gap: 4px; flex: none; }
   .faq .tags .chip { font-size: .7rem; padding: 1px 7px; }
 
-  .tip { background: var(--brand-soft); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; }
-  .tip h3 { color: var(--brand); margin-bottom: 6px; font-size: 1rem; }
 
   footer { padding: 40px 0 48px; color: var(--muted); font-size: .85rem; }
 
   @media print {
     nav.sections, .timer, .faq-filter, .theme-btn { display: none !important; }
     .panel[hidden] { display: block !important; break-before: page; }
-    details.notes, .faq details { display: block; }
+    .faq details { display: block; }
     body { background: #fff; }
   }
 </style>
@@ -213,7 +207,7 @@
   <div class="wrap">
     <div class="eyebrow">Optimización · Ciencia de Datos · Universidad Externado</div>
     <h1>Heurísticas y metaheurísticas</h1>
-    <p class="muted">Búsqueda Local · Búsqueda Tabú · Algoritmo Genético · Colonia de Hormigas — análisis crítico y cierre a cargo de Carolina.</p>
+    <p class="muted">Búsqueda Local · Búsqueda Tabú · Algoritmo Genético · Colonia de Hormigas.</p>
   </div>
 </header>
 
@@ -234,23 +228,9 @@
     <header>
       <div class="eyebrow">Contexto común</div>
       <h2>Lo necesario para la expo</h2>
-      <p class="muted">El tema se sortea al inicio del turno, así que el reparto es el mismo para los cuatro: unos 14 minutos en total.</p>
     </header>
 
-    <div class="table-scroll">
-      <table>
-        <thead><tr><th>Bloque</th><th>Quién</th><th class="num">Tiempo</th><th>Criterio de la rúbrica</th></tr></thead>
-        <tbody>
-          <tr><th>Apertura: qué es, origen, dónde encaja</th><td>Angie Donato</td><td class="num">3 min</td><td>1. Fundamentos</td></tr>
-          <tr><th>Componentes y pseudocódigo</th><td>Angie Loango</td><td class="num">4 min</td><td>2. Componentes · 3. Pseudocódigo</td></tr>
-          <tr><th>Ejemplo en vivo</th><td>Andrés</td><td class="num">4.5 min</td><td>4. Ejemplo</td></tr>
-          <tr style="background:var(--brand-soft)"><th>Cierre: comparación, ventajas, limitaciones, aplicación</th><td><b>Carolina</b></td><td class="num"><b>2.5 min</b></td><td><b>5. Análisis crítico</b></td></tr>
-          <tr><th>Preguntas (modera Carolina)</th><td>Quien domine el bloque</td><td class="num">3–5 min</td><td>6. Dominio</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="grid-2" style="margin-top:14px">
+    <div class="grid-2">
       <div class="card">
         <h3>Instancia: agente viajero de 5 ciudades</h3>
         <p class="muted" style="font-size:.9rem">Distancias simétricas. Todos los tours empiezan y terminan en A. En verde, las aristas del tour óptimo <b>A‑D‑B‑E‑C‑A = 20</b> (verificado probando los 12 tours posibles).</p>
@@ -365,17 +345,6 @@
         </div>
 
         <div class="closer"><span class="q">“</span><p>Una solución puede ser la mejor entre sus vecinos sin ser la mejor de todo el problema.</p></div>
-
-        <details class="notes">
-          <summary>Notas del guion (para ensayar, no para leer)</summary>
-          <div class="body">
-            <p>“Lo que acabamos de ver resume la Búsqueda Local. <b>Ventajas:</b> es muy simple, rápida y casi no tiene parámetros. Pasamos de 37 a 22 en un solo movimiento.</p>
-            <p><b>Limitación principal:</b> se estanca en óptimos locales y el resultado depende mucho de la solución inicial. La respuesta clásica es el multi-start: correrla desde muchas soluciones iniciales distintas y quedarse con la mejor.</p>
-            <p><b>Comparación:</b> la Tabú ataca justo el problema del ejemplo. Desde 22 se movería al mejor vecino aunque sea peor (23) y usaría una memoria de movimientos prohibidos para no devolverse. El Genético y la Colonia de Hormigas trabajan con una población y exploran varias regiones a la vez, a cambio de más evaluaciones. Aun así, la Búsqueda Local casi siempre está dentro de ellos: muchas implementaciones refinan los mejores individuos o tours con 2-opt.</p>
-            <p><b>Aplicación real:</b> el 2-opt y el 3-opt se usan en ruteo de vehículos y logística de última milla para pulir rutas que construyó otra heurística. Es adecuada ahí porque las rutas cambian a diario y se necesita una respuesta en segundos.</p>
-            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
-          </div>
-        </details>
       </div>
     </div>
 
@@ -437,18 +406,6 @@
         </div>
 
         <div class="closer"><span class="q">“</span><p>Una búsqueda local con memoria: acepta empeorar un paso para no quedarse quieta, y recuerda por dónde pasó para no volver.</p></div>
-
-        <details class="notes">
-          <summary>Notas del guion (para ensayar, no para leer)</summary>
-          <div class="body">
-            <p>“El ejemplo muestra la idea central: <b>empeorar a propósito, con memoria, para salir de un óptimo local.</b></p>
-            <p><b>Ventajas:</b> es determinista, así que con la misma entrada da el mismo resultado, lo que facilita depurarla. En problemas combinatorios como horarios o ruteo suele encontrar muy buenas soluciones con relativamente pocas evaluaciones.</p>
-            <p><b>Limitaciones:</b> hay que calibrar la tenencia, el tamaño del vecindario y el criterio de parada, y los mejores valores dependen del problema. En cada iteración evalúa todo el vecindario, lo que es costoso si el vecindario es grande.</p>
-            <p><b>Comparación:</b> en el ejemplo, una búsqueda local se habría detenido en 22 en la iteración 2. La Tabú siguió y llegó a 20. El Genético y las Hormigas trabajan con una población y usan azar. La Tabú sigue una sola trayectoria, es determinista y su memoria es explícita: una lista. En el Genético la memoria está en la población y en las Hormigas en la feromona.</p>
-            <p><b>Aplicación real:</b> programación de horarios, por ejemplo de clases en universidades o turnos de enfermería. Funciona bien ahí porque las soluciones se modifican con movimientos naturales, como cambiar una clase de franja, y la lista tabú evita deshacer y rehacer los mismos cambios.</p>
-            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
-          </div>
-        </details>
       </div>
     </div>
 
@@ -509,18 +466,6 @@
         </div>
 
         <div class="closer"><span class="q">“</span><p>La fuerza del Genético es la diversidad de su población; si la pierde, pierde también su ventaja.</p></div>
-
-        <details class="notes">
-          <summary>Notas del guion (para ensayar, no para leer)</summary>
-          <div class="body">
-            <p>“En una sola generación el mejor pasó de 23 a 20 y el promedio de 29.25 a 22. Lo hizo el <b>cruce</b>: combinó el bloque B-E de un padre con el orden del otro.</p>
-            <p><b>Ventajas:</b> explora muchas regiones a la vez, no necesita derivadas ni que el problema tenga una estructura especial, y se adapta a casi cualquier codificación: binaria, permutaciones o números reales. Además se paraleliza fácil, porque cada individuo se evalúa por separado.</p>
-            <p><b>Limitaciones:</b> tiene muchos parámetros (N, pc, pm, G y el tipo de selección) y es estocástico, así que dos corridas dan resultados distintos. Puede sufrir convergencia prematura. También es costoso en evaluaciones: con 100 individuos y 500 generaciones son 50 000 evaluaciones.</p>
-            <p><b>Comparación:</b> la Búsqueda Local y la Tabú mueven una sola solución. El Genético mueve una población, y su “memoria” es la población misma. Las Hormigas también usan varias soluciones, pero construyen cada una desde cero guiadas por la feromona. El Genético, en cambio, recombina soluciones que ya existen. En la práctica se combinan: un algoritmo memético es un Genético que aplica Búsqueda Local a cada hijo.</p>
-            <p><b>Aplicación real:</b> diseño de redes y de ingeniería. Un ejemplo conocido es la antena ST5 de la NASA (2006), diseñada por un algoritmo evolutivo. Es adecuado ahí porque el espacio de diseños es enorme, la función objetivo sale de una simulación sin fórmula y no hay derivadas.</p>
-            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
-          </div>
-        </details>
       </div>
     </div>
 
@@ -583,18 +528,6 @@
         </div>
 
         <div class="closer"><span class="q">“</span><p>La evaporación hace que la colonia olvide lo que dejó de servir; el depósito, que recuerde lo que funcionó.</p></div>
-
-        <details class="notes">
-          <summary>Notas del guion (para ensayar, no para leer)</summary>
-          <div class="body">
-            <p>“En una iteración con dos hormigas, una ya encontró el óptimo, 20. Y la feromona quedó reforzando sus aristas para las hormigas que vienen.</p>
-            <p><b>Ventajas:</b> se adapta muy bien a problemas de caminos y grafos, porque construye soluciones arista por arista. Combina conocimiento del problema (η) con aprendizaje (τ). También funciona en problemas dinámicos: si una calle se cierra, la feromona de esa arista se evapora y la colonia se adapta.</p>
-            <p><b>Limitaciones:</b> tiene varios parámetros sensibles (α, β, ρ, Q, número de hormigas). Es estocástica y su convergencia puede ser lenta. Si la feromona se concentra demasiado, todas las hormigas repiten el mismo tour. Por eso existen variantes como MAX-MIN Ant System, que pone límites mínimos y máximos a τ.</p>
-            <p><b>Comparación:</b> la Búsqueda Local y la Tabú mejoran una sola solución con movimientos. ACO construye muchas soluciones nuevas en cada iteración. El Genético también es poblacional, pero recombina soluciones existentes. ACO guarda su memoria en la feromona de las aristas, no en los individuos. La memoria es distinta en cada método: la Tabú usa la lista de movimientos recientes, el Genético usa la población y ACO usa la feromona.</p>
-            <p><b>Aplicación real:</b> ruteo de vehículos y enrutamiento en redes de telecomunicaciones (AntNet). Es adecuado porque son problemas de caminos en grafos que cambian con el tiempo, y la evaporación permite olvidar rutas que dejaron de ser buenas.</p>
-            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
-          </div>
-        </details>
       </div>
     </div>
   </div>
@@ -647,11 +580,6 @@
       <h2>Preguntas frecuentes</h2>
       <p class="muted">Basadas en las 20 preguntas guía de la rúbrica. Toca una pregunta para ver la respuesta.</p>
     </header>
-
-    <div class="tip">
-      <h3>Cómo moderar</h3>
-      <p style="margin:0">Repite la pregunta en voz alta y pásala a quien domina el bloque: <b>Angie Donato</b> → definiciones y origen · <b>Angie Loango</b> → componentes y pseudocódigo · <b>Andrés</b> → números del ejemplo · <b>Carolina</b> → comparación, parámetros y aplicaciones.</p>
-    </div>
 
     <div class="faq-filter" role="group" aria-label="Filtrar preguntas">
       <button type="button" data-f="all" aria-pressed="true">Todas</button>
