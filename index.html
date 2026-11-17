@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis crítico · Metaheurísticas</title>
+<style>
+  :root {
+    --bg: #f6f7f5;
+    --surface: #ffffff;
+    --surface-2: #eef2ef;
+    --text: #1b2420;
+    --muted: #5b6862;
+    --border: #d9e0dc;
+    --brand: #00563f;
+    --brand-soft: #e3efe9;
+    --good: #1f7a4d;
+    --good-soft: #e4f3ea;
+    --bad: #a3392c;
+    --bad-soft: #f8e7e3;
+    --local: #3d5a98;  --local-soft: #e7ecf7;
+    --tabu: #a8620a;   --tabu-soft: #fbf0df;
+    --ga: #2c7a3f;     --ga-soft: #e4f2e7;
+    --aco: #a33a5b;    --aco-soft: #f8e6ec;
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111614; --surface: #1a211e; --surface-2: #222b27; --text: #e7ece9; --muted: #9aa8a1;
+      --border: #2f3a35; --brand: #6fcfa6; --brand-soft: #1d3129;
+      --good: #6fcf97; --good-soft: #1b3125; --bad: #f08a7a; --bad-soft: #3a211d;
+      --local: #93acec; --local-soft: #1f2840; --tabu: #f0b25c; --tabu-soft: #3a2c16;
+      --ga: #7fd394; --ga-soft: #1b3122; --aco: #f08bab; --aco-soft: #3a1d27;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111614; --surface: #1a211e; --surface-2: #222b27; --text: #e7ece9; --muted: #9aa8a1;
+    --border: #2f3a35; --brand: #6fcfa6; --brand-soft: #1d3129;
+    --good: #6fcf97; --good-soft: #1b3125; --bad: #f08a7a; --bad-soft: #3a211d;
+    --local: #93acec; --local-soft: #1f2840; --tabu: #f0b25c; --tabu-soft: #3a2c16;
+    --ga: #7fd394; --ga-soft: #1b3122; --aco: #f08bab; --aco-soft: #3a1d27;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  h1, h2, h3 { line-height: 1.2; margin: 0; }
+  h2 { font-size: 1.6rem; letter-spacing: -.01em; }
+  h3 { font-size: 1.1rem; }
+  p { margin: 0 0 .6em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .25em 0; }
+  .muted { color: var(--muted); }
+  .eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
+
+  /* Header + nav */
+  header.top { background: var(--surface); border-bottom: 1px solid var(--border); }
+  header.top .wrap { padding-top: 28px; padding-bottom: 20px; }
+  header.top h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); letter-spacing: -.02em; margin: 6px 0 6px; }
+  nav.sections {
+    position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(6px); border-bottom: 1px solid var(--border);
+  }
+  nav.sections .wrap { display: flex; gap: 4px; overflow-x: auto; padding-top: 8px; padding-bottom: 8px; align-items: center; }
+  nav.sections a {
+    white-space: nowrap; text-decoration: none; color: var(--muted); font-weight: 600; font-size: .92rem;
+    padding: 6px 12px; border-radius: 999px;
+  }
+  nav.sections a:hover { color: var(--text); background: var(--surface-2); }
+  nav.sections .spacer { flex: 1; }
+  .theme-btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 5px 12px; font: inherit; font-size: .85rem; cursor: pointer; white-space: nowrap; }
+
+  section.block { padding: 40px 0 8px; scroll-margin-top: 56px; }
+  section.block > .wrap > header { margin-bottom: 18px; }
+  section.block > .wrap > header p { margin-top: 6px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* Tables */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+  th, td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+  thead th { background: var(--surface-2); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+  tbody th { font-weight: 600; white-space: nowrap; }
+  td.num, th.num { text-align: center; font-variant-numeric: tabular-nums; }
+  .opt { font-weight: 700; color: var(--good); }
+
+  /* Distance matrix */
+  .matrix td, .matrix th { text-align: center; padding: 8px 10px; }
+  .matrix td.diag { color: var(--muted); }
+  .matrix td.on { background: var(--good-soft); color: var(--good); font-weight: 700; }
+
+  /* Method chips */
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: .8rem; padding: 2px 10px; border-radius: 999px; }
+  .c-local { color: var(--local); background: var(--local-soft); }
+  .c-tabu  { color: var(--tabu);  background: var(--tabu-soft); }
+  .c-ga    { color: var(--ga);    background: var(--ga-soft); }
+  .c-aco   { color: var(--aco);   background: var(--aco-soft); }
+
+  /* Carolina: tabs */
+  .tabs-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .tablist { display: flex; gap: 6px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); padding: 5px; border-radius: 999px; }
+  .tablist button {
+    border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 700; font-size: .95rem;
+    padding: 8px 16px; border-radius: 999px; cursor: pointer;
+  }
+  .tablist button:hover { color: var(--text); }
+  .tablist button[aria-selected="true"] { color: #fff; }
+  .tablist button[data-m="local"][aria-selected="true"] { background: var(--local); }
+  .tablist button[data-m="tabu"][aria-selected="true"]  { background: var(--tabu); }
+  .tablist button[data-m="ga"][aria-selected="true"]    { background: var(--ga); }
+  .tablist button[data-m="aco"][aria-selected="true"]   { background: var(--aco); }
+  :root[data-theme="dark"] .tablist button[aria-selected="true"] { color: #111; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tablist button[aria-selected="true"] { color: #111; } }
+  .kbd-hint { font-size: .8rem; color: var(--muted); }
+  kbd { font: 600 .75rem ui-monospace, monospace; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--surface); }
+
+  /* Timer */
+  .timer { margin-left: auto; display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px 6px 4px 14px; }
+  .timer .t { font: 700 1.05rem ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; min-width: 3.2em; }
+  .timer.warn .t { color: var(--tabu); }
+  .timer.over .t { color: var(--bad); }
+  .timer button { border: 0; background: var(--surface-2); color: var(--text); border-radius: 999px; padding: 5px 11px; font: inherit; font-size: .82rem; font-weight: 600; cursor: pointer; }
+
+  .panel { --m: var(--local); --m-soft: var(--local-soft); }
+  .panel[data-m="tabu"] { --m: var(--tabu); --m-soft: var(--tabu-soft); }
+  .panel[data-m="ga"]   { --m: var(--ga);   --m-soft: var(--ga-soft); }
+  .panel[data-m="aco"]  { --m: var(--aco);  --m-soft: var(--aco-soft); }
+  .panel[hidden] { display: none; }
+
+  .hero { border-left: 6px solid var(--m); background: var(--surface); border-radius: 14px; padding: 20px 22px; box-shadow: var(--shadow); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .hero .label { color: var(--m); }
+  .hero h3 { font-size: clamp(1.35rem, 3vw, 1.85rem); letter-spacing: -.01em; margin: 6px 0 12px; }
+  .stat-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .stat { background: var(--m-soft); border-radius: 10px; padding: 8px 14px; }
+  .stat b { display: block; font-size: 1.25rem; color: var(--m); font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .82rem; color: var(--muted); }
+
+  .pros h3 { color: var(--good); }
+  .cons h3 { color: var(--bad); }
+  .pros ul li::marker { content: "+  "; color: var(--good); font-weight: 700; }
+  .cons ul li::marker { content: "−  "; color: var(--bad); font-weight: 700; }
+  .card h3 { margin-bottom: 8px; }
+  .focus { background: var(--m-soft); border-color: transparent; }
+  .focus h3 { color: var(--m); }
+  .stack { display: grid; gap: 14px; margin-top: 14px; }
+
+  .closer { display: flex; gap: 12px; align-items: flex-start; border: 1px dashed var(--m); border-radius: 14px; padding: 14px 18px; background: var(--surface); }
+  .closer .q { font-size: 2rem; line-height: 1; color: var(--m); font-family: Georgia, serif; }
+  .closer p { margin: 0; font-size: 1.08rem; font-weight: 600; }
+
+  details.notes { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+  details.notes summary { cursor: pointer; padding: 12px 18px; font-weight: 600; color: var(--muted); }
+  details.notes .body { padding: 0 18px 14px; border-top: 1px solid var(--border); padding-top: 12px; }
+  details.notes .body p { font-size: .95rem; }
+
+  /* Ideas clave */
+  .ideas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+  @media (max-width: 860px) { .ideas { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .ideas { grid-template-columns: 1fr; } }
+  .idea { border-radius: 12px; padding: 14px 16px; border: 1px solid var(--border); background: var(--surface); }
+  .idea .verb { font-size: 1.2rem; font-weight: 800; }
+  .idea p { margin: 4px 0 0; font-size: .92rem; color: var(--muted); }
+
+  .cmp thead th:not(:first-child) { text-align: center; }
+  .cmp td { text-align: center; }
+  .cmp thead th.h-local { color: var(--local); } .cmp thead th.h-tabu { color: var(--tabu); }
+  .cmp thead th.h-ga { color: var(--ga); } .cmp thead th.h-aco { color: var(--aco); }
+  .cmp tbody tr:hover td, .cmp tbody tr:hover th { background: var(--surface-2); }
+
+  /* FAQ */
+  .faq-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .faq-filter button { border: 1px solid var(--border); background: var(--surface); color: var(--muted); font: inherit; font-size: .85rem; font-weight: 600; padding: 5px 12px; border-radius: 999px; cursor: pointer; }
+  .faq-filter button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: var(--surface); }
+  .faq { display: grid; gap: 8px; }
+  .faq details { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+  .faq details[hidden] { display: none; }
+  .faq summary { cursor: pointer; padding: 13px 18px; font-weight: 600; list-style: none; display: flex; gap: 10px; align-items: baseline; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::before { content: "+"; color: var(--brand); font-weight: 800; width: 1em; flex: none; }
+  .faq details[open] summary::before { content: "−"; }
+  .faq .a { padding: 0 18px 14px 46px; }
+  .faq .tags { margin-left: auto; display: flex; gap: 4px; flex: none; }
+  .faq .tags .chip { font-size: .7rem; padding: 1px 7px; }
+
+  .tip { background: var(--brand-soft); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; }
+  .tip h3 { color: var(--brand); margin-bottom: 6px; font-size: 1rem; }
+
+  footer { padding: 40px 0 48px; color: var(--muted); font-size: .85rem; }
+
+  @media print {
+    nav.sections, .timer, .faq-filter, .theme-btn { display: none !important; }
+    .panel[hidden] { display: block !important; break-before: page; }
+    details.notes, .faq details { display: block; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Optimización · Ciencia de Datos · Universidad Externado</div>
+    <h1>Heurísticas y metaheurísticas</h1>
+    <p class="muted">Búsqueda Local · Búsqueda Tabú · Algoritmo Genético · Colonia de Hormigas — análisis crítico y cierre a cargo de Carolina.</p>
+  </div>
+</header>
+
+<nav class="sections" aria-label="Secciones">
+  <div class="wrap">
+    <a href="#expo">La expo</a>
+    <a href="#carolina">Análisis crítico</a>
+    <a href="#comparacion">Comparación general</a>
+    <a href="#preguntas">Preguntas</a>
+    <span class="spacer"></span>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Cambiar tema claro u oscuro">◐ Tema</button>
+  </div>
+</nav>
+
+<!-- ============ 1. LA EXPO ============ -->
+<section class="block" id="expo">
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Contexto común</div>
+      <h2>Lo necesario para la expo</h2>
+      <p class="muted">El tema se sortea al inicio del turno, así que el reparto es el mismo para los cuatro: unos 14 minutos en total.</p>
+    </header>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Bloque</th><th>Quién</th><th class="num">Tiempo</th><th>Criterio de la rúbrica</th></tr></thead>
+        <tbody>
+          <tr><th>Apertura: qué es, origen, dónde encaja</th><td>Angie Donato</td><td class="num">3 min</td><td>1. Fundamentos</td></tr>
+          <tr><th>Componentes y pseudocódigo</th><td>Angie Loango</td><td class="num">4 min</td><td>2. Componentes · 3. Pseudocódigo</td></tr>
+          <tr><th>Ejemplo en vivo</th><td>Andrés</td><td class="num">4.5 min</td><td>4. Ejemplo</td></tr>
+          <tr style="background:var(--brand-soft)"><th>Cierre: comparación, ventajas, limitaciones, aplicación</th><td><b>Carolina</b></td><td class="num"><b>2.5 min</b></td><td><b>5. Análisis crítico</b></td></tr>
+          <tr><th>Preguntas (modera Carolina)</th><td>Quien domine el bloque</td><td class="num">3–5 min</td><td>6. Dominio</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2" style="margin-top:14px">
+      <div class="card">
+        <h3>Instancia: agente viajero de 5 ciudades</h3>
+        <p class="muted" style="font-size:.9rem">Distancias simétricas. Todos los tours empiezan y terminan en A. En verde, las aristas del tour óptimo <b>A‑D‑B‑E‑C‑A = 20</b> (verificado probando los 12 tours posibles).</p>
+        <div class="table-scroll">
+          <table class="matrix">
+            <thead><tr><th>d(i,j)</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+            <tbody>
+              <tr><th>A</th><td class="diag">–</td><td>6</td><td class="on">4</td><td class="on">2</td><td>10</td></tr>
+              <tr><th>B</th><td>6</td><td class="diag">–</td><td>7</td><td class="on">6</td><td class="on">6</td></tr>
+              <tr><th>C</th><td class="on">4</td><td>7</td><td class="diag">–</td><td>9</td><td class="on">2</td></tr>
+              <tr><th>D</th><td class="on">2</td><td class="on">6</td><td>9</td><td class="diag">–</td><td>5</td></tr>
+              <tr><th>E</th><td>10</td><td class="on">6</td><td class="on">2</td><td>5</td><td class="diag">–</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Qué obtuvo cada método en el ejemplo</h3>
+        <p class="muted" style="font-size:.9rem">Estos son los números que Carolina retoma en el cierre.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Método</th><th>Partida</th><th class="num">Mejor</th><th>¿Óptimo?</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip c-local">Local</span><br><span class="muted" style="font-size:.82rem">swap, mejor mejora</span></td><td>A‑B‑C‑D‑E‑A (37)</td><td class="num">22</td><td>No: óptimo local en 1 movimiento</td></tr>
+              <tr><td><span class="chip c-tabu">Tabú</span><br><span class="muted" style="font-size:.82rem">tenencia 2</span></td><td>A‑B‑C‑D‑E‑A (37)</td><td class="num opt">20</td><td>Sí, en la iteración 3</td></tr>
+              <tr><td><span class="chip c-ga">Genético</span><br><span class="muted" style="font-size:.82rem">1 generación, 4 individuos</span></td><td>Población, mejor 23</td><td class="num opt">20</td><td>Sí, por el cruce OX</td></tr>
+              <tr><td><span class="chip c-aco">ACO</span><br><span class="muted" style="font-size:.82rem">1 iteración, 2 hormigas</span></td><td>Feromona inicial 1</td><td class="num opt">20</td><td>Sí, la hormiga 2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. CAROLINA ============ -->
+<section class="block" id="carolina">
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Sección de Carolina · 2.5 minutos por tema</div>
+      <h2>Análisis crítico de los cuatro métodos</h2>
+      <p class="muted">Ventajas, limitaciones, comparación y aplicación real. Elige el tema que salió en el sorteo.</p>
+    </header>
+
+    <div class="tabs-bar">
+      <div class="tablist" role="tablist" aria-label="Método">
+        <button role="tab" id="tab-local" data-m="local" aria-controls="p-local" aria-selected="true">Local</button>
+        <button role="tab" id="tab-tabu" data-m="tabu" aria-controls="p-tabu" aria-selected="false" tabindex="-1">Tabú</button>
+        <button role="tab" id="tab-ga" data-m="ga" aria-controls="p-ga" aria-selected="false" tabindex="-1">Genético</button>
+        <button role="tab" id="tab-aco" data-m="aco" aria-controls="p-aco" aria-selected="false" tabindex="-1">ACO</button>
+      </div>
+      <span class="kbd-hint">Teclas <kbd>1</kbd>–<kbd>4</kbd></span>
+      <div class="timer" id="timer" aria-live="off">
+        <span class="t" id="timerText">2:30</span>
+        <button type="button" id="timerToggle">Iniciar</button>
+        <button type="button" id="timerReset" aria-label="Reiniciar cronómetro">↺</button>
+      </div>
+    </div>
+
+    <!-- ---------- A. BÚSQUEDA LOCAL ---------- -->
+    <div class="panel" id="p-local" data-m="local" role="tabpanel" aria-labelledby="tab-local">
+      <div class="hero">
+        <div class="eyebrow label">A · Búsqueda Local</div>
+        <h3>Mejora rápido, pero se detiene en el primer óptimo local.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>37 → 22</b><span>en un solo movimiento</span></div>
+          <div class="stat"><b>22</b><span>óptimo local: ahí se detiene</span></div>
+          <div class="stat"><b>20</b><span>óptimo global, que no ve</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Es sencilla de implementar.</li>
+              <li>Tiene bajo costo computacional y casi no tiene parámetros.</li>
+              <li>Mejora rápidamente una solución inicial.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Se queda atrapada en óptimos locales.</li>
+              <li>Depende mucho de la solución inicial.</li>
+              <li>No garantiza encontrar el óptimo global.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>¿Por qué se queda en un óptimo local?</h3>
+          <p>Solo acepta movimientos que <b>mejoran</b>. Desde A‑B‑C‑E‑D‑A (22), los 6 vecinos por swap cuestan entre 23 y 37: todos son peores. Para llegar a 20 habría que pasar primero por una solución peor, y el método no lo permite.</p>
+          <p style="margin:0"><b>Remedio clásico:</b> <i>multi-start</i>, es decir, correrla desde muchas soluciones iniciales y quedarse con la mejor, o usar una metaheurística.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación con los otros métodos</h3>
+            <ul>
+              <li><span class="chip c-tabu">Tabú</span> ataca justo este problema: desde 22 se movería al mejor vecino aunque sea peor (23) y usaría una memoria de movimientos prohibidos para no devolverse.</li>
+              <li><span class="chip c-ga">Genético</span> y <span class="chip c-aco">ACO</span> no siguen una sola trayectoria: trabajan con una población y exploran varias regiones a la vez, a cambio de más evaluaciones.</li>
+              <li>Aun así, casi siempre está <b>dentro</b> de ellos: muchas implementaciones refinan los mejores individuos o tours con 2-opt.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Optimización de rutas de última milla.</b> Los movimientos 2-opt y 3-opt reorganizan los recorridos que construyó otra heurística para reducir distancias y tiempos de entrega.</p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> Las rutas cambian a diario y se necesita una respuesta en segundos.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>Una solución puede ser la mejor entre sus vecinos sin ser la mejor de todo el problema.</p></div>
+
+        <details class="notes">
+          <summary>Notas del guion (para ensayar, no para leer)</summary>
+          <div class="body">
+            <p>“Lo que acabamos de ver resume la Búsqueda Local. <b>Ventajas:</b> es muy simple, rápida y casi no tiene parámetros. Pasamos de 37 a 22 en un solo movimiento.</p>
+            <p><b>Limitación principal:</b> se estanca en óptimos locales y el resultado depende mucho de la solución inicial. La respuesta clásica es el multi-start: correrla desde muchas soluciones iniciales distintas y quedarse con la mejor.</p>
+            <p><b>Comparación:</b> la Tabú ataca justo el problema del ejemplo. Desde 22 se movería al mejor vecino aunque sea peor (23) y usaría una memoria de movimientos prohibidos para no devolverse. El Genético y la Colonia de Hormigas trabajan con una población y exploran varias regiones a la vez, a cambio de más evaluaciones. Aun así, la Búsqueda Local casi siempre está dentro de ellos: muchas implementaciones refinan los mejores individuos o tours con 2-opt.</p>
+            <p><b>Aplicación real:</b> el 2-opt y el 3-opt se usan en ruteo de vehículos y logística de última milla para pulir rutas que construyó otra heurística. Es adecuada ahí porque las rutas cambian a diario y se necesita una respuesta en segundos.</p>
+            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ---------- B. BÚSQUEDA TABÚ ---------- -->
+    <div class="panel" id="p-tabu" data-m="tabu" role="tabpanel" aria-labelledby="tab-tabu" hidden>
+      <div class="hero">
+        <div class="eyebrow label">B · Búsqueda Tabú</div>
+        <h3>Empeora a propósito, con memoria, para salir del óptimo local.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>37 → 22 → 23 → 20</b><span>recorrido de la solución actual</span></div>
+          <div class="stat"><b>1</b><span>empeoramiento aceptado (22 → 23)</span></div>
+          <div class="stat"><b>Iteración 3</b><span>llega al óptimo global</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Usa memoria (la lista tabú) para evitar ciclos.</li>
+              <li>Acepta movimientos que empeoran temporalmente la solución.</li>
+              <li>Es determinista: con la misma entrada da el mismo resultado, lo que facilita depurarla.</li>
+              <li>En problemas combinatorios suele encontrar muy buenas soluciones con relativamente pocas evaluaciones.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Hay que calibrar la tenencia tabú, y el mejor valor depende del problema.</li>
+              <li>Evalúa todo el vecindario en cada iteración, lo que es costoso si el vecindario es grande.</li>
+              <li>Su rendimiento depende del tamaño del vecindario y del criterio de parada.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>La importancia de la tenencia tabú</h3>
+          <div class="grid-2" style="gap:10px">
+            <p style="margin:0"><b>Muy corta →</b> el método vuelve a ciclar. En el ejemplo, si C↔D no estuviera prohibido en la iteración 3, lo más atractivo sería devolverse a 22.</p>
+            <p style="margin:0"><b>Muy larga →</b> prohíbe demasiado y puede bloquear el camino al óptimo. Valores típicos: de 5 a 20, o alrededor de √n.</p>
+          </div>
+          <p style="margin:10px 0 0"><b>Criterio de aspiración:</b> un movimiento tabú se permite si lleva a una solución mejor que la mejor encontrada. En la iteración 3, C↔D daba 22, que no mejora el 22 ya conocido, así que siguió prohibido.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación</h3>
+            <ul>
+              <li><span class="chip c-local">Local</span> se habría detenido en 22 en la iteración 2, porque ningún vecino mejoraba. La Tabú siguió y llegó a 20.</li>
+              <li><span class="chip c-ga">Genético</span> y <span class="chip c-aco">ACO</span> trabajan con una población y usan azar. La Tabú sigue una sola trayectoria, es determinista y su memoria es <b>explícita</b>: una lista. En el Genético la memoria está en la población y en ACO en la feromona.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Horarios universitarios y turnos de enfermería.</b></p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> Las soluciones se modifican con movimientos naturales, como cambiar una clase de franja o intercambiar dos turnos, y la lista tabú evita deshacer y rehacer los mismos cambios.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>Una búsqueda local con memoria: acepta empeorar un paso para no quedarse quieta, y recuerda por dónde pasó para no volver.</p></div>
+
+        <details class="notes">
+          <summary>Notas del guion (para ensayar, no para leer)</summary>
+          <div class="body">
+            <p>“El ejemplo muestra la idea central: <b>empeorar a propósito, con memoria, para salir de un óptimo local.</b></p>
+            <p><b>Ventajas:</b> es determinista, así que con la misma entrada da el mismo resultado, lo que facilita depurarla. En problemas combinatorios como horarios o ruteo suele encontrar muy buenas soluciones con relativamente pocas evaluaciones.</p>
+            <p><b>Limitaciones:</b> hay que calibrar la tenencia, el tamaño del vecindario y el criterio de parada, y los mejores valores dependen del problema. En cada iteración evalúa todo el vecindario, lo que es costoso si el vecindario es grande.</p>
+            <p><b>Comparación:</b> en el ejemplo, una búsqueda local se habría detenido en 22 en la iteración 2. La Tabú siguió y llegó a 20. El Genético y las Hormigas trabajan con una población y usan azar. La Tabú sigue una sola trayectoria, es determinista y su memoria es explícita: una lista. En el Genético la memoria está en la población y en las Hormigas en la feromona.</p>
+            <p><b>Aplicación real:</b> programación de horarios, por ejemplo de clases en universidades o turnos de enfermería. Funciona bien ahí porque las soluciones se modifican con movimientos naturales, como cambiar una clase de franja, y la lista tabú evita deshacer y rehacer los mismos cambios.</p>
+            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ---------- C. ALGORITMO GENÉTICO ---------- -->
+    <div class="panel" id="p-ga" data-m="ga" role="tabpanel" aria-labelledby="tab-ga" hidden>
+      <div class="hero">
+        <div class="eyebrow label">C · Algoritmo Genético</div>
+        <h3>No mejora una solución: hace evolucionar una población.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>23 → 20</b><span>mejor costo en 1 generación</span></div>
+          <div class="stat"><b>29.25 → 22.0</b><span>costo promedio de la población</span></div>
+          <div class="stat"><b>Cruce OX</b><span>combinó el bloque B‑E de un padre con el orden del otro</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Explora varias regiones del espacio de búsqueda a la vez.</li>
+              <li>No necesita derivadas ni una estructura especial del problema.</li>
+              <li>Se adapta a casi cualquier codificación: binaria, permutaciones o números reales.</li>
+              <li>Se paraleliza fácil: cada individuo se evalúa por separado.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Tiene muchos parámetros: N, p<sub>c</sub>, p<sub>m</sub>, G y el tipo de selección.</li>
+              <li>Es estocástico: dos corridas dan resultados distintos.</li>
+              <li>Puede sufrir convergencia prematura.</li>
+              <li>Es costoso en evaluaciones: 100 individuos × 500 generaciones = 50 000.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>El riesgo de la convergencia prematura</h3>
+          <p>Si la población pierde diversidad muy pronto, todos los individuos se parecen, el cruce ya no produce nada nuevo y el algoritmo se estanca, a veces lejos del óptimo.</p>
+          <p style="margin:0"><b>En nuestro ejemplo ya se ve el inicio:</b> tras una sola generación, B D E C aparece dos veces en la población. Por eso importa la <b>mutación</b>, que reintroduce diversidad, junto con una población suficientemente grande y una presión de selección moderada.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación con Tabú y ACO</h3>
+            <ul>
+              <li><span class="chip c-local">Local</span> y <span class="chip c-tabu">Tabú</span> mueven una sola solución. El Genético mueve una población, y su “memoria” es la población misma.</li>
+              <li><span class="chip c-aco">ACO</span> también usa varias soluciones, pero cada hormiga construye la suya <b>desde cero</b> guiada por la feromona. El Genético <b>recombina</b> soluciones que ya existen.</li>
+              <li>En la práctica se combinan: un <b>algoritmo memético</b> es un Genético que aplica Búsqueda Local a cada hijo.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Diseño de redes y de ingeniería.</b> Ejemplo conocido: la antena ST5 de la NASA (2006), diseñada por un algoritmo evolutivo.</p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> El espacio de diseños es enorme, la función objetivo sale de una simulación sin fórmula y no hay derivadas.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>La fuerza del Genético es la diversidad de su población; si la pierde, pierde también su ventaja.</p></div>
+
+        <details class="notes">
+          <summary>Notas del guion (para ensayar, no para leer)</summary>
+          <div class="body">
+            <p>“En una sola generación el mejor pasó de 23 a 20 y el promedio de 29.25 a 22. Lo hizo el <b>cruce</b>: combinó el bloque B-E de un padre con el orden del otro.</p>
+            <p><b>Ventajas:</b> explora muchas regiones a la vez, no necesita derivadas ni que el problema tenga una estructura especial, y se adapta a casi cualquier codificación: binaria, permutaciones o números reales. Además se paraleliza fácil, porque cada individuo se evalúa por separado.</p>
+            <p><b>Limitaciones:</b> tiene muchos parámetros (N, pc, pm, G y el tipo de selección) y es estocástico, así que dos corridas dan resultados distintos. Puede sufrir convergencia prematura. También es costoso en evaluaciones: con 100 individuos y 500 generaciones son 50 000 evaluaciones.</p>
+            <p><b>Comparación:</b> la Búsqueda Local y la Tabú mueven una sola solución. El Genético mueve una población, y su “memoria” es la población misma. Las Hormigas también usan varias soluciones, pero construyen cada una desde cero guiadas por la feromona. El Genético, en cambio, recombina soluciones que ya existen. En la práctica se combinan: un algoritmo memético es un Genético que aplica Búsqueda Local a cada hijo.</p>
+            <p><b>Aplicación real:</b> diseño de redes y de ingeniería. Un ejemplo conocido es la antena ST5 de la NASA (2006), diseñada por un algoritmo evolutivo. Es adecuado ahí porque el espacio de diseños es enorme, la función objetivo sale de una simulación sin fórmula y no hay derivadas.</p>
+            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ---------- D. COLONIA DE HORMIGAS ---------- -->
+    <div class="panel" id="p-aco" data-m="aco" role="tabpanel" aria-labelledby="tab-aco" hidden>
+      <div class="hero">
+        <div class="eyebrow label">D · Colonia de Hormigas (ACO)</div>
+        <h3>Ninguna hormiga sabe la respuesta: la colonia la aprende con la feromona.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>20</b><span>la hormiga 2 halló el óptimo en la iteración 1</span></div>
+          <div class="stat"><b>0.71 → 0.79</b><span>P(A→D) en la siguiente iteración</span></div>
+          <div class="stat"><b>1.4</b><span>τ en las aristas que usaron ambas hormigas</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Es especialmente adecuado para problemas de rutas y grafos: construye soluciones arista por arista.</li>
+              <li>Combina conocimiento del problema (η) con aprendizaje (τ).</li>
+              <li>Se adapta a cambios: si una calle se cierra, la feromona de esa arista se evapora y la colonia se reorganiza.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Tiene varios parámetros sensibles: α, β, ρ, Q y el número de hormigas.</li>
+              <li>Es estocástico y su convergencia puede ser lenta.</li>
+              <li>Si la feromona se concentra demasiado, todas las hormigas repiten el mismo tour. Por eso existe MAX‑MIN Ant System, que pone límites mínimo y máximo a τ.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>Influencia de α, β y ρ</h3>
+          <div class="grid-3" style="gap:10px">
+            <p style="margin:0"><b>α (feromona).</b> Si sube, las hormigas siguen lo que funcionó antes: más explotación. Demasiado alto, todas convergen rápido a un mismo tour.</p>
+            <p style="margin:0"><b>β (distancia).</b> Si sube, pesan más las ciudades cercanas y el método se vuelve casi un vecino más cercano voraz.</p>
+            <p style="margin:0"><b>ρ (evaporación).</b> Muy grande: la colonia olvida todo y la búsqueda es casi aleatoria. Muy pequeño: los primeros caminos dominan para siempre.</p>
+          </div>
+          <p style="margin:10px 0 0">El depósito es <b>Q/L<sub>k</sub></b>: un tour más corto deposita más feromona, así la calidad de la solución se vuelve señal para las siguientes hormigas.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación con los otros métodos</h3>
+            <ul>
+              <li><span class="chip c-local">Local</span> y <span class="chip c-tabu">Tabú</span> mejoran una sola solución con movimientos. ACO <b>construye</b> muchas soluciones nuevas en cada iteración.</li>
+              <li><span class="chip c-ga">Genético</span> también es poblacional, pero recombina soluciones existentes. ACO guarda su memoria en la feromona de las aristas, no en los individuos.</li>
+              <li>La memoria es distinta en cada método: Tabú usa la lista de movimientos recientes, el Genético la población y ACO la feromona.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Ruteo de vehículos y enrutamiento en redes de telecomunicaciones</b> (AntNet).</p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> Son problemas de caminos en grafos que cambian con el tiempo, y la evaporación permite olvidar rutas que dejaron de ser buenas.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>La evaporación hace que la colonia olvide lo que dejó de servir; el depósito, que recuerde lo que funcionó.</p></div>
+
+        <details class="notes">
+          <summary>Notas del guion (para ensayar, no para leer)</summary>
+          <div class="body">
+            <p>“En una iteración con dos hormigas, una ya encontró el óptimo, 20. Y la feromona quedó reforzando sus aristas para las hormigas que vienen.</p>
+            <p><b>Ventajas:</b> se adapta muy bien a problemas de caminos y grafos, porque construye soluciones arista por arista. Combina conocimiento del problema (η) con aprendizaje (τ). También funciona en problemas dinámicos: si una calle se cierra, la feromona de esa arista se evapora y la colonia se adapta.</p>
+            <p><b>Limitaciones:</b> tiene varios parámetros sensibles (α, β, ρ, Q, número de hormigas). Es estocástica y su convergencia puede ser lenta. Si la feromona se concentra demasiado, todas las hormigas repiten el mismo tour. Por eso existen variantes como MAX-MIN Ant System, que pone límites mínimos y máximos a τ.</p>
+            <p><b>Comparación:</b> la Búsqueda Local y la Tabú mejoran una sola solución con movimientos. ACO construye muchas soluciones nuevas en cada iteración. El Genético también es poblacional, pero recombina soluciones existentes. ACO guarda su memoria en la feromona de las aristas, no en los individuos. La memoria es distinta en cada método: la Tabú usa la lista de movimientos recientes, el Genético usa la población y ACO usa la feromona.</p>
+            <p><b>Aplicación real:</b> ruteo de vehículos y enrutamiento en redes de telecomunicaciones (AntNet). Es adecuado porque son problemas de caminos en grafos que cambian con el tiempo, y la evaporación permite olvidar rutas que dejaron de ser buenas.</p>
+            <p style="margin:0">Gracias. Quedamos atentos a sus preguntas.”</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. COMPARACIÓN GENERAL ============ -->
+<section class="block" id="comparacion">
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Para responder preguntas</div>
+      <h2>Comparación general</h2>
+      <p class="muted">La idea en una línea, y luego la tabla completa.</p>
+    </header>
+
+    <div class="ideas">
+      <div class="idea" style="border-top:4px solid var(--local)"><div class="verb" style="color:var(--local)">Mejora</div><p><b>Búsqueda Local:</b> mejora una solución.</p></div>
+      <div class="idea" style="border-top:4px solid var(--tabu)"><div class="verb" style="color:var(--tabu)">Recuerda</div><p><b>Búsqueda Tabú:</b> mejora una solución utilizando memoria.</p></div>
+      <div class="idea" style="border-top:4px solid var(--ga)"><div class="verb" style="color:var(--ga)">Combina</div><p><b>Genético:</b> combina una población de soluciones.</p></div>
+      <div class="idea" style="border-top:4px solid var(--aco)"><div class="verb" style="color:var(--aco)">Construye</div><p><b>ACO:</b> construye soluciones guiadas por feromonas.</p></div>
+    </div>
+
+    <div class="table-scroll" style="margin-top:16px">
+      <table class="cmp">
+        <thead>
+          <tr><th>Característica</th><th class="h-local">Local</th><th class="h-tabu">Tabú</th><th class="h-ga">Genético</th><th class="h-aco">ACO</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Origen</th><td>Idea clásica (2-opt de Croes, 1958)</td><td>Fred Glover, 1986</td><td>John Holland, años 70 (libro de 1975)</td><td>Marco Dorigo, 1992</td></tr>
+          <tr><th>¿Heurística o metaheurística?</th><td>Heurística de mejora</td><td>Metaheurística</td><td>Metaheurística</td><td>Metaheurística</td></tr>
+          <tr><th>Tipo de búsqueda</th><td>Trayectoria (una solución)</td><td>Trayectoria (una solución)</td><td>Poblacional</td><td>Poblacional</td></tr>
+          <tr><th>Cómo genera soluciones</th><td>Movimientos sobre la actual</td><td>Movimientos + memoria</td><td>Recombina (cruce y mutación)</td><td>Construye desde cero, arista por arista</td></tr>
+          <tr><th>Memoria</th><td>No explícita</td><td>Lista tabú (corto plazo) y frecuencias (largo plazo)</td><td>La población</td><td>Feromona en las aristas</td></tr>
+          <tr><th>Usa azar</th><td>No necesariamente</td><td>No necesariamente (determinista)</td><td>Sí</td><td>Sí</td></tr>
+          <tr><th>¿Acepta soluciones peores?</th><td>No</td><td>Sí, a propósito</td><td>No como movimiento individual: los hijos pueden ser peores que los padres</td><td>Explora probabilísticamente: una arista mala no está prohibida, solo es menos probable</td></tr>
+          <tr><th>Parámetros clave</th><td>Movimiento y estrategia (primera o mejor mejora)</td><td>Tenencia, vecindario, criterio de parada</td><td>N, p<sub>c</sub>, p<sub>m</sub>, G, tipo de selección</td><td>α, β, ρ, Q, número de hormigas</td></tr>
+          <tr><th>Principal dificultad</th><td>Óptimos locales</td><td>Ajuste de parámetros; vecindario costoso</td><td>Convergencia prematura</td><td>Concentración de feromona; convergencia lenta</td></tr>
+          <tr><th>En nuestro ejemplo</th><td>22 (óptimo local)</td><td class="opt">20 en la iteración 3</td><td class="opt">20 en 1 generación</td><td class="opt">20 con la hormiga 2</td></tr>
+          <tr><th>Aplicación real</th><td>Rutas de última milla (2-opt, 3-opt)</td><td>Horarios universitarios, turnos de enfermería</td><td>Diseño de redes y antenas (NASA ST5)</td><td>Ruteo de vehículos, telecomunicaciones (AntNet)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PREGUNTAS ============ -->
+<section class="block" id="preguntas">
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Carolina modera · 3 a 5 minutos</div>
+      <h2>Preguntas frecuentes</h2>
+      <p class="muted">Basadas en las 20 preguntas guía de la rúbrica. Toca una pregunta para ver la respuesta.</p>
+    </header>
+
+    <div class="tip">
+      <h3>Cómo moderar</h3>
+      <p style="margin:0">Repite la pregunta en voz alta y pásala a quien domina el bloque: <b>Angie Donato</b> → definiciones y origen · <b>Angie Loango</b> → componentes y pseudocódigo · <b>Andrés</b> → números del ejemplo · <b>Carolina</b> → comparación, parámetros y aplicaciones.</p>
+    </div>
+
+    <div class="faq-filter" role="group" aria-label="Filtrar preguntas">
+      <button type="button" data-f="all" aria-pressed="true">Todas</button>
+      <button type="button" data-f="gen" aria-pressed="false">Generales</button>
+      <button type="button" data-f="local" aria-pressed="false">Local</button>
+      <button type="button" data-f="tabu" aria-pressed="false">Tabú</button>
+      <button type="button" data-f="ga" aria-pressed="false">Genético</button>
+      <button type="button" data-f="aco" aria-pressed="false">ACO</button>
+    </div>
+
+    <div class="faq" id="faq">
+      <details data-t="gen">
+        <summary>¿Cuál de los cuatro métodos es mejor?</summary>
+        <div class="a"><p>No existe uno universalmente mejor: depende del problema, de su representación y de los recursos disponibles. Por ejemplo, ACO encaja con problemas de caminos en grafos; el Genético con codificaciones binarias o espacios sin derivadas; la Tabú con problemas donde hay movimientos naturales, como horarios. En nuestro ejemplo los tres metaheurísticos llegaron a 20, pero con 5 ciudades eso dice poco.</p></div>
+      </details>
+      <details data-t="local tabu">
+        <summary>¿Cuál es la diferencia principal entre Búsqueda Local y Tabú?</summary>
+        <div class="a"><p>La memoria. La Tabú usa una lista para no deshacer movimientos recientes y, gracias a ella, puede aceptar soluciones temporalmente peores sin ciclar. En el ejemplo, la Local se detuvo en 22 y la Tabú pasó por 23 para llegar a 20.</p></div>
+      </details>
+      <details data-t="ga">
+        <summary>¿Por qué un algoritmo genético puede estancarse?</summary>
+        <div class="a"><p>Porque la población puede perder diversidad y concentrarse en soluciones muy parecidas: es la convergencia prematura. Si todos los padres son casi iguales, el cruce ya no genera nada nuevo. La mutación sirve para reintroducir diversidad.</p></div>
+      </details>
+      <details data-t="aco">
+        <summary>¿Qué representa la feromona en ACO?</summary>
+        <div class="a"><p>Es la memoria colectiva de la colonia: indica qué tan buenas han resultado las aristas en tours anteriores. Se refuerza en los caminos que producen buenas soluciones y se evapora en los que nadie usa.</p></div>
+      </details>
+      <details data-t="gen">
+        <summary>¿Se pueden combinar estos métodos?</summary>
+        <div class="a"><p>Sí. Los algoritmos meméticos combinan un Genético con Búsqueda Local aplicada a cada hijo. También es común que ACO refine los tours de sus hormigas con 2-opt.</p></div>
+      </details>
+      <details data-t="gen">
+        <summary>¿Cuáles trabajan con una sola solución y cuáles con una población? ¿Cuáles usan memoria?</summary>
+        <div class="a"><p><b>Una sola solución (trayectoria):</b> Búsqueda Local y Tabú. <b>Población:</b> Genético y ACO. <b>Memoria:</b> la Tabú usa la lista tabú (y frecuencias a largo plazo), el Genético usa la población y ACO la feromona. La Búsqueda Local no tiene memoria explícita.</p></div>
+      </details>
+      <details data-t="gen">
+        <summary>¿Alguno garantiza encontrar el óptimo?</summary>
+        <div class="a"><p>No. Ninguno de los cuatro lo garantiza; eso solo lo hace un método exacto. En el ejemplo sabemos que 20 es óptimo porque probamos los 12 tours posibles, pero con 20 ciudades ya hay unos 6 × 10¹⁶ tours (19!/2), así que no se puede verificar así.</p></div>
+      </details>
+      <details data-t="local">
+        <summary>¿Qué influencia tiene la solución inicial en la Búsqueda Local?</summary>
+        <div class="a"><p>Mucha: el óptimo local al que llega depende de dónde empieza. Por eso se usa el <i>multi-start</i>: correrla desde muchas soluciones iniciales distintas y quedarse con la mejor.</p></div>
+      </details>
+      <details data-t="tabu">
+        <summary>¿Qué pasa si la tenencia tabú es muy corta o muy larga?</summary>
+        <div class="a"><p>Muy corta: el método vuelve a ciclar entre las mismas soluciones. Muy larga: prohíbe demasiados movimientos y puede bloquear el camino al óptimo. Valores típicos van de 5 a 20, o alrededor de √n.</p></div>
+      </details>
+      <details data-t="tabu">
+        <summary>¿Qué es el criterio de aspiración y cuándo se aplica?</summary>
+        <div class="a"><p>Permite hacer un movimiento tabú si produce una solución mejor que la mejor encontrada hasta ahora. Existe porque la lista guarda atributos, no soluciones completas, y podría prohibir una solución nueva y buena.</p></div>
+      </details>
+      <details data-t="aco">
+        <summary>¿Qué pasa si ρ es muy grande o muy pequeño?</summary>
+        <div class="a"><p>ρ grande: la feromona se evapora casi toda, la colonia no acumula memoria y la búsqueda es casi aleatoria. ρ pequeño: los primeros caminos dominan para siempre y hay convergencia prematura.</p></div>
+      </details>
+      <details data-t="aco">
+        <summary>¿Por qué el depósito de feromona depende de la calidad de la solución?</summary>
+        <div class="a"><p>Cada hormiga deposita Q/L<sub>k</sub>: cuanto más corto su tour, más feromona deja. En el ejemplo, la hormiga 1 (tour 25) depositó 0.4 y la hormiga 2 (tour 20) depositó 0.5. Así las aristas de los buenos tours se vuelven más atractivas.</p></div>
+      </details>
+      <details data-t="ga">
+        <summary>¿Por qué se usa el cruce OX en el agente viajero?</summary>
+        <div class="a"><p>Con un cruce de un punto se pueden repetir ciudades y el hijo no sería un tour válido. OX copia un segmento de un padre y completa con las ciudades que faltan en el orden del otro padre, así que el hijo siempre es una permutación válida.</p></div>
+      </details>
+      <details data-t="ga tabu local aco">
+        <summary>Si el problema fuera la mochila, ¿qué cambia?</summary>
+        <div class="a"><p>La representación. En la mochila una solución es un vector binario (qué objetos van). Para Local y Tabú el movimiento natural es cambiar un bit; en el Genético el cromosoma es ese vector y la mutación voltea un bit. ACO, pensado originalmente para caminos en grafos, requiere adaptar qué significa la feromona (por ejemplo, sobre cada objeto).</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Exposición de Heurísticas y Metaheurísticas · Optimización, Ciencia de Datos · Universidad Externado de Colombia</div>
+</footer>
+
+<script>
+(function () {
+  // Theme toggle (remembered per browser, optional)
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = i === j;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+    try { localStorage.setItem('tab', i); } catch (e) {}
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { select((i + 1) % tabs.length, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft')  { select((i + tabs.length - 1) % tabs.length, true); e.preventDefault(); }
+    });
+  });
+  try { var st = parseInt(localStorage.getItem('tab'), 10); if (st >= 0 && st < tabs.length) select(st); } catch (e) {}
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+    var n = parseInt(e.key, 10);
+    if (n >= 1 && n <= 4) { select(n - 1); document.getElementById('carolina').scrollIntoView(); }
+  });
+
+  // 2:30 timer
+  var TOTAL = 150, left = TOTAL, id = null;
+  var box = document.getElementById('timer'), txt = document.getElementById('timerText'), btn = document.getElementById('timerToggle');
+  function draw() {
+    var neg = left < 0, s = Math.abs(left);
+    txt.textContent = (neg ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    box.classList.toggle('warn', left <= 30 && left >= 0);
+    box.classList.toggle('over', left < 0);
+  }
+  btn.addEventListener('click', function () {
+    if (id) { clearInterval(id); id = null; btn.textContent = 'Seguir'; }
+    else { id = setInterval(function () { left--; draw(); }, 1000); btn.textContent = 'Pausa'; }
+  });
+  document.getElementById('timerReset').addEventListener('click', function () {
+    clearInterval(id); id = null; left = TOTAL; btn.textContent = 'Iniciar'; draw();
+  });
+
+  // FAQ filter
+  var fbtns = document.querySelectorAll('.faq-filter button');
+  var items = document.querySelectorAll('#faq details');
+  var chipName = { gen: null, local: ['c-local', 'Local'], tabu: ['c-tabu', 'Tabú'], ga: ['c-ga', 'Genético'], aco: ['c-aco', 'ACO'] };
+  items.forEach(function (d) {
+    var tags = d.getAttribute('data-t').split(' ');
+    var holder = document.createElement('span'); holder.className = 'tags';
+    tags.forEach(function (t) { if (chipName[t]) { var c = document.createElement('span'); c.className = 'chip ' + chipName[t][0]; c.textContent = chipName[t][1]; holder.appendChild(c); } });
+    if (holder.childNodes.length) d.querySelector('summary').appendChild(holder);
+  });
+  fbtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-f');
+      fbtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      items.forEach(function (d) { d.hidden = f !== 'all' && d.getAttribute('data-t').split(' ').indexOf(f) === -1; });
+    });
+  });
+})();
+</script>
+</body>
+</html>
