@@ -1,0 +1,1290 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angie Loango | Componentes y código Python</title>
+<style>
+  /* Colores de la presentación del equipo que usa esta sección */
+  :root {
+    --local: #3d5a98; --local-soft: #e7ecf7;
+    --tabu: #a8620a;  --tabu-soft: #fbf0df;
+    --ga: #2c7a3f;    --ga-soft: #e4f2e7;
+    --aco: #a33a5b;   --aco-soft: #f8e6ec;
+    --good: #1f7a4d;  --good-soft: #e4f3ea;
+    --bad: #a3392c;   --bad-soft: #f8e7e3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: #f1f0ea; color: #16221c;
+    font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #loango { margin: 0; border: 0; min-height: 100vh; padding-top: 22px; }
+</style>
+<style>
+/* =====================================================================
+   Sección de Angie Loango: componentes y pseudocódigo
+   Diapositivas 16:9 sobre un lienzo fijo de 1600 × 900 que se escala
+   completo a la pantalla: nunca necesita desplazamiento.
+   Todo está bajo #loango con prefijo lo-. Reutiliza las variables del
+   sitio (--local, --tabu, --ga, --aco, --good, --bad).
+   ===================================================================== */
+
+#loango {
+  --lo-bg: #f1f0ea;
+  --lo-paper: #fbfaf6;
+  --lo-surface: #ffffff;
+  --lo-surface-2: #efeee7;
+  --lo-ink: #16221c;
+  --lo-ink-2: #46544c;
+  --lo-ink-3: #7d8981;
+  --lo-line: #dcddd3;
+  --lo-line-2: #e9e9e1;
+  --lo-deep: #1e4636;
+  --lo-sage: #8ca595;
+  --lo-sage-soft: #e3eae2;
+  --lo-sand: #f2e9d8;
+  --lo-sand-ink: #8a6a2f;
+  --lo-m: var(--local);
+  --lo-m-soft: var(--local-soft);
+  --lo-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --lo-math: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+  --lo-ease: cubic-bezier(.2, .7, .2, 1);
+
+  background: var(--lo-bg);
+  color: var(--lo-ink);
+  border-top: 1px solid var(--lo-line);
+  border-bottom: 1px solid var(--lo-line);
+  margin-top: 40px;
+  padding: 34px 0 30px;
+}
+#loango[data-algo="tabu"], #loango .lo-slide[data-algo="tabu"] { --lo-m: var(--tabu); --lo-m-soft: var(--tabu-soft); }
+#loango[data-algo="ga"], #loango .lo-slide[data-algo="ga"] { --lo-m: var(--ga); --lo-m-soft: var(--ga-soft); }
+#loango[data-algo="aco"], #loango .lo-slide[data-algo="aco"] { --lo-m: var(--aco); --lo-m-soft: var(--aco-soft); }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #loango {
+    --lo-bg: #131916; --lo-paper: #1a221e; --lo-surface: #212b26; --lo-surface-2: #29342f; --lo-ink: #e7ece9; --lo-ink-2: #b4c0b9;
+    --lo-ink-3: #86948c; --lo-line: #34413b; --lo-line-2: #2b3631; --lo-deep: #8fd0b0; --lo-sage: #7f9b8a; --lo-sage-soft: #24322b;
+    --lo-sand: #3a3121; --lo-sand-ink: #e2c48a;
+  }
+}
+:root[data-theme="dark"] #loango {
+  --lo-bg: #131916; --lo-paper: #1a221e; --lo-surface: #212b26; --lo-surface-2: #29342f; --lo-ink: #e7ece9; --lo-ink-2: #b4c0b9;
+  --lo-ink-3: #86948c; --lo-line: #34413b; --lo-line-2: #2b3631; --lo-deep: #8fd0b0; --lo-sage: #7f9b8a; --lo-sage-soft: #24322b;
+  --lo-sand: #3a3121; --lo-sand-ink: #e2c48a;
+}
+
+#loango *, #loango *::before, #loango *::after { box-sizing: border-box; }
+/* La hoja de la página da margen a todo li y padding a todo footer: aquí no aplica */
+#loango li { margin: 0; }
+:where(#loango) button { font: inherit; color: inherit; }
+#loango :focus-visible { outline: 2px solid var(--lo-m); outline-offset: 2px; border-radius: 8px; }
+#loango .lo-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#loango .lo-wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Encabezado y barra de control (fuera de la diapositiva) ---------- */
+.lo-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+.lo-head h2 { margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -.02em; }
+.lo-head p { margin: 0; font-size: .92rem; font-weight: 600; color: var(--lo-deep); }
+.lo-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.lo-tabs { display: flex; gap: 4px; padding: 4px; background: var(--lo-surface); border: 1px solid var(--lo-line); border-radius: 14px; }
+.lo-tab { --c: var(--local); border: 0; background: transparent; border-radius: 10px; padding: 6px 12px 6px 6px; cursor: pointer;
+  display: flex; align-items: center; gap: 9px; color: var(--lo-ink-2); font-weight: 650; font-size: .92rem; transition: background .2s; }
+.lo-tab[data-algo="tabu"] { --c: var(--tabu); } .lo-tab[data-algo="ga"] { --c: var(--ga); } .lo-tab[data-algo="aco"] { --c: var(--aco); }
+.lo-tab:hover { background: var(--lo-surface-2); }
+.lo-tab-letter { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font-size: .82rem; color: var(--c); background: color-mix(in srgb, var(--c) 13%, transparent); }
+.lo-tab[aria-selected="true"] { background: color-mix(in srgb, var(--c) 10%, var(--lo-surface)); color: var(--lo-ink); }
+.lo-tab[aria-selected="true"] .lo-tab-letter { background: var(--c); color: #fff; }
+.lo-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.lo-nav button, .lo-timer button, .lo-fullbtn { border: 1px solid var(--lo-line); background: var(--lo-surface); border-radius: 10px; height: 36px; min-width: 36px; padding: 0 12px;
+  cursor: pointer; font-weight: 650; font-size: .88rem; display: inline-grid; place-items: center; }
+.lo-nav button:hover, .lo-timer button:hover, .lo-fullbtn:hover { background: var(--lo-surface-2); }
+.lo-nav button[disabled] { opacity: .4; cursor: default; }
+.lo-nav svg { width: 15px; height: 15px; }
+.lo-count { display: flex; align-items: center; gap: 8px; font-size: .9rem; color: var(--lo-ink-2); min-width: 92px; justify-content: center; font-variant-numeric: tabular-nums; }
+.lo-count b { color: var(--lo-ink); }
+.lo-count-f { display: inline-flex; gap: 3px; }
+.lo-count-f i { width: 6px; height: 6px; border-radius: 50%; background: var(--lo-line); }
+.lo-count-f i.is-on { background: var(--lo-m); }
+.lo-timer { display: flex; align-items: center; gap: 6px; }
+.lo-timer-t { font: 700 1.05rem var(--lo-mono); font-variant-numeric: tabular-nums; min-width: 3.2em; text-align: right; }
+.lo-timer.is-warn .lo-timer-t { color: var(--tabu); }
+.lo-timer.is-over .lo-timer-t { color: var(--bad); }
+.lo-keys { margin: 10px 0 0; font-size: .78rem; color: var(--lo-ink-3); display: flex; gap: 14px; flex-wrap: wrap; }
+.lo-keys kbd { font: 600 .7rem var(--lo-mono); border: 1px solid var(--lo-line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--lo-surface); }
+
+/* ---------- Lienzo ---------- */
+.lo-viewport { margin-top: 14px; width: 100%; }
+.lo-frame { position: relative; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 2px rgba(20, 30, 25, .05), 0 18px 50px -22px rgba(20, 30, 25, .28); }
+.lo-deck { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; }
+
+/* ---------- Diapositiva (medidas en px del lienzo 1600 × 900) ---------- */
+.lo-slide { position: absolute; inset: 0; background: var(--lo-paper); padding: 48px 96px 34px; display: flex; flex-direction: column;
+  opacity: 0; visibility: hidden; transition: opacity .45s var(--lo-ease), visibility 0s .45s; }
+.lo-slide.is-current { opacity: 1; visibility: visible; transition: opacity .45s var(--lo-ease); }
+.lo-s-kicker { display: flex; align-items: center; gap: 14px; margin: 0; font-size: 24px; font-weight: 650; color: var(--lo-ink-2); }
+.lo-s-letter { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--lo-m); color: #fff; font-size: 21px; }
+.lo-s-chap { margin-left: 6px; padding-left: 20px; border-left: 2px solid var(--lo-line); color: var(--lo-m); }
+.lo-s-title { margin: 10px 0 0; font-size: 56px; font-weight: 750; letter-spacing: -.03em; line-height: 1.05; }
+.lo-s-body { flex: 1; min-height: 0; margin-top: 30px; position: relative; display: flex; flex-direction: column; gap: 28px; }
+#loango .lo-s-foot { padding: 0; }
+.lo-s-foot { display: flex; justify-content: space-between; align-items: center; font-size: 17px; color: var(--lo-ink-3); margin-top: 12px; }
+.lo-s-prog { list-style: none; margin: 0; padding: 0; display: flex; gap: 22px; }
+.lo-s-prog li { margin: 0; position: relative; padding-top: 10px; }
+.lo-s-prog li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 3px; background: var(--lo-line); }
+.lo-s-prog li.is-past::before { background: color-mix(in srgb, var(--lo-m) 45%, var(--lo-line)); }
+.lo-s-prog li.is-now { color: var(--lo-ink); font-weight: 650; }
+.lo-s-prog li.is-now::before { background: var(--lo-m); }
+
+/* Apariciones progresivas */
+.lo-slide [data-f] { opacity: 0; transform: translateY(16px); transition: opacity .5s var(--lo-ease), transform .5s var(--lo-ease); }
+.lo-slide [data-f].is-in { opacity: 1; transform: none; }
+
+/* ---------- Tarjetas ---------- */
+.lo-row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+.lo-row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.lo-c { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 24px; padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
+.lo-c.is-key { border-color: var(--lo-m); box-shadow: 0 0 0 5px var(--lo-m-soft); }
+.lo-c-vis { min-height: 104px; display: grid; place-items: center; background: var(--lo-bg); border-radius: 18px; padding: 12px; margin-bottom: 4px; }
+.lo-c-name { font-size: 29px; font-weight: 720; letter-spacing: -.02em; display: flex; align-items: center; gap: 12px; line-height: 1.15; }
+.lo-c-num { flex: none; width: 36px; height: 36px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 18px; font-weight: 700; color: var(--lo-m); background: var(--lo-m-soft); }
+.lo-c-line { margin: 0; font-size: 22px; line-height: 1.4; color: var(--lo-ink-2); }
+.lo-c-line b { color: var(--lo-ink); font-weight: 650; }
+.lo-stack { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.lo-tiny { font-size: 17px; color: var(--lo-ink-3); font-weight: 600; }
+.lo-pill { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 16px; font-size: 21px; font-weight: 650; background: var(--lo-surface-2); color: var(--lo-ink-2); white-space: nowrap; }
+.lo-pill.is-m { background: var(--lo-m-soft); color: var(--lo-m); }
+.lo-formula-sm { font: 600 22px var(--lo-mono); color: var(--lo-ink-2); }
+.lo-formula-sm.is-big { font-size: 24px; color: var(--lo-m); white-space: nowrap; }
+
+/* Genes */
+.lo-genes { display: inline-flex; gap: 7px; }
+.lo-g { width: 58px; height: 58px; border-radius: 14px; display: grid; place-items: center; font-size: 27px; font-weight: 700; background: var(--lo-surface); border: 2px solid var(--lo-line); color: var(--lo-ink); }
+.lo-genes.is-sm .lo-g { width: 50px; height: 50px; font-size: 24px; border-radius: 12px; }
+.lo-genes.is-xs .lo-g { width: 40px; height: 40px; font-size: 20px; border-radius: 10px; }
+.lo-g.is-fixed { background: var(--lo-surface-2); color: var(--lo-ink-3); border-style: dashed; }
+.lo-g.is-seg { background: var(--ga-soft); border-color: var(--ga); color: var(--ga); }
+.lo-g.is-fill { background: var(--lo-sand); border-color: var(--lo-sand-ink); color: var(--lo-sand-ink); }
+.lo-g.is-mut { background: var(--lo-m-soft); border-color: var(--lo-m); color: var(--lo-m); }
+.lo-g.is-dim { opacity: .38; }
+.lo-to { font-size: 26px; color: var(--lo-ink-3); }
+
+/* Banda inferior */
+.lo-band { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 24px; padding: 18px 26px 20px; }
+.lo-band-title { margin: 0 0 10px; font-size: 22px; font-weight: 700; color: var(--lo-m); }
+.lo-band.is-row { display: grid; grid-template-columns: 1fr 1.25fr 1.25fr; gap: 24px; align-items: stretch; padding: 22px; }
+.lo-band-lead { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 0 8px; }
+.lo-band-lead b { font-size: 31px; letter-spacing: -.02em; }
+.lo-band-lead span { font-size: 22px; color: var(--lo-ink-2); line-height: 1.4; }
+.lo-band.is-row .lo-c, .lo-row3.is-compact .lo-c { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; column-gap: 20px; row-gap: 4px; align-items: start; padding: 18px 22px; }
+.lo-band.is-row .lo-c-vis, .lo-row3.is-compact .lo-c-vis { grid-row: 1 / span 2; min-height: 0; width: 160px; height: 100%; margin: 0; padding: 8px; }
+.lo-row3.is-compact .lo-c-vis { width: 150px; }
+.lo-band.is-row .lo-c-name { font-size: 26px; }
+.lo-band.is-row .lo-c-line { font-size: 21px; }
+.lo-moves { display: grid; grid-template-columns: 1.15fr 1.15fr .85fr .9fr; gap: 22px; }
+.lo-move { display: flex; flex-direction: column; gap: 6px; font-size: 18px; white-space: nowrap; color: var(--lo-ink-2); }
+.lo-move b { font-size: 25px; color: var(--lo-ink); }
+.lo-move-vis { display: flex; align-items: center; gap: 8px; min-height: 52px; }
+.lo-move .lo-genes.is-xs .lo-g { width: 36px; height: 36px; font-size: 18px; }
+.lo-move-vis .lo-mini { width: 150px; }
+.lo-move.is-alt { padding-left: 22px; border-left: 2px dashed var(--lo-line); }
+
+/* Mini ilustraciones */
+.lo-mini { width: 100%; max-width: 230px; height: auto; display: block; overflow: visible; }
+.lo-mini-tour { fill: none; stroke: var(--lo-m); stroke-width: 4; stroke-linejoin: round; }
+.lo-mini-n { fill: var(--lo-surface); stroke: var(--lo-ink); stroke-width: 2.5; }
+.lo-mini-n.is-soft { stroke: var(--lo-sage); fill: var(--lo-sage-soft); }
+.lo-mini-n.is-m { fill: var(--lo-m); stroke: var(--lo-m); }
+.lo-mini-l { stroke: var(--lo-sage); stroke-width: 2.5; }
+.lo-mini-c { fill: var(--lo-ink); }
+.lo-mini-t { fill: var(--lo-paper); font: 700 20px system-ui, -apple-system, sans-serif; text-anchor: middle; dominant-baseline: central; }
+.lo-mini-gone { stroke: var(--bad); stroke-width: 3.5; stroke-dasharray: 3 8; stroke-linecap: round; opacity: .7; }
+.lo-mini-new { stroke: var(--lo-m); stroke-width: 4.5; }
+.lo-mini-line { fill: none; stroke: var(--lo-sage); stroke-width: 4; stroke-linejoin: round; }
+.lo-mini-up { stroke: var(--lo-m); stroke-width: 6; stroke-linecap: round; }
+.lo-mini-zone { fill: var(--lo-m-soft); stroke: var(--lo-m); stroke-width: 2; stroke-dasharray: 5 5; }
+.lo-mini-zone.is-new { fill: none; }
+.lo-mini-path { fill: none; stroke: var(--lo-deep); stroke-width: 3; stroke-dasharray: 7 6; }
+.lo-scan { display: inline-flex; gap: 8px; }
+.lo-scan i { width: 34px; height: 34px; border-radius: 9px; border: 2px solid var(--lo-line); background: transparent; opacity: .45; }
+.lo-scan i.is-seen { opacity: 1; background: var(--lo-surface); }
+.lo-scan i.is-pick { background: var(--lo-m); border-color: var(--lo-m); }
+
+/* Flujos */
+.lo-flow { width: 100%; height: auto; display: block; overflow: visible; }
+.lo-box rect { fill: var(--lo-surface); stroke: var(--lo-line); stroke-width: 2; transition: fill .4s, stroke .4s; }
+.lo-box .tt { font: 700 27px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--lo-ink); text-anchor: middle; dominant-baseline: central; letter-spacing: -.01em; }
+.lo-box .ts { font: 500 21px var(--lo-mono); fill: var(--lo-ink-2); text-anchor: middle; dominant-baseline: central; }
+.lo-box.is-key rect { fill: var(--lo-m-soft); stroke: var(--lo-m); stroke-width: 3; }
+.lo-box.is-key .ts { fill: var(--lo-m); }
+.lo-box.is-stop rect { stroke-dasharray: 6 6; }
+.lo-box.is-stop.is-on rect { fill: var(--lo-ink); stroke: var(--lo-ink); stroke-dasharray: none; }
+.lo-box.is-stop.is-on .tt { fill: var(--lo-paper); }
+.lo-arr { fill: none; stroke: var(--lo-ink-3); stroke-width: 2.5; }
+.lo-arr.is-m { stroke: var(--lo-m); stroke-width: 3; }
+.lo-ah { fill: var(--lo-ink-3); }
+.lo-ahm { fill: var(--lo-m); }
+.lo-flow-lab { font: 650 21px system-ui, -apple-system, sans-serif; fill: var(--lo-ink-2); text-anchor: middle; }
+.lo-flow-lab.is-m { fill: var(--lo-m); }
+
+/* Paisaje */
+.lo-land { width: 100%; height: auto; display: block; }
+.lo-land .ground { fill: var(--lo-sage-soft); stroke: var(--lo-sage); stroke-width: 3; }
+.lo-land .ball { fill: var(--lo-m); }
+.lo-land .flag { fill: var(--lo-deep); }
+.lo-land text { font: 650 18px system-ui, -apple-system, sans-serif; fill: var(--lo-ink-2); text-anchor: middle; }
+.lo-row3 .lo-land { max-width: 140px; }
+.lo-row3.is-compact .lo-scan { gap: 5px; } .lo-row3.is-compact .lo-scan i { width: 18px; height: 18px; border-radius: 5px; }
+
+/* ---------- Pseudocódigo ---------- */
+.lo-code-panel { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 26px; overflow: hidden; }
+.lo-code-bar { display: flex; align-items: center; gap: 14px; padding: 11px 24px; border-bottom: 1.5px solid var(--lo-line-2); font: 600 18px var(--lo-mono); color: var(--lo-ink-3); }
+.lo-dots { display: inline-flex; gap: 7px; }
+.lo-dots i { width: 12px; height: 12px; border-radius: 50%; background: var(--lo-line); }
+.lo-code { list-style: none; margin: 0; padding: 10px 0 14px; font: 500 var(--fs, 30px)/1.42 var(--lo-mono); }
+.lo-cl { display: grid; grid-template-columns: 2.6em 1fr; position: relative; padding: 0 28px 0 0; transition: background .4s, opacity .4s; }
+.lo-cn { text-align: right; padding-right: .9em; color: var(--lo-ink-3); font-size: .78em; line-height: 1.82; }
+.lo-cx { white-space: pre; color: var(--lo-ink); }
+.lo-cl.is-key::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 5px; border-radius: 0 4px 4px 0; background: color-mix(in srgb, var(--lo-m) 45%, transparent); }
+.lo-cl.is-on { background: var(--lo-m-soft); }
+.lo-cl.is-on::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--lo-m); border-radius: 0; }
+.lo-cl.is-on .lo-cn { color: var(--lo-m); font-weight: 700; }
+.lo-slide.has-focus .lo-cl:not(.is-on) .lo-cx { opacity: .45; }
+.tk-kw { color: var(--lo-deep); font-weight: 700; }
+.tk-op { color: var(--lo-m); font-weight: 700; }
+.tk-com { color: var(--lo-ink-3); font-style: italic; }
+.tk-num { color: var(--lo-sand-ink); }
+.tk-str { color: var(--lo-sand-ink); }
+.lo-code-uses { margin-left: auto; font-weight: 500; color: var(--lo-ink-3); }
+.lo-notes { display: flex; gap: 22px; }
+.lo-note { flex: 1; display: flex; align-items: center; gap: 18px; background: var(--lo-m-soft); border-radius: 20px; padding: 18px 24px; }
+.lo-note-n { flex: none; min-width: 56px; height: 46px; padding: 0 12px; border-radius: 12px; display: grid; place-items: center; background: var(--lo-m); color: #fff; font: 700 21px var(--lo-mono); }
+.lo-note p { margin: 0; font-size: 25px; line-height: 1.35; color: var(--lo-ink); }
+
+/* ---------- Idea fundamental ---------- */
+.lo-idea { flex: 1; display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; }
+.lo-idea-main { display: flex; flex-direction: column; gap: 34px; }
+.lo-idea-quote { margin: 0; font-size: 56px; font-weight: 750; letter-spacing: -.03em; line-height: 1.12; }
+.lo-idea-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.lo-idea-item { border-top: 4px solid var(--lo-line); padding-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.lo-idea-item b { font-size: 29px; letter-spacing: -.01em; }
+.lo-idea-item span { font-size: 23px; color: var(--lo-ink-2); line-height: 1.4; }
+.lo-idea-item.is-good { border-color: var(--good); }
+.lo-idea-item.is-bad { border-color: var(--bad); }
+.lo-idea-vis { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 26px; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.lo-idea-vis.is-ring { background: transparent; border: 0; padding: 0; }
+.lo-handoff { position: absolute; right: 0; bottom: 0; margin: 0; display: flex; align-items: center; gap: 14px; font-size: 24px; font-weight: 650; color: var(--lo-ink-2);
+  background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 999px; padding: 12px 24px 12px 18px; }
+.lo-handoff-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--lo-m); box-shadow: 0 0 0 6px var(--lo-m-soft); }
+.lo-legend { display: flex; gap: 28px; font-size: 21px; color: var(--lo-ink-2); }
+.lo-legend span { display: inline-flex; align-items: center; gap: 10px; }
+.lo-legend i { width: 34px; height: 0; border-top: 5px solid var(--lo-m); border-radius: 3px; }
+.lo-legend i.is-best { border-top: 4px dashed var(--lo-deep); }
+.lo-memchart { width: 100%; height: auto; display: block; }
+.lo-memchart .ax { stroke: var(--lo-line); stroke-width: 2; }
+.lo-memchart .cur { fill: none; stroke: var(--lo-m); stroke-width: 5; stroke-linejoin: round; }
+.lo-memchart .best { fill: none; stroke: var(--lo-deep); stroke-width: 4; stroke-dasharray: 10 8; }
+.lo-memchart .pt { fill: var(--lo-surface); stroke: var(--lo-m); stroke-width: 4; }
+.lo-memchart .pt.is-up { fill: var(--lo-m); }
+.lo-memchart text { font: 700 20px system-ui, -apple-system, sans-serif; fill: var(--lo-m); }
+
+/* ---------- Tabú ---------- */
+.lo-inherit { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 23px; color: var(--lo-ink-2); font-weight: 600; }
+.lo-plus { margin-left: 10px; color: var(--lo-m); font-weight: 750; font-size: 25px; }
+.lo-tl { display: flex; gap: 8px; }
+.lo-ts { min-width: 88px; height: 52px; border-radius: 12px; border: 2px dashed var(--lo-line); display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: 700 20px var(--lo-mono); color: var(--lo-ink-3); padding: 0 10px; }
+.lo-ts.is-full { border-style: solid; border-color: var(--tabu); background: var(--tabu-soft); color: var(--tabu); }
+.lo-lock { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.lo-lock rect { fill: currentColor; stroke: none; }
+.lo-scale { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.lo-scale-bar { display: grid; grid-template-columns: 1fr 1.8fr 1fr; height: 16px; border-radius: 8px; overflow: hidden; }
+.lo-scale-bar i.is-bad { background: var(--bad-soft); }
+.lo-scale-bar i.is-good { background: var(--good); opacity: .55; }
+.lo-scale-lab { display: grid; grid-template-columns: 1fr 1.8fr 1fr; font-size: 18px; color: var(--lo-ink-2); text-align: center; }
+.lo-scale-lab b { color: var(--lo-ink); font-size: 18px; white-space: nowrap; }
+
+/* ---------- Genético ---------- */
+.lo-split { flex: 1; display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
+.lo-col { display: flex; flex-direction: column; gap: 22px; }
+.lo-vocab-wrap { display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: center; background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 24px; padding: 24px; }
+.lo-pop { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 2px dashed var(--lo-sage); border-radius: 20px; }
+.lo-pop-row { display: flex; align-items: center; gap: 16px; padding: 6px; border-radius: 14px; }
+.lo-pop-row.is-hl { background: var(--lo-m-soft); }
+.lo-fit { width: 120px; height: 14px; border-radius: 7px; background: var(--lo-surface-2); overflow: hidden; display: block; }
+.lo-fit i { display: block; height: 100%; background: var(--lo-m); border-radius: 7px; }
+.lo-vocab { display: flex; flex-direction: column; gap: 20px; }
+.lo-vocab-item { display: flex; flex-direction: column; gap: 2px; padding-left: 16px; border-left: 4px solid var(--lo-sage); }
+.lo-vocab-item.is-m { border-color: var(--lo-m); }
+.lo-vocab-item b { font-size: 28px; letter-spacing: -.01em; }
+.lo-vocab-item span { font-size: 21px; color: var(--lo-ink-2); }
+.lo-code2 { display: grid; grid-template-columns: 1fr; gap: 8px; padding-top: 6px; }
+.lo-ops { display: grid; grid-template-columns: 1fr auto 1.35fr auto 1fr; gap: 18px; align-items: stretch; }
+.lo-op { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 26px; padding: 24px 26px; display: flex; flex-direction: column; gap: 16px; }
+.lo-op.is-key { border-color: var(--lo-m); box-shadow: 0 0 0 5px var(--lo-m-soft); }
+.lo-op-head { display: flex; align-items: center; gap: 12px; font-size: 31px; font-weight: 720; letter-spacing: -.02em; }
+.lo-op-arrow { align-self: center; font-size: 38px; color: var(--lo-ink-3); }
+.lo-op-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.lo-op-list li { margin: 0; font-size: 22px; color: var(--lo-ink-2); line-height: 1.35; display: flex; flex-direction: column; }
+.lo-op-list b { font-size: 25px; color: var(--lo-ink); }
+.lo-op-tags { display: flex; gap: 8px; }
+.lo-op-tags .lo-pill { font-size: 18px; padding: 4px 13px; }
+.lo-ox { display: flex; flex-direction: column; gap: 10px; }
+.lo-oxr { display: flex; align-items: center; gap: 14px; }
+.lo-oxn { width: 92px; font-size: 19px; font-weight: 650; color: var(--lo-ink-2); }
+.lo-mut { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 0; }
+.lo-to.is-down { font-size: 30px; }
+.lo-params { display: grid; grid-template-columns: repeat(4, auto) 1fr; gap: 14px; }
+.lo-param { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 18px; padding: 12px 20px; display: flex; align-items: baseline; gap: 12px; }
+.lo-param b { font: 700 25px var(--lo-mono); color: var(--lo-m); }
+.lo-param span { font-size: 20px; color: var(--lo-ink-2); }
+.lo-param.is-warn { background: var(--bad-soft); border-color: transparent; }
+.lo-param.is-warn b { font-family: inherit; font-size: 22px; color: var(--bad); }
+.lo-ring { width: 100%; max-width: 480px; height: auto; display: block; }
+.lo-ring-path { fill: none; stroke: var(--lo-m); stroke-width: 3; stroke-dasharray: 2 10; stroke-linecap: round; }
+.lo-ring-node rect { fill: var(--lo-surface); stroke: var(--lo-line); stroke-width: 2; }
+.lo-ring-node.is-key rect { fill: var(--lo-m-soft); stroke: var(--lo-m); stroke-width: 3; }
+.lo-ring-node text { font: 700 24px system-ui, -apple-system, sans-serif; fill: var(--lo-ink); text-anchor: middle; dominant-baseline: central; }
+.lo-ring-c { font: 750 30px system-ui, -apple-system, sans-serif; fill: var(--lo-m); text-anchor: middle; }
+.lo-ring-s { font: 500 21px system-ui, -apple-system, sans-serif; fill: var(--lo-ink-2); text-anchor: middle; }
+
+/* ---------- Colonia de hormigas ---------- */
+.lo-split.is-graph { grid-template-columns: 1fr 1fr; }
+.lo-graph-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 26px; padding: 26px; }
+.lo-graph { width: 100%; max-width: 500px; height: auto; display: block; overflow: visible; }
+.lo-ge { stroke: color-mix(in srgb, var(--aco) 55%, var(--lo-surface)); stroke-linecap: round; }
+.lo-ge.is-hot { stroke: var(--aco); }
+.lo-gn { fill: var(--lo-surface); stroke: var(--lo-ink); stroke-width: 3; }
+.lo-gt { font: italic 700 20px var(--lo-math); fill: var(--lo-ink); text-anchor: middle; dominant-baseline: central; }
+.lo-gl { font: italic 700 34px var(--lo-math); }
+.lo-gl.is-tau, .lo-sym.is-tau, b.is-tau, .lo-fx .is-tau { color: var(--aco); fill: var(--aco); }
+.lo-gl.is-eta, .lo-sym.is-eta, b.is-eta, .lo-fx .is-eta { color: var(--lo-deep); fill: var(--lo-deep); }
+.lo-caption { margin: 0; font-size: 20px; color: var(--lo-ink-3); text-align: center; }
+.lo-sym { font: italic 600 30px var(--lo-math); padding: 2px 14px; border-radius: 12px; background: var(--lo-bg); }
+.lo-sym sub { font-size: .6em; }
+.lo-c.is-tau-card { border-left: 8px solid var(--aco); }
+.lo-c.is-eta-card { border-left: 8px solid var(--lo-deep); }
+.lo-phases { flex: 1; display: grid; grid-template-columns: 1fr auto 1fr; gap: 22px; align-items: stretch; }
+.lo-phase { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 24px; padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; }
+.lo-phase-head { display: flex; align-items: center; gap: 14px; }
+.lo-phase-head b { display: block; font-size: 31px; letter-spacing: -.02em; }
+.lo-phase-head small { display: block; font-size: 19px; color: var(--lo-ink-3); margin-top: 2px; }
+.lo-fx { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; font-family: var(--lo-math); font-size: 40px; color: var(--lo-ink); background: var(--lo-bg); border-radius: 20px; padding: 12px 20px; }
+.lo-fx.is-sm { font-size: 32px; padding: 8px 20px; }
+.lo-fx sub, .lo-fx sup { font-size: .6em; }
+.lo-frac { display: inline-grid; text-align: center; vertical-align: middle; }
+.lo-frac > span:first-child { border-bottom: 2.5px solid currentColor; padding: 0 10px 6px; }
+.lo-frac > span:last-child { padding: 6px 10px 0; }
+.lo-ss { display: inline-flex; flex-direction: column; vertical-align: middle; font-size: .6em; line-height: 1.05; margin-left: 2px; text-align: left; }
+.lo-ss sup, .lo-ss sub { font-size: 1em; vertical-align: baseline; line-height: 1.05; }
+.lo-fx-note { font-family: system-ui, -apple-system, sans-serif; font-size: 19px; color: var(--lo-ink-3); }
+.lo-plist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.lo-plist li { margin: 0; font-size: 23px; color: var(--lo-ink-2); line-height: 1.35; }
+.lo-plist b { color: var(--lo-ink); }
+.lo-plist b.is-tau, .lo-plist b.is-eta { font-family: var(--lo-math); font-size: 28px; font-style: italic; }
+
+/* ---------- Modo presentación (pantalla completa) ---------- */
+#loango:fullscreen { margin: 0; border: 0; overflow: hidden; }
+#loango.is-present { padding: 12px 0 0; display: flex; flex-direction: column; }
+#loango.is-present .lo-wrap { max-width: none; width: 100%; padding: 0 18px; }
+#loango.is-present .lo-keys { display: none; }
+#loango.is-present .lo-viewport { margin-top: 10px; }
+#loango.is-present .lo-frame { border-radius: 10px; }
+
+@media (max-width: 760px) {
+  .lo-tab-name { display: none; }
+  .lo-tab { padding-right: 6px; }
+  .lo-keys { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #loango *, #loango *::before, #loango *::after { animation: none !important; transition: none !important; }
+}
+@media print {
+  .lo-bar, .lo-keys { display: none !important; }
+}
+.lo-c-vis > .lo-mini, .lo-c-vis .lo-stack > .lo-mini { height: 92px; width: auto; max-width: 100%; }
+.lo-row3.is-compact .lo-c-vis > .lo-land { height: 84px; width: auto; }
+.lo-band.is-row .lo-c-vis > .lo-mini { height: 80px; }
+#loango .lo-head[hidden], #loango.is-present .lo-head { display: none; }
+
+/* Código largo: notas en una columna a la derecha */
+.lo-s-body:has(> .lo-code-panel.is-side) { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: start; gap: 24px; }
+.lo-s-body:has(> .lo-code-panel.is-side) .lo-notes { flex-direction: column; }
+.lo-s-body:has(> .lo-code-panel.is-side) .lo-note { flex-direction: column; align-items: flex-start; gap: 12px; }
+.lo-code-panel.is-side .lo-code { line-height: 1.3; }
+.lo-code-panel.is-side .lo-cn { line-height: 1.67; }
+
+</style>
+</head>
+<body>
+
+<section id="loango" aria-labelledby="lo-title" data-algo="local">
+  <div class="lo-wrap">
+    <header class="lo-head">
+      <h2 id="lo-title">Componentes y código Python</h2>
+      <p>Angie Loango, 4 minutos por método</p>
+    </header>
+
+    <div class="lo-bar">
+      <div class="lo-tabs" aria-label="Método"></div>
+      <div class="lo-nav">
+        <button type="button" data-lo="prev" aria-label="Anterior">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="lo-count" data-lo="count" aria-hidden="true"></span>
+        <button type="button" data-lo="next" aria-label="Siguiente">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="lo-timer" aria-label="Cronómetro de 4 minutos">
+        <span class="lo-timer-t" data-lo="timer-text">4:00</span>
+        <button type="button" data-lo="timer-toggle">Iniciar</button>
+        <button type="button" data-lo="timer-reset" aria-label="Reiniciar cronómetro">↺</button>
+      </div>
+      <button type="button" class="lo-fullbtn" data-lo="full" aria-pressed="false">Pantalla completa</button>
+    </div>
+
+    <div class="lo-viewport">
+      <div class="lo-frame">
+        <div class="lo-deck"><noscript>Estas diapositivas necesitan JavaScript.</noscript></div>
+      </div>
+    </div>
+
+    <p class="lo-keys">
+      <span><kbd>→</kbd> <kbd>←</kbd> avanzar y retroceder</span>
+      <span><kbd>1</kbd>–<kbd>4</kbd> método</span>
+      <span><kbd>F</kbd> pantalla completa</span>
+      <span><kbd>T</kbd> cronómetro</span>
+    </p>
+    <p class="lo-sr" data-lo="live" aria-live="polite"></p>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   Sección de Angie Loango: componentes y pseudocódigo
+   Diapositivas 16:9 para proyectar. Cuatro pantallas por método:
+   Componentes, Cómo funciona, Pseudocódigo e Idea fundamental.
+   Las apariciones progresivas siguen el orden del guion.
+
+   Convivencia con el resto de la página:
+   - Todo vive dentro de #loango y usa clases lo-*.
+   - Esta sección funciona de manera autónoma, sin otras presentaciones.
+   ===================================================================== */
+(function () {
+  'use strict';
+  var root = document.getElementById('loango');
+  if (!root) return;
+
+  var W = 1600, H = 900;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var CHAPTERS = ['Componentes', 'Cómo funciona', 'Código Python', 'Idea fundamental'];
+
+  /* ---------------- Utilidades ---------------- */
+  function el(tag, attrs, kids) { var n = document.createElement(tag); set(n, attrs); add(n, kids); return n; }
+  function sv(tag, attrs, kids) { var n = document.createElementNS(SVGNS, tag); set(n, attrs); add(n, kids); return n; }
+  function set(n, a) {
+    if (!a) return;
+    Object.keys(a).forEach(function (k) {
+      var v = a[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === 'text') n.textContent = v;
+      else if (k === 'html') n.innerHTML = v;
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? '' : v);
+    });
+  }
+  function add(n, kids) {
+    if (kids === null || kids === undefined) return;
+    (Array.isArray(kids) ? kids : [kids]).forEach(function (k) {
+      if (k === null || k === undefined || k === false) return;
+      n.appendChild(typeof k === 'string' || typeof k === 'number' ? document.createTextNode(String(k)) : k);
+    });
+  }
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); return n; }
+  // Aparece en el paso f (apariciones progresivas)
+  function F(f, node) { node.setAttribute('data-f', f); return node; }
+  // Se resalta desde el paso f (sin ocultarse antes)
+  function ON(f, node) { node.setAttribute('data-on', f); return node; }
+
+  /* ---------------- Piezas visuales ---------------- */
+  function gene(c, cls) { return el('span', { class: 'lo-g ' + (cls || ''), text: c }); }
+  function genes(list, clsFn, extra) {
+    return el('span', { class: 'lo-genes ' + (extra || '') }, list.map(function (c, i) { return gene(c, clsFn ? clsFn(i, c) : ''); }));
+  }
+  function card(num, name, line, visual, extra) {
+    return el('div', { class: 'lo-c ' + (extra || '') }, [
+      visual ? el('div', { class: 'lo-c-vis' }, visual) : null,
+      el('div', { class: 'lo-c-name' }, [num ? el('span', { class: 'lo-c-num', text: num }) : null, name]),
+      el('p', { class: 'lo-c-line', html: line })
+    ]);
+  }
+  function pill(t, cls) { return el('span', { class: 'lo-pill ' + (cls || ''), html: t }); }
+  function lock() { return '<svg class="lo-lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>'; }
+
+  function svgBox(g, x, y, w, h, title, sub, cls) {
+    var b = sv('g', { class: 'lo-box ' + (cls || '') }, [sv('rect', { x: x, y: y, width: w, height: h, rx: 22 })]);
+    b.appendChild(sv('text', { class: 'tt', x: x + w / 2, y: y + (sub ? h / 2 - 14 : h / 2), text: title }));
+    if (sub) b.appendChild(sv('text', { class: 'ts', x: x + w / 2, y: y + h / 2 + 22, text: sub }));
+    g.appendChild(b);
+    return b;
+  }
+  function svgArrow(g, x1, y1, x2, y2, cls) {
+    var a = sv('line', { class: 'lo-arr ' + (cls || ''), x1: x1, y1: y1, x2: x2, y2: y2, 'marker-end': 'url(#lo-ah' + (cls && cls.indexOf('is-m') >= 0 ? 'm' : '') + ')' });
+    g.appendChild(a); return a;
+  }
+  function svgDefs(svg) {
+    svg.appendChild(sv('defs', null, [
+      sv('marker', { id: 'lo-ah', viewBox: '0 0 10 10', refX: 8.5, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' }, sv('path', { class: 'lo-ah', d: 'M0,0 L10,5 L0,10 z' })),
+      sv('marker', { id: 'lo-ahm', viewBox: '0 0 10 10', refX: 8.5, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' }, sv('path', { class: 'lo-ahm', d: 'M0,0 L10,5 L0,10 z' }))
+    ]));
+  }
+  // Las marcas de flecha se comparten por id: se definen una sola vez en la página.
+  var defsHost = sv('svg', { width: 0, height: 0, style: 'position:absolute', 'aria-hidden': 'true' });
+  svgDefs(defsHost);
+  root.appendChild(defsHost);
+
+  // Ciudades sin nombre: el esquema no adelanta el ejemplo de Andrés
+  var NODES = [[60, 150], [190, 40], [350, 70], [380, 230], [200, 290]];
+  function graph(opts) {
+    opts = opts || {};
+    var svg = sv('svg', { class: 'lo-graph', viewBox: '0 0 440 330', role: 'img', 'aria-label': opts.label || 'Esquema de ciudades y caminos' });
+    var w = opts.widths || {};
+    for (var i = 0; i < NODES.length; i++) for (var j = i + 1; j < NODES.length; j++) {
+      var k = i + '-' + j, a = NODES[i], b = NODES[j];
+      svg.appendChild(sv('line', { class: 'lo-ge ' + (opts.hot === k ? 'is-hot' : ''), x1: a[0], y1: a[1], x2: b[0], y2: b[1], style: 'stroke-width:' + (w[k] || opts.base || 2.5) }));
+    }
+    NODES.forEach(function (p, i) {
+      svg.appendChild(sv('circle', { class: 'lo-gn', cx: p[0], cy: p[1], r: 15 }));
+      if (opts.names && opts.names[i]) svg.appendChild(sv('text', { class: 'lo-gt', x: p[0], y: p[1] + 1, text: opts.names[i] }));
+    });
+    if (opts.extra) opts.extra(svg);
+    return svg;
+  }
+
+  /* ---------------- Código Python ---------------- */
+  var PY = /(#.*$)|('(?:[^'\\]|\\.)*')|\b(def|return|for|in|while|if|else|elif|not|or|and|is|None|True|False|break|lambda)\b|\b(\d+(?:\.\d+)?)\b/g;
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function highlight(line) {
+    var out = '', last = 0, m;
+    PY.lastIndex = 0;
+    while ((m = PY.exec(line))) {
+      out += esc(line.slice(last, m.index));
+      out += '<span class="' + (m[1] ? 'tk-com' : m[2] ? 'tk-str' : m[3] ? 'tk-kw' : 'tk-num') + '">' + esc(m[0]) + '</span>';
+      last = m.index + m[0].length;
+      if (!m[0].length) PY.lastIndex++;
+    }
+    return out + esc(line.slice(last));
+  }
+  // lines: código de algoritmos.py, tal cual. key: líneas importantes
+  // (siempre marcadas). marks: { línea: paso desde el que se resalta }
+  function code(lines, opts) {
+    var ol = el('ol', { class: 'lo-code', style: '--fs:' + opts.size + 'px' });
+    lines.forEach(function (src, i) {
+      var n = i + 1;
+      var li = el('li', { class: 'lo-cl' + (opts.key && opts.key.indexOf(n) >= 0 ? ' is-key' : '') }, [
+        el('span', { class: 'lo-cn', text: n }),
+        el('span', { class: 'lo-cx', html: highlight(src) || ' ' })
+      ]);
+      if (opts.marks && opts.marks[n] !== undefined) ON(opts.marks[n], li);
+      ol.appendChild(li);
+    });
+    return el('div', { class: 'lo-code-panel' + (opts.side ? ' is-side' : '') }, [
+      el('div', { class: 'lo-code-bar' }, [el('span', { class: 'lo-dots' }, [el('i'), el('i'), el('i')]), el('span', { text: opts.file }), el('span', { class: 'lo-code-uses', text: opts.uses })]),
+      ol
+    ]);
+  }
+  function notes(list) {
+    return el('div', { class: 'lo-notes' }, list.map(function (n) {
+      return F(n[0], el('div', { class: 'lo-note' }, [el('span', { class: 'lo-note-n', text: n[1] }), el('p', { html: n[2] })]));
+    }));
+  }
+  function handoff(text) { return el('p', { class: 'lo-handoff' }, [el('span', { class: 'lo-handoff-dot' }), text]); }
+
+  /* =====================================================================
+     A. BÚSQUEDA LOCAL
+     ===================================================================== */
+  function tourMini() {
+    var s = sv('svg', { viewBox: '0 0 200 120', class: 'lo-mini', 'aria-hidden': 'true' });
+    var p = [[20, 70], [70, 18], [160, 26], [182, 92], [96, 108]];
+    s.appendChild(sv('polygon', { class: 'lo-mini-tour', points: p.map(function (q) { return q.join(','); }).join(' ') }));
+    p.forEach(function (q) { s.appendChild(sv('circle', { class: 'lo-mini-n', cx: q[0], cy: q[1], r: 8 })); });
+    return s;
+  }
+  function starMini() {
+    var s = sv('svg', { viewBox: '0 0 200 120', class: 'lo-mini', 'aria-hidden': 'true' });
+    for (var i = 0; i < 6; i++) {
+      var a = -Math.PI / 2 + i * Math.PI / 3, x = 100 + 70 * Math.cos(a), y = 60 + 46 * Math.sin(a);
+      s.appendChild(sv('line', { class: 'lo-mini-l', x1: 100, y1: 60, x2: x, y2: y }));
+      s.appendChild(sv('circle', { class: 'lo-mini-n is-soft', cx: x, cy: y, r: 10 }));
+    }
+    s.appendChild(sv('circle', { class: 'lo-mini-c', cx: 100, cy: 60, r: 18 }));
+    s.appendChild(sv('text', { class: 'lo-mini-t', x: 100, y: 61, text: 'x' }));
+    return s;
+  }
+  function twoOptMini() {
+    var s = sv('svg', { viewBox: '0 0 220 110', class: 'lo-mini', 'aria-hidden': 'true' });
+    var a = [20, 25], b = [200, 25], c = [20, 85], d = [200, 85];
+    s.appendChild(sv('line', { class: 'lo-mini-gone', x1: a[0], y1: a[1], x2: d[0], y2: d[1] }));
+    s.appendChild(sv('line', { class: 'lo-mini-gone', x1: c[0], y1: c[1], x2: b[0], y2: b[1] }));
+    s.appendChild(sv('line', { class: 'lo-mini-new', x1: a[0], y1: a[1], x2: b[0], y2: b[1] }));
+    s.appendChild(sv('line', { class: 'lo-mini-new', x1: c[0], y1: c[1], x2: d[0], y2: d[1] }));
+    [a, b, c, d].forEach(function (q) { s.appendChild(sv('circle', { class: 'lo-mini-n', cx: q[0], cy: q[1], r: 8 })); });
+    return s;
+  }
+  function landscape(labels) {
+    var s = sv('svg', { viewBox: '0 0 420 200', class: 'lo-land', role: 'img', 'aria-label': 'Paisaje con un óptimo local y un óptimo global' });
+    s.appendChild(sv('path', { class: 'ground', d: 'M10,50 C60,50 70,130 115,130 C160,130 160,70 205,68 C255,66 265,175 315,175 C360,175 370,80 410,60 L410,198 L10,198 Z' }));
+    s.appendChild(sv('circle', { class: 'ball', cx: 115, cy: 116, r: 13 }));
+    s.appendChild(sv('path', { class: 'flag', d: 'M315,173 L315,132 L338,141 L315,150 Z' }));
+    if (labels !== false) {
+      s.appendChild(sv('text', { x: 115, y: 162, text: 'óptimo local' }));
+      s.appendChild(sv('text', { x: 315, y: 122, text: 'óptimo global' }));
+    }
+    return s;
+  }
+  function scanRow(upto, pick) {
+    return el('span', { class: 'lo-scan' }, [0, 1, 2, 3, 4, 5].map(function (i) {
+      return el('i', { class: (i <= upto ? 'is-seen' : '') + (i === pick ? ' is-pick' : '') });
+    }));
+  }
+
+  var LOCAL = {
+    key: 'local', letter: 'A', name: 'Búsqueda Local',
+    slides: [
+      { title: 'Las cuatro piezas', build: function (b) {
+        var row = el('div', { class: 'lo-row4' }, [
+          F(1, card('1', 'Representación', 'Cómo escribimos una solución. En la mochila, un vector binario.',
+            genes(['A', 'B', 'C', 'D', 'E', 'A'], function (i) { return i === 0 || i === 5 ? 'is-fixed' : 'is-seg'; }, 'is-sm'))),
+          F(2, card('2', 'Función objetivo', 'f(x): distancia total del tour. <b>Se minimiza.</b>', el('div', { class: 'lo-stack' }, [tourMini(), el('span', { class: 'lo-tiny', text: 'f(x) = suma de distancias' })]))),
+          F(3, card('3', 'Solución inicial', 'Aleatoria o de una heurística constructiva.', el('div', { class: 'lo-stack' }, [pill('aleatoria'), pill('vecino más cercano', 'is-m')]))),
+          F(4, card('4', 'Vecindario N(x)', 'Soluciones a <b>un movimiento</b> de x.', starMini(), 'is-key'))
+        ]);
+        var moves = F(5, el('div', { class: 'lo-band' }, [
+          el('p', { class: 'lo-band-title', text: 'El movimiento define el vecindario' }),
+          el('div', { class: 'lo-moves' }, [
+            el('div', { class: 'lo-move' }, [el('b', { text: 'Swap' }), el('div', { class: 'lo-move-vis' }, [genes(['B', 'C', 'D', 'E'], function (i) { return i === 1 || i === 3 ? 'is-mut' : ''; }, 'is-xs'), el('span', { class: 'lo-to', text: '→' }), genes(['B', 'E', 'D', 'C'], function (i) { return i === 1 || i === 3 ? 'is-mut' : ''; }, 'is-xs')]), el('span', { text: 'intercambio dos ciudades' })]),
+            el('div', { class: 'lo-move' }, [el('b', { text: 'Inserción' }), el('div', { class: 'lo-move-vis' }, [genes(['B', 'C', 'D', 'E'], function (i) { return i === 0 ? 'is-mut' : ''; }, 'is-xs'), el('span', { class: 'lo-to', text: '→' }), genes(['C', 'D', 'E', 'B'], function (i) { return i === 3 ? 'is-mut' : ''; }, 'is-xs')]), el('span', { text: 'saco una y la pongo en otra posición' })]),
+            el('div', { class: 'lo-move' }, [el('b', { text: '2-opt' }), el('div', { class: 'lo-move-vis' }, twoOptMini()), el('span', { text: 'invierto un tramo' })]),
+            el('div', { class: 'lo-move is-alt' }, [el('b', { text: 'Mochila' }), el('div', { class: 'lo-move-vis' }, [genes(['1', '0', '1'], function (i) { return i === 2 ? 'is-mut' : ''; }, 'is-xs'), el('span', { class: 'lo-to', text: '→' }), genes(['1', '0', '0'], function (i) { return i === 2 ? 'is-mut' : ''; }, 'is-xs')]), el('span', { text: 'cambio un bit' })])
+          ])
+        ]));
+        add(b, [row, moves]);
+        return 5;
+      } },
+      { title: 'Cómo interactúan las piezas', build: function (b) {
+        var svg = sv('svg', { class: 'lo-flow', viewBox: '0 0 1408 280', role: 'img', 'aria-label': 'Ciclo de la Búsqueda Local' });
+        var g = sv('g'); svg.appendChild(g);
+        svgBox(g, 0, 20, 236, 120, 'Solución actual', 'x');
+        svgArrow(g, 242, 80, 290, 80);
+        svgBox(g, 296, 20, 236, 120, 'Generar vecinos', 'N(x)');
+        svgArrow(g, 538, 80, 586, 80);
+        svgBox(g, 592, 20, 236, 120, 'Evaluar con f', "f(x')");
+        svgArrow(g, 834, 80, 882, 80);
+        svgBox(g, 888, 20, 316, 120, '¿Algún vecino mejora?', "f(x') < f(x)", 'is-key');
+        g.appendChild(sv('path', { class: 'lo-arr is-m', d: 'M1046,146 C1046,262 118,262 118,150', 'marker-end': 'url(#lo-ahm)' }));
+        g.appendChild(sv('text', { class: 'lo-flow-lab is-m', x: 582, y: 262, text: "sí: me muevo, x ← x'" }));
+        svgArrow(g, 1210, 80, 1262, 80);
+        g.appendChild(sv('text', { class: 'lo-flow-lab', x: 1236, y: 64, text: 'no' }));
+        ON(2, svgBox(g, 1268, 38, 140, 84, 'Parar', null, 'is-stop'));
+        var band = el('div', { class: 'lo-row3 is-compact' }, [
+          F(1, card(null, 'Primera mejora', 'Tomo el primer vecino que mejore. <b>Pasos más rápidos.</b>', scanRow(1, 1))),
+          F(1, card(null, 'Mejor mejora', 'Evalúo todo N(x) y tomo el mejor. <b>Avance más grande.</b>', scanRow(5, 4))),
+          F(2, card(null, 'Criterio de parada', 'Ningún vecino mejora: <b>óptimo local</b>. Puede no ser el global.', landscape(false), 'is-key'))
+        ]);
+        add(b, [svg, band]);
+        return 2;
+      } },
+      { title: 'Implementación en Python', build: function (b) {
+        add(b, [
+          code([
+            "def busqueda_local(x, primera_mejora=False):",
+            "    while True:",
+            "        mejor, f_mejor = None, costo(x)",
+            "        for v, _ in vecinos_swap(x):",
+            "            if costo(v) < f_mejor:",
+            "                mejor, f_mejor = v, costo(v)",
+            "                if primera_mejora:",
+            "                    break  # el primero que mejore",
+            "        if mejor is None:",
+            "            return x  # ningún vecino mejora: óptimo local",
+            "        x = mejor  # solo aceptamos movimientos que mejoran"
+          ], { file: 'algoritmos.py', uses: 'usa costo() y vecinos_swap()', lang: 'py', size: 28, key: [5, 9, 10, 11], marks: { 5: 1, 11: 1 } }),
+          notes([[1, '5 y 11', 'La condición clave: <b>solo aceptamos movimientos que mejoran</b>.']])
+        ]);
+        return 1;
+      } },
+      { title: 'Idea fundamental', build: function (b) {
+        add(b, el('div', { class: 'lo-idea' }, [
+          el('div', { class: 'lo-idea-main' }, [
+            el('p', { class: 'lo-idea-quote', text: 'Solo acepta movimientos que mejoran.' }),
+            el('div', { class: 'lo-idea-pair' }, [
+              F(1, el('div', { class: 'lo-idea-item is-good' }, [el('b', { text: 'Por eso es rápida' }), el('span', { text: 'Cada paso baja el costo.' })])),
+              F(1, el('div', { class: 'lo-idea-item is-bad' }, [el('b', { text: 'Y esa es su debilidad' }), el('span', { text: 'Se detiene en el primer óptimo local.' })]))
+            ])
+          ]),
+          el('div', { class: 'lo-idea-vis' }, landscape())
+        ]));
+        add(b, F(2, handoff('Ahora, el ejemplo en vivo con Andrés')));
+        return 2;
+      } }
+    ]
+  };
+
+  /* =====================================================================
+     B. BÚSQUEDA TABÚ
+     ===================================================================== */
+  function worseMini() {
+    var s = sv('svg', { viewBox: '0 0 220 110', class: 'lo-mini', 'aria-hidden': 'true' });
+    s.appendChild(sv('polyline', { class: 'lo-mini-line', points: '10,20 70,80 120,62 200,96' }));
+    s.appendChild(sv('line', { class: 'lo-mini-up', x1: 70, y1: 80, x2: 120, y2: 62 }));
+    [[10, 20], [70, 80], [120, 62], [200, 96]].forEach(function (q, i) { s.appendChild(sv('circle', { class: 'lo-mini-n' + (i === 2 ? ' is-m' : ''), cx: q[0], cy: q[1], r: 7 })); });
+    return s;
+  }
+  function tabuList() {
+    return el('div', { class: 'lo-tl' }, [
+      el('span', { class: 'lo-ts is-full', html: lock() + 'C↔D' }),
+      el('span', { class: 'lo-ts is-full', html: lock() + '···' }),
+      el('span', { class: 'lo-ts', text: 'libre' })
+    ]);
+  }
+  function tenureScale() {
+    return el('div', { class: 'lo-scale' }, [
+      el('div', { class: 'lo-scale-bar' }, [el('i', { class: 'is-bad' }), el('i', { class: 'is-good' }), el('i', { class: 'is-bad' })]),
+      el('div', { class: 'lo-scale-lab' }, [el('span', { text: 'cicla' }), el('b', { text: '5 a 20 o √n' }), el('span', { text: 'bloquea' })])
+    ]);
+  }
+  function clusterMini(mode) {
+    var s = sv('svg', { viewBox: '0 0 220 110', class: 'lo-mini', 'aria-hidden': 'true' });
+    if (mode === 'in') {
+      s.appendChild(sv('circle', { class: 'lo-mini-zone', cx: 110, cy: 55, r: 44 }));
+      [[96, 46], [118, 40], [128, 62], [104, 70], [86, 60], [112, 56]].forEach(function (q, i) { s.appendChild(sv('circle', { class: 'lo-mini-n' + (i === 5 ? ' is-m' : ''), cx: q[0], cy: q[1], r: 6 })); });
+    } else {
+      s.appendChild(sv('circle', { class: 'lo-mini-zone', cx: 50, cy: 55, r: 32 }));
+      [[44, 48], [58, 62], [40, 64]].forEach(function (q) { s.appendChild(sv('circle', { class: 'lo-mini-n', cx: q[0], cy: q[1], r: 6 })); });
+      s.appendChild(sv('path', { class: 'lo-mini-path', d: 'M86,50 C120,20 150,20 172,44' }));
+      s.appendChild(sv('circle', { class: 'lo-mini-zone is-new', cx: 180, cy: 62, r: 26 }));
+      s.appendChild(sv('circle', { class: 'lo-mini-n is-m', cx: 180, cy: 62, r: 7 }));
+    }
+    return s;
+  }
+  function memoryChart() {
+    var s = sv('svg', { viewBox: '0 0 520 260', class: 'lo-memchart', role: 'img', 'aria-label': 'La solución actual sube y baja; la mejor encontrada nunca empeora' });
+    s.appendChild(sv('line', { class: 'ax', x1: 30, y1: 230, x2: 510, y2: 230 }));
+    s.appendChild(sv('polyline', { class: 'best', points: '40,40 140,40 140,170 380,170 380,205 500,205' }));
+    s.appendChild(sv('polyline', { class: 'cur', points: '40,40 140,170 260,130 380,205 500,180' }));
+    [[40, 40], [140, 170], [260, 130], [380, 205], [500, 180]].forEach(function (q, i) { s.appendChild(sv('circle', { class: 'pt' + (i === 2 || i === 4 ? ' is-up' : ''), cx: q[0], cy: q[1], r: 9 })); });
+    s.appendChild(sv('text', { x: 268, y: 112, text: 'acepta empeorar' }));
+    return s;
+  }
+
+  var TABU = {
+    key: 'tabu', letter: 'B', name: 'Búsqueda Tabú',
+    slides: [
+      { title: 'Lo que agrega a la Búsqueda Local', build: function (b) {
+        var base = el('div', { class: 'lo-inherit' }, [el('span', { text: 'Conserva' }), pill('representación'), pill('función objetivo'), pill('vecindario'), el('span', { class: 'lo-plus', text: '+ cuatro piezas' })]);
+        var row = el('div', { class: 'lo-row4' }, [
+          F(1, card('1', 'Aceptar empeorar', 'Va al mejor vecino permitido, <b>aunque sea peor</b>.', worseMini())),
+          F(2, card('2', 'Lista tabú', 'Memoria de corto plazo: <b>prohíbe deshacer</b> lo reciente.', tabuList(), 'is-key')),
+          F(3, card('3', 'Tenencia', 'Cuántas iteraciones dura la prohibición.', tenureScale())),
+          F(4, card('4', 'Aspiración', 'Un tabú se permite si <b>supera a la mejor</b> encontrada.', el('div', { class: 'lo-formula-sm is-big', html: 'f(vecino) &lt; f(x*)' })))
+        ]);
+        add(b, [base, row]);
+        return 4;
+      } },
+      { title: 'Cómo se conectan', build: function (b) {
+        var svg = sv('svg', { class: 'lo-flow', viewBox: '0 0 1408 270', role: 'img', 'aria-label': 'Una iteración de la Búsqueda Tabú' });
+        var g = sv('g'); svg.appendChild(g);
+        var X = [0, 293, 586, 879, 1172], T = [['Vecinos de x', 'N(x)'], ['Filtrar los tabú', 'salvo aspiración'], ['Mejor candidato', 'aunque empeore'], ['Anotar en T', 'sale el más viejo'], ['Mejor histórica', 'x* si mejora']];
+        X.forEach(function (x, i) {
+          svgBox(g, x, 20, 236, 120, T[i][0], T[i][1], i === 2 ? 'is-key' : '');
+          if (i < 4) svgArrow(g, x + 242, 80, x + 287, 80);
+        });
+        g.appendChild(sv('path', { class: 'lo-arr is-m', d: 'M1290,146 C1290,256 118,256 118,150', 'marker-end': 'url(#lo-ahm)' }));
+        g.appendChild(sv('text', { class: 'lo-flow-lab is-m', x: 704, y: 258, text: 'repetir hasta el criterio de parada' }));
+        var mem = F(1, el('div', { class: 'lo-band is-row' }, [
+          el('div', { class: 'lo-band-lead' }, [el('b', { text: 'Memoria de largo plazo' }), el('span', { text: 'Cuenta cuántas veces aparece cada atributo.' })]),
+          card(null, 'Intensificación', 'Volver a buscar alrededor de las mejores soluciones.', clusterMini('in')),
+          card(null, 'Diversificación', 'Forzar movimientos poco usados para explorar regiones nuevas.', clusterMini('out'))
+        ]));
+        add(b, [svg, mem]);
+        return 1;
+      } },
+      { title: 'Implementación en Python', build: function (b) {
+        add(b, [
+          code([
+            "def busqueda_tabu(x, tenencia=2, iteraciones=3):",
+            "    mejor = x  # x*: la mejor encontrada",
+            "    tabu = deque(maxlen=tenencia)  # T: memoria de corto plazo",
+            "    for _ in range(iteraciones):  # criterio de parada",
+            "        candidatos = [(v, m) for v, m in vecinos_swap(x)",
+            "                      if m not in tabu  # movimiento permitido",
+            "                      or costo(v) < costo(mejor)]  # aspiración",
+            "        if not candidatos:",
+            "            break",
+            "        # el mejor candidato, aunque empeore",
+            "        x, m = min(candidatos, key=lambda c: costo(c[0]))",
+            "        tabu.append(m)  # si T se llena, sale el más viejo",
+            "        if costo(x) < costo(mejor):",
+            "            mejor = x",
+            "    return mejor"
+          ], { file: 'algoritmos.py', uses: 'usa costo(), vecinos_swap() y deque', lang: 'py', size: 24, side: true, key: [3, 5, 6, 7, 11, 12], marks: { 2: 1, 13: 1, 14: 1, 15: 1, 4: 2 } }),
+          notes([[1, 'x*', '<b>La mejor se guarda aparte</b>, porque la actual puede empeorar.'], [2, '4', '<b>Parada:</b> un número de iteraciones o de iteraciones sin mejorar.']])
+        ]);
+        return 2;
+      } },
+      { title: 'Idea fundamental', build: function (b) {
+        add(b, el('div', { class: 'lo-idea' }, [
+          el('div', { class: 'lo-idea-main' }, [
+            el('p', { class: 'lo-idea-quote', text: 'Puede aceptar un empeoramiento y conserva la mejor solución encontrada.' }),
+            el('div', { class: 'lo-legend' }, [el('span', null, [el('i', { class: 'is-cur' }), 'solución actual x']), el('span', null, [el('i', { class: 'is-best' }), 'mejor encontrada x*'])])
+          ]),
+          el('div', { class: 'lo-idea-vis' }, memoryChart())
+        ]));
+        add(b, F(1, handoff('Ahora, el ejemplo en vivo con Andrés')));
+        return 1;
+      } }
+    ]
+  };
+
+  /* =====================================================================
+     C. ALGORITMO GENÉTICO
+     ===================================================================== */
+  // Cruce OX ilustrativo (no es el ejemplo de Andrés): segmento de genes 2 y 3
+  function ox(a, b, c1, c2) {
+    var n = a.length, child = new Array(n).fill(null), from = new Array(n).fill('fill');
+    for (var i = c1; i <= c2; i++) { child[i] = a[i]; from[i] = 'seg'; }
+    var pos = (c2 + 1) % n;
+    for (var k = 1; k <= n; k++) {
+      var c = b[(c2 + k) % n];
+      if (child.indexOf(c) >= 0) continue;
+      while (child[pos] !== null) pos = (pos + 1) % n;
+      child[pos] = c;
+    }
+    return { child: child, from: from };
+  }
+  var P1 = ['B', 'C', 'D', 'E'], P2 = ['D', 'B', 'E', 'C'], OX = ox(P1, P2, 1, 2);
+  var MUT_BEFORE = OX.child, MUT_AFTER = [OX.child[0], OX.child[2], OX.child[1], OX.child[3]];
+
+  function oxDiagram() {
+    function row(name, list, cls) {
+      return el('div', { class: 'lo-oxr' }, [el('span', { class: 'lo-oxn', text: name }), genes(list, cls, 'is-sm')]);
+    }
+    return el('div', { class: 'lo-ox' }, [
+      row('Padre 1', P1, function (i) { return i === 1 || i === 2 ? 'is-seg' : 'is-dim'; }),
+      row('Padre 2', P2, function (i, c) { return P1.slice(1, 3).indexOf(c) >= 0 ? 'is-dim' : 'is-fill'; }),
+      row('Hijo', OX.child, function (i) { return OX.from[i] === 'seg' ? 'is-seg' : 'is-fill'; })
+    ]);
+  }
+  var POP = [['C', 'D', 'B', 'E'], ['E', 'B', 'D', 'C'], ['B', 'E', 'C', 'D'], ['D', 'C', 'E', 'B']];
+  var FIT = [0.55, 0.8, 0.4, 0.95]; // largo de las barras: solo ilustrativo
+
+  var GENETIC = {
+    key: 'ga', letter: 'C', name: 'Algoritmo Genético',
+    slides: [
+      { title: 'El vocabulario', build: function (b) {
+        var pop = el('div', { class: 'lo-pop' }, POP.map(function (p, i) {
+          return el('div', { class: 'lo-pop-row' + (i === 1 ? ' is-hl' : '') }, [
+            genes(p, function (j) { return i === 1 && j === 2 ? 'is-seg' : ''; }, 'is-sm'),
+            F(3, el('span', { class: 'lo-fit' }, el('i', { style: 'width:' + (FIT[i] * 100) + '%' })))
+          ]);
+        }));
+        var labels = el('div', { class: 'lo-vocab' }, [
+          el('div', { class: 'lo-vocab-item' }, [el('b', { text: 'Población' }), el('span', { text: 'varias soluciones a la vez' })]),
+          el('div', { class: 'lo-vocab-item is-m' }, [el('b', { text: 'Cromosoma' }), el('span', { text: 'una solución codificada' })]),
+          el('div', { class: 'lo-vocab-item is-m' }, [el('b', { text: 'Gen y alelo' }), el('span', { text: 'una posición y el valor que toma' })])
+        ]);
+        var left = F(1, el('div', { class: 'lo-vocab-wrap' }, [pop, labels]));
+        var right = el('div', { class: 'lo-col' }, [
+          F(2, el('div', { class: 'lo-c' }, [
+            el('div', { class: 'lo-c-name', text: 'Codificación' }),
+            el('div', { class: 'lo-code2' }, [el('span', { class: 'lo-tiny', text: 'Binaria (mochila)' }), genes(['1', '0', '1', '1', '0'], function (i, c) { return c === '1' ? 'is-fill' : ''; }, 'is-xs'), el('span', { class: 'lo-c-line', text: 'llevo los objetos 1, 3 y 4' })]),
+            el('div', { class: 'lo-code2' }, [el('span', { class: 'lo-tiny', text: 'Permutación (agente viajero)' }), genes(['B', 'C', 'D', 'E'], null, 'is-xs'), el('span', { class: 'lo-c-line', text: 'orden de visita' })])
+          ])),
+          F(3, card(null, 'Aptitud (fitness)', 'Qué tan bueno es un individuo. Para minimizar distancia: <b>1/costo</b>.', null, 'is-key'))
+        ]);
+        add(b, el('div', { class: 'lo-split' }, [left, right]));
+        return 3;
+      } },
+      { title: 'Los operadores, en el orden en que actúan', build: function (b) {
+        var cols = el('div', { class: 'lo-ops' }, [
+          F(1, el('div', { class: 'lo-op' }, [
+            el('div', { class: 'lo-op-head' }, [el('span', { class: 'lo-c-num', text: '1' }), 'Selección']),
+            el('ul', { class: 'lo-op-list' }, [
+              el('li', { html: '<b>Ruleta</b> tajada proporcional a la aptitud' }),
+              el('li', { html: '<b>Torneo</b> k al azar, gana el mejor' }),
+              el('li', { html: '<b>Elitismo</b> el mejor pasa intacto' })
+            ])
+          ])),
+          F(1, el('span', { class: 'lo-op-arrow', text: '→' })),
+          F(2, el('div', { class: 'lo-op is-key' }, [
+            el('div', { class: 'lo-op-head' }, [el('span', { class: 'lo-c-num', text: '2' }), 'Cruce']),
+            el('div', { class: 'lo-op-tags' }, [pill('un punto'), pill('dos puntos'), pill('OX', 'is-m')]),
+            oxDiagram(),
+            el('p', { class: 'lo-c-line', html: 'OX: segmento de un padre y <b>el orden del otro</b>. Siempre es un tour válido.' })
+          ])),
+          F(3, el('span', { class: 'lo-op-arrow', text: '→' })),
+          F(3, el('div', { class: 'lo-op' }, [
+            el('div', { class: 'lo-op-head' }, [el('span', { class: 'lo-c-num', text: '3' }), 'Mutación']),
+            el('div', { class: 'lo-mut' }, [genes(MUT_BEFORE, function (i) { return i === 1 || i === 2 ? 'is-mut' : ''; }, 'is-sm'), el('span', { class: 'lo-to is-down', text: '↓' }), genes(MUT_AFTER, function (i) { return i === 1 || i === 2 ? 'is-mut' : ''; }, 'is-sm')]),
+            el('p', { class: 'lo-c-line', html: 'Un cambio pequeño al azar. <b>Mantiene la diversidad.</b>' })
+          ]))
+        ]);
+        var params = F(4, el('div', { class: 'lo-params' }, [
+          el('div', { class: 'lo-param' }, [el('b', { text: 'N' }), el('span', { text: 'tamaño de la población' })]),
+          el('div', { class: 'lo-param' }, [el('b', { text: 'pc' }), el('span', { text: '0.6 a 0.9' })]),
+          el('div', { class: 'lo-param' }, [el('b', { text: 'pm' }), el('span', { text: '0.01 a 0.1' })]),
+          el('div', { class: 'lo-param' }, [el('b', { text: 'G' }), el('span', { text: 'generaciones' })]),
+          el('div', { class: 'lo-param is-warn' }, [el('b', { text: 'Convergencia prematura' }), el('span', { text: 'si todos se parecen, se estanca' })])
+        ]));
+        add(b, [cols, params]);
+        return 4;
+      } },
+      { title: 'Implementación en Python', build: function (b) {
+        add(b, [
+          code([
+            "def algoritmo_genetico(P, G=1, pc=0.9, pm=0.1):",
+            "    for _ in range(G):  # G generaciones",
+            "        Q = []",
+            "        while len(Q) < len(P):",
+            "            p1, p2 = ruleta(P), ruleta(P)  # selección",
+            "            if random.random() < pc:  # cruce OX",
+            "                a, b = sorted(random.sample(range(len(p1)), 2))",
+            "                h1 = cruce_ox(p1, p2, a, b)",
+            "                h2 = cruce_ox(p2, p1, a, b)",
+            "            else:",
+            "                h1, h2 = p1[:], p2[:]  # si no, copias",
+            "            Q += [mutar(h1, pm), mutar(h2, pm)]  # mutación",
+            "        peor = max(range(len(Q)), key=lambda i: costo(Q[i]))",
+            "        Q[peor] = min(P, key=costo)[:]  # elitismo",
+            "        P = Q",
+            "    return min(P, key=costo)"
+          ], { file: 'algoritmos.py', uses: 'usa ruleta(), cruce_ox(), mutar() y costo()', lang: 'py', size: 24, side: true, key: [5, 6, 8, 9, 12, 14], marks: { 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 12: 1, 13: 2, 14: 2 } }),
+          notes([[1, '5–12', '<b>Selección, cruce OX y mutación</b>, en ese orden.'], [2, '14', '<b>Elitismo:</b> el mejor padre reemplaza al peor hijo.']])
+        ]);
+        return 2;
+      } },
+      { title: 'Idea fundamental', build: function (b) {
+        var svg = sv('svg', { class: 'lo-ring', viewBox: '0 0 600 560', role: 'img', 'aria-label': 'Ciclo de una generación' });
+        var names = ['Población', 'Aptitud', 'Selección', 'Cruce', 'Mutación', 'Elitismo'];
+        var cx = 300, cy = 280, R = 210;
+        var pts = names.map(function (n, i) { var a = -Math.PI / 2 + i * 2 * Math.PI / names.length; return [cx + R * Math.cos(a), cy + R * Math.sin(a)]; });
+        svg.appendChild(sv('circle', { class: 'lo-ring-path', cx: cx, cy: cy, r: R }));
+        pts.forEach(function (p, i) {
+          var g = sv('g', { class: 'lo-ring-node' + (i === 3 ? ' is-key' : '') }, [sv('rect', { x: p[0] - 92, y: p[1] - 32, width: 184, height: 64, rx: 32 }), sv('text', { x: p[0], y: p[1] + 1, text: names[i] })]);
+          svg.appendChild(g);
+        });
+        svg.appendChild(sv('text', { class: 'lo-ring-c', x: cx, y: cy - 10, text: 'Nueva generación' }));
+        svg.appendChild(sv('text', { class: 'lo-ring-s', x: cx, y: cy + 26, text: 'se repite G veces' }));
+        add(b, el('div', { class: 'lo-idea' }, [
+          el('div', { class: 'lo-idea-main' }, [
+            el('p', { class: 'lo-idea-quote', text: 'Una población que evoluciona: los más aptos se reproducen y el mejor nunca se pierde.' })
+          ]),
+          el('div', { class: 'lo-idea-vis is-ring' }, svg)
+        ]));
+        add(b, F(1, handoff('Ahora, una generación completa con Andrés')));
+        return 1;
+      } }
+    ]
+  };
+
+  /* =====================================================================
+     D. COLONIA DE HORMIGAS
+     ===================================================================== */
+  function formulaP() {
+    return el('div', { class: 'lo-fx', html:
+      '<span>p<sub>ij</sub> =</span><span class="lo-frac"><span><span class="is-tau">τ<span class="lo-ss"><sup>α</sup><sub>ij</sub></span></span> · <span class="is-eta">η<span class="lo-ss"><sup>β</sup><sub>ij</sub></span></span></span>' +
+      '<span>∑<sub>l ∈ N<sub>i</sub></sub> τ<span class="lo-ss"><sup>α</sup><sub>il</sub></span> · η<span class="lo-ss"><sup>β</sup><sub>il</sub></span></span></span>' });
+  }
+  function formulaU() {
+    return el('div', { class: 'lo-fx', html:
+      '<span><span class="is-tau">τ<sub>ij</sub></span> ← (1 − ρ) τ<sub>ij</sub> + ∑<sub>k</sub> Δτ<span class="lo-ss"><sup>k</sup><sub>ij</sub></span></span>' });
+  }
+  function formulaQ() {
+    return el('div', { class: 'lo-fx is-sm', html: '<span>Δτ<span class="lo-ss"><sup>k</sup><sub>ij</sub></span> = </span><span class="lo-frac"><span>Q</span><span>L<sub>k</sub></span></span><span class="lo-fx-note">si la hormiga k usó (i, j)</span>' });
+  }
+  function edgeCallout(svg, withEta) {
+    var a = NODES[0], b = NODES[1];
+    svg.appendChild(sv('text', { class: 'lo-gl is-tau', x: (a[0] + b[0]) / 2 - 40, y: (a[1] + b[1]) / 2 - 8, text: 'τ' }));
+    if (withEta) svg.appendChild(sv('text', { class: 'lo-gl is-eta', x: (a[0] + b[0]) / 2 + 2, y: (a[1] + b[1]) / 2 + 30, text: 'η' }));
+  }
+
+  var ACO = {
+    key: 'aco', letter: 'D', name: 'Colonia de Hormigas',
+    slides: [
+      { title: 'El problema como un grafo', build: function (b) {
+        var g1 = graph({ label: 'Grafo de ciudades con feromona igual en todas las aristas', base: 4, hot: '0-1', names: ['i', 'j'], extra: function (s) { edgeCallout(s, true); } });
+        var left = el('div', { class: 'lo-graph-wrap' }, [g1, el('p', { class: 'lo-caption', text: 'Ciudades y aristas. Cada arista (i, j) guarda dos números.' })]);
+        var right = el('div', { class: 'lo-col' }, [
+          F(1, el('div', { class: 'lo-c is-tau-card' }, [
+            el('div', { class: 'lo-c-name' }, [el('span', { class: 'lo-sym is-tau', html: 'τ<sub>ij</sub>' }), 'Feromona']),
+            el('p', { class: 'lo-c-line', html: '<b>Memoria de la colonia:</b> qué tan buena ha resultado la arista. Empieza igual en todas.' })
+          ])),
+          F(2, el('div', { class: 'lo-c is-eta-card' }, [
+            el('div', { class: 'lo-c-name' }, [el('span', { class: 'lo-sym is-eta', html: 'η<sub>ij</sub> = 1/d<sub>ij</sub>' }), 'Información heurística']),
+            el('p', { class: 'lo-c-line', html: '<b>Conocimiento a priori:</b> las ciudades cercanas son más atractivas.' })
+          ]))
+        ]);
+        add(b, el('div', { class: 'lo-split is-graph' }, [left, right]));
+        return 2;
+      } },
+      { title: 'Cómo funciona', build: function (b) {
+        var cons = el('div', { class: 'lo-phase' }, [
+          F(1, el('div', { class: 'lo-phase-head' }, [el('span', { class: 'lo-c-num', text: '1' }), el('span', null, [el('b', { text: 'Construir rutas' }), el('small', { text: 'regla de transición, entre ciudades no visitadas' })])])),
+          F(1, formulaP()),
+          F(2, el('ul', { class: 'lo-plist' }, [
+            el('li', { html: '<b class="is-tau">α</b> pesa la feromona: seguir lo que funcionó antes' }),
+            el('li', { html: '<b class="is-eta">β</b> pesa la distancia: casi un vecino más cercano' }),
+            el('li', { html: '<b>Probabilística:</b> una arista mala sigue siendo posible' })
+          ]))
+        ]);
+        var upd = el('div', { class: 'lo-phase' }, [
+          F(3, el('div', { class: 'lo-phase-head' }, [el('span', { class: 'lo-c-num', text: '2' }), el('span', null, [el('b', { text: 'Actualizar la feromona' }), el('small', { text: 'cuando todas las hormigas terminan' })])])),
+          F(3, formulaU()),
+          F(3, el('ul', { class: 'lo-plist' }, [el('li', { html: '<b>Evaporación (1 − ρ):</b> la colonia olvida' })])),
+          F(4, formulaQ()),
+          F(4, el('ul', { class: 'lo-plist' }, [el('li', { html: '<b>Depósito Q/L<sub>k</sub>:</b> un tour más corto deposita más' })]))
+        ]);
+        add(b, el('div', { class: 'lo-phases' }, [cons, F(3, el('span', { class: 'lo-op-arrow', text: '→' })), upd]));
+        return 4;
+      } },
+      { title: 'Implementación en Python', build: function (b) {
+        add(b, [
+          code([
+            "def colonia_hormigas(hormigas=2, iteraciones=1, alfa=1, beta=2,",
+            "                     rho=0.5, Q=10, tau0=1):",
+            "    tau = {e: tau0 for e in ARISTAS}  # feromona inicial",
+            "    mejor = None",
+            "    for _ in range(iteraciones):",
+            "        tours = []",
+            "        for _ in range(hormigas):",
+            "            t = ['A']  # ubicar la hormiga",
+            "            while len(t) < len(CIUDADES):",
+            "                libres = [j for j in CIUDADES if j not in t]",
+            "                pesos = [tau[arista(t[-1], j)] ** alfa",
+            "                         * (1 / D[t[-1]][j]) ** beta for j in libres]",
+            "                t.append(random.choices(libres, pesos)[0])  # p_ij",
+            "            tours.append(t + ['A'])  # cerrar el tour",
+            "        for e in tau:",
+            "            tau[e] *= 1 - rho  # evaporar",
+            "        for t in tours:",
+            "            for i, j in zip(t, t[1:]):",
+            "                tau[arista(i, j)] += Q / longitud(t)  # depositar",
+            "            if mejor is None or longitud(t) < longitud(mejor):",
+            "                mejor = t",
+            "    return mejor, tau"
+          ], { file: 'algoritmos.py', uses: 'usa arista(), longitud() y D', lang: 'py', size: 19, side: true, key: [11, 12, 13, 16, 19], marks: { 10: 1, 11: 1, 12: 1, 13: 1, 15: 2, 16: 2, 17: 2, 18: 2, 19: 2 } }),
+          notes([[1, '10–13', '<b>Construir:</b> cada ciudad se elige con la regla de transición.'], [2, '16 y 19', '<b>Actualizar:</b> evaporar y luego depositar Q/L<sub>k</sub>.']])
+        ]);
+        return 2;
+      } },
+      { title: 'Idea fundamental', build: function (b) {
+        var widths = { '0-1': 11, '1-2': 9, '2-3': 12, '3-4': 8, '0-4': 10, '0-2': 2, '0-3': 1.5, '1-3': 3, '1-4': 2, '2-4': 1.5 };
+        add(b, el('div', { class: 'lo-idea' }, [
+          el('div', { class: 'lo-idea-main' }, [
+            el('p', { class: 'lo-idea-quote', text: 'La calidad de cada tour se convierte en señal para las siguientes hormigas.' }),
+            el('div', { class: 'lo-idea-pair' }, [
+              el('div', { class: 'lo-idea-item is-good' }, [el('b', { text: 'Depósito' }), el('span', { text: 'refuerza lo que funcionó.' })]),
+              el('div', { class: 'lo-idea-item' }, [el('b', { text: 'Evaporación' }), el('span', { text: 'olvida lo que nadie usa.' })])
+            ])
+          ]),
+          el('div', { class: 'lo-idea-vis' }, [graph({ label: 'Aristas con distinta cantidad de feromona', widths: widths }), el('p', { class: 'lo-caption', text: 'Grosor = feromona' })])
+        ]));
+        add(b, F(1, handoff('Ahora, una iteración con dos hormigas, con Andrés')));
+        return 1;
+      } }
+    ]
+  };
+
+  /* =====================================================================
+     Controlador
+     ===================================================================== */
+  var ALGOS = [LOCAL, TABU, GENETIC, ACO];
+  var st = { algo: 0, slide: 0, frag: 0 };
+  try { var saved = parseInt(localStorage.getItem('lo-algo'), 10); if (saved >= 0 && saved < 4) st.algo = saved; } catch (e) {}
+
+  var $tabs = root.querySelector('.lo-tabs');
+  var $frame = root.querySelector('.lo-frame');
+  var $deck = root.querySelector('.lo-deck');
+  var $view = root.querySelector('.lo-viewport');
+  var $count = root.querySelector('[data-lo="count"]');
+  var $prev = root.querySelector('[data-lo="prev"]');
+  var $next = root.querySelector('[data-lo="next"]');
+  var $live = root.querySelector('[data-lo="live"]');
+  var $full = root.querySelector('[data-lo="full"]');
+  var slides = [], nfrag = [];
+
+  $tabs.setAttribute('role', 'tablist');
+  var tabBtns = ALGOS.map(function (a, i) {
+    var b = el('button', { type: 'button', class: 'lo-tab', 'data-algo': a.key, id: 'lo-tab-' + a.key }, [el('span', { class: 'lo-tab-letter', text: a.letter }), el('span', { class: 'lo-tab-name', text: a.name })]);
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-controls', 'lo-deck');
+    b.addEventListener('click', function () { selectAlgo(i); });
+    b.addEventListener('keydown', function (e) {
+      var k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!k) return;
+      e.preventDefault(); e.stopPropagation();
+      var n = (i + k + 4) % 4; selectAlgo(n); tabBtns[n].focus();
+    });
+    $tabs.appendChild(b);
+    return b;
+  });
+  $deck.setAttribute('role', 'tabpanel');
+  $deck.id = 'lo-deck';
+
+  function buildDeck() {
+    var algo = ALGOS[st.algo];
+    root.setAttribute('data-algo', algo.key);
+    clear($deck); slides = []; nfrag = [];
+    algo.slides.forEach(function (s, i) {
+      var body = el('div', { class: 'lo-s-body' });
+      var foot = el('footer', { class: 'lo-s-foot' }, [
+        el('span', { class: 'lo-s-owner', text: 'Angie Loango' }),
+        el('ol', { class: 'lo-s-prog' }, CHAPTERS.map(function (c, j) { return el('li', { class: j === i ? 'is-now' : j < i ? 'is-past' : '', text: c }); }))
+      ]);
+      var slide = el('section', { class: 'lo-slide', 'data-algo': algo.key, 'aria-roledescription': 'diapositiva', 'aria-label': algo.name + ': ' + CHAPTERS[i] }, [
+        el('header', { class: 'lo-s-head' }, [
+          el('p', { class: 'lo-s-kicker' }, [el('span', { class: 'lo-s-letter', text: algo.letter }), algo.name, el('span', { class: 'lo-s-chap', text: CHAPTERS[i] })]),
+          el('h3', { class: 'lo-s-title', text: s.title })
+        ]),
+        body, foot
+      ]);
+      nfrag.push(s.build(body));
+      slides.push(slide);
+      $deck.appendChild(slide);
+    });
+    tabBtns.forEach(function (b, i) { b.setAttribute('aria-selected', String(i === st.algo)); b.tabIndex = i === st.algo ? 0 : -1; });
+    $deck.setAttribute('aria-labelledby', 'lo-tab-' + algo.key);
+    render();
+  }
+
+  function render() {
+    slides.forEach(function (s, i) {
+      var on = i === st.slide;
+      s.classList.toggle('is-current', on);
+      s.setAttribute('aria-hidden', String(!on));
+      if (!on) return;
+      Array.prototype.forEach.call(s.querySelectorAll('[data-f]'), function (n) {
+        var f = +n.getAttribute('data-f');
+        n.classList.toggle('is-in', f <= st.frag);
+      });
+      Array.prototype.forEach.call(s.querySelectorAll('[data-on]'), function (n) {
+        n.classList.toggle('is-on', +n.getAttribute('data-on') <= st.frag);
+      });
+      s.classList.toggle('has-focus', st.frag > 0);
+    });
+    var total = nfrag[st.slide];
+    $count.innerHTML = '<b>' + (st.slide + 1) + '</b> / ' + slides.length + (total ? '<span class="lo-count-f">' + dots(total) + '</span>' : '');
+    $prev.disabled = st.slide === 0 && st.frag === 0;
+    $next.disabled = st.slide === slides.length - 1 && st.frag >= total;
+    $live.textContent = ALGOS[st.algo].name + '. ' + CHAPTERS[st.slide] + '.';
+  }
+  function dots(total) {
+    var s = '';
+    for (var i = 1; i <= total; i++) s += '<i class="' + (i <= st.frag ? 'is-on' : '') + '"></i>';
+    return s;
+  }
+  function go(d) {
+    if (d > 0) {
+      if (st.frag < nfrag[st.slide]) st.frag++;
+      else if (st.slide < slides.length - 1) { st.slide++; st.frag = 0; }
+    } else {
+      if (st.frag > 0) st.frag--;
+      else if (st.slide > 0) { st.slide--; st.frag = nfrag[st.slide]; }
+    }
+    render();
+  }
+  function selectAlgo(i) {
+    st.algo = i; st.slide = 0; st.frag = 0;
+    try { localStorage.setItem('lo-algo', i); } catch (e) {}
+    buildDeck();
+  }
+  function restart() { st.slide = 0; st.frag = 0; render(); }
+
+  $prev.addEventListener('click', function () { go(-1); });
+  $next.addEventListener('click', function () { go(1); });
+
+  /* ---------------- Escala del lienzo 16:9 ---------------- */
+  function isFull() { return document.fullscreenElement === root; }
+  function fit() {
+    var bar = root.querySelector('.lo-bar'), head = root.querySelector('.lo-head');
+    var availW = $view.clientWidth;
+    var availH = isFull()
+      ? window.innerHeight - bar.offsetHeight - 36
+      : window.innerHeight - bar.offsetHeight - (head ? head.offsetHeight : 0) - 100;
+    var s = Math.max(0.2, Math.min(availW / W, availH / H));
+    $frame.style.width = (W * s) + 'px';
+    $frame.style.height = (H * s) + 'px';
+    $deck.style.transform = 'scale(' + s + ')';
+    if (head) head.hidden = isFull();
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------------- Cronómetro de 4 minutos ---------------- */
+  var TOTAL = 240, left = TOTAL, timerId = null;
+  var $timer = root.querySelector('.lo-timer'), $tt = root.querySelector('[data-lo="timer-text"]'), $tToggle = root.querySelector('[data-lo="timer-toggle"]'), $tReset = root.querySelector('[data-lo="timer-reset"]');
+  function drawTimer() {
+    var neg = left < 0, s = Math.abs(left);
+    $tt.textContent = (neg ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    $timer.classList.toggle('is-warn', left <= 30 && left >= 0);
+    $timer.classList.toggle('is-over', left < 0);
+  }
+  function toggleTimer() {
+    if (timerId) { clearInterval(timerId); timerId = null; $tToggle.textContent = 'Seguir'; }
+    else { timerId = setInterval(function () { left--; drawTimer(); }, 1000); $tToggle.textContent = 'Pausa'; }
+  }
+  function resetTimer() { clearInterval(timerId); timerId = null; left = TOTAL; $tToggle.textContent = 'Iniciar'; drawTimer(); }
+  $tToggle.addEventListener('click', toggleTimer);
+  $tReset.addEventListener('click', resetTimer);
+
+  /* ---------------- Pantalla completa ---------------- */
+  function toggleFull() {
+    if (isFull()) { if (document.exitFullscreen) document.exitFullscreen(); }
+    else if (root.requestFullscreen) root.requestFullscreen().catch(function () {});
+  }
+  if (!root.requestFullscreen) $full.hidden = true;
+  $full.addEventListener('click', toggleFull);
+  document.addEventListener('fullscreenchange', function () {
+    root.classList.toggle('is-present', isFull());
+    $full.setAttribute('aria-pressed', String(isFull()));
+    $full.textContent = isFull() ? 'Salir' : 'Pantalla completa';
+    fit();
+  });
+
+  /* ---------------- Teclado ---------------- */
+  // Solo cuando la sección está en pantalla o tiene el foco. Se escucha en
+  // gestionar atajos propios de esta presentación.
+  function active() {
+    if (isFull()) return true;
+    if (root.contains(document.activeElement) && document.activeElement !== document.body) return true;
+    var r = root.getBoundingClientRect(), mid = window.innerHeight / 2;
+    return r.top <= mid && r.bottom >= mid;
+  }
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || !active()) return;
+    var t = e.target;
+    if (t && t.matches && t.matches('input, textarea, select, [contenteditable]')) return;
+    var ok = true;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ': go(1); break;
+      case 'ArrowLeft': case 'PageUp': go(-1); break;
+      case '1': case '2': case '3': case '4': selectAlgo(+e.key - 1); break;
+      case 'Home': restart(); break;
+      case 't': case 'T': toggleTimer(); break;
+      case 'f': case 'F': toggleFull(); break;
+      default: ok = false;
+    }
+    if (ok) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  drawTimer();
+  buildDeck();
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+})();
+
+</script>
+</body>
+</html>
