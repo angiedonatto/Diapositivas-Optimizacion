@@ -4,17 +4,50 @@
 .local-guide .lo-c-name { margin: 0; }
 .local-body { gap: 19px; }
 .local-split { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-.problem-split { grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr); }
+.problem-split { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: start; }
 .local-stack { display: grid; gap: 17px; }
 .local-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .local-guide figure { margin: 0; }
 .local-guide canvas { display: block; width: 100%; height: auto; background: var(--lo-bg); border-radius: 14px; }
-.local-map { gap: 15px; }
-.local-map-key { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; font-size: 19px; color: var(--lo-ink-2); }
-.local-map-key > span { display: inline-flex; align-items: center; gap: 7px; }
-.local-map-key i { width: 22px; border-top: 3px solid var(--lo-m); }
-.local-map-key span:nth-child(2) i { border-top-style: dashed; }
-.local-map-key strong { margin-left: auto; }
+.local-city { padding: 18px; gap: 14px; }
+.local-city-scene { position: relative; overflow: hidden; border-radius: 14px; }
+.local-city-scene img { display: block; width: 100%; height: auto; }
+.local-city-cart { position: absolute; inset: 0; width: 100%; height: 100%; }
+.local-city-cart.is-in .local-cart-motion { animation: city-drive .82s var(--lo-ease) both; }
+@keyframes city-drive {
+  from { transform: translateX(-253px); }
+  to { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .local-city-cart.is-in .local-cart-motion { animation: none; }
+}
+.local-guide .local-thought { display: flex; align-items: center; gap: 10px; min-height: 140px; }
+.local-thought img { flex: 0 0 112px; width: 112px; height: auto; }
+.local-thought blockquote {
+  position: relative;
+  flex: 1;
+  margin: 0;
+  padding: 17px 20px;
+  border-radius: 18px;
+  background: var(--lo-m-soft);
+  color: var(--lo-m);
+  font-size: 25px;
+  font-weight: 720;
+  line-height: 1.25;
+}
+.local-thought blockquote::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 55%;
+  border: 10px solid transparent;
+  border-right-color: var(--lo-m-soft);
+}
+.problem-split .local-stack { gap: 12px; }
+.problem-split .local-stack .lo-c { padding: 14px 17px; }
+.problem-split .local-method { gap: 6px; }
+.problem-split .local-method .lo-c-name { font-size: 25px; }
+.problem-split .local-method .lo-c-line { font-size: 20px; }
 .local-count { background: var(--lo-m-soft); border-color: transparent; gap: 5px; }
 .local-formula { font: 750 56px/1.08 var(--lo-math); color: var(--lo-m); margin: 0; white-space: nowrap; }
 .local-formula sup { font-size: .59em; }

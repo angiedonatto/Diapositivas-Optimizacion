@@ -117,6 +117,5 @@
   });
 
   SlideCanvas.fit(stage, document.getElementById('localCanvas'));
-  LocalDiagrams.cityMap(document.getElementById('cityMap'));
   render();
 })();

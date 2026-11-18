@@ -39,45 +39,6 @@ window.LocalDiagrams = (() => {
     return { ctx, line, shape, circle };
   }
 
-  function cityMap(canvas) {
-    const { ctx, line, shape, circle } = drawing(canvas);
-    const cities = [[83, 167], [125, 67], [282, 49], [402, 98], [332, 193]];
-    const blue = '#3d5a98';
-
-    // El trazado de fondo sugiere un mapa. Las líneas tenues son otras conexiones.
-    for (let i = 0; i < 5; i++) {
-      const radius = 22 + i * 14;
-      ctx.beginPath();
-      ctx.ellipse(410, 212, radius * 1.4, radius * .52, -.35, 0, Math.PI * 2);
-      ctx.strokeStyle = '#daddd2';
-      ctx.lineWidth = .9;
-      ctx.stroke();
-    }
-    line([[0, 135], [44, 106], [83, 96], [144, 119], [220, 118], [279, 97], [337, 71], [421, 70], [480, 55]], '#d8e4e7', 12);
-    for (const [from, to] of [[0, 2], [0, 3], [1, 3], [1, 4], [2, 4]]) {
-      line([cities[from], cities[to]], '#a8b2a9', 1.2, [3, 6]);
-    }
-    line(cities, blue, 4);
-    line([cities[4], cities[0]], blue, 3, [8, 6]);
-
-    // Las puntas indican el sentido del recorrido, incluido el regreso.
-    for (let i = 0; i < cities.length; i++) {
-      const [x, y] = cities[i];
-      const [tx, ty] = cities[(i + 1) % cities.length];
-      const angle = Math.atan2(ty - y, tx - x);
-      const mid = [(x + tx) / 2, (y + ty) / 2];
-      const side = offset => [mid[0] - 10 * Math.cos(angle + offset), mid[1] - 10 * Math.sin(angle + offset)];
-      shape([mid, side(.48), side(-.48)], blue);
-      if (i === 0) circle(x, y, 26, '#cbd7ee');
-      circle(x, y, 17, blue);
-      ctx.fillStyle = '#fff';
-      ctx.font = '700 16px system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('ABCDE'[i], x, y);
-    }
-  }
-
   function mountain(canvas, appearance) {
     const { ctx, line, shape, circle } = drawing(canvas);
     const sky = ctx.createLinearGradient(0, 0, 0, 175);
@@ -128,5 +89,5 @@ window.LocalDiagrams = (() => {
     }
   }
 
-  return { cityMap, mountain };
+  return { mountain };
 })();
