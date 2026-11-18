@@ -16,11 +16,12 @@ Abre el HTML de Búsqueda Local directamente y pulsa **N** para ver el guion y l
 | 2 · Origen e inspiración · 60 s | 3 | «Imaginemos a una persona subiendo una montaña con niebla.» | Señala al escalador y el camino. |
 | 2 · Origen e inspiración · 60 s | 4 | «Solo puede ver los pasos que tiene cerca, porque la niebla le limita la vista.» | Señala el círculo de visión. |
 | 2 · Origen e inspiración · 60 s | 5 | «El escalador avanza a un punto mejor. Búsqueda Local explora pequeños cambios en la solución actual para mejorarla.» | Sigue el ascenso y señala la frase de cierre. |
-| 3 · Qué es y dónde encaja · 60 s | 1 | «Partimos de una solución completa que ya visita todos los destinos.» | Señala el primer carrito y su ruta. |
-| 3 · Qué es y dónde encaja · 60 s | 2 | «Probamos un cambio pequeño y buscamos mejorar la solución que teníamos.» | Compara los mismos destinos en las dos rutas. |
-| 3 · Qué es y dónde encaja · 60 s | 3 | «Es un método de trayectoria porque lleva una sola solución actual a la vez y la va modificando.» | Sigue el único vehículo en el esquema. |
-| 3 · Qué es y dónde encaja · 60 s | 4 | «Local es una heurística de mejora directa. Una metaheurística es una estrategia general que orienta la búsqueda; Tabú, Genético y Colonia de Hormigas entran en esa categoría.» | Señala las dos categorías. |
-| 3 · Qué es y dónde encaja · 60 s | 5 | «Búsqueda Local mejora una solución paso a paso. Ahora Angie Loango explicará sus componentes y su funcionamiento.» | Señala el relevo y avanza. |
+| 3 · Qué es y dónde encaja · 60 s | 1 | «Es una heurística de mejora. Parte de una solución completa y trata de mejorarla con cambios pequeños.» | Señala la primera banda. |
+| 3 | 2 | «Por ejemplo, partimos de una ruta existente y probamos un pequeño cambio.» | Compara las dos rutas. |
+| 3 | 3 | «Trabaja con una sola solución actual. Si encuentra una mejor, continúa desde esa versión.» | Sigue la trayectoria del vehículo. |
+| 3 | 4 | «Una heurística busca una buena solución. Una metaheurística organiza y orienta la exploración.» | Contrasta las dos tarjetas. |
+| 3 | 5 | «Tabú añade memoria a una búsqueda local para explorar más alternativas.» | Señala el ejemplo de Tabú. |
+| 3 | 6 | «Búsqueda Local mejora una solución paso a paso y trabaja con una sola trayectoria.» | Señala la síntesis y da paso a Angie Loango. |
 
 ## Adaptar la estructura a los demás temas
 

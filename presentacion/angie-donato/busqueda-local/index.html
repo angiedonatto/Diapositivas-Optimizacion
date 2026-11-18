@@ -122,7 +122,8 @@
                       alt="Repartidora pensando"
                     />
                     <blockquote>
-                      El problema es que hay muchísimas rutas que podríamos escoger.
+                      El problema es que hay muchísimas rutas que podríamos
+                      escoger.
                     </blockquote>
                   </figure>
                   <div class="lo-c acento" data-f="3" data-cue="20 ciudades">
@@ -368,16 +369,22 @@
                 <span class="lo-s-chap">Qué es y dónde encaja</span>
               </p>
               <h1 class="lo-s-title" id="titulo-3">
-                Una heurística de mejora y de trayectoria
+                ¿Qué es la Búsqueda Local?
               </h1>
             </header>
             <div class="lo-s-body">
+              <div class="cierre" data-f="1" data-cue="Heurística de mejora">
+                <strong>Heurística de mejora</strong>
+                <small
+                  >Solución completa → cambios pequeños → posible mejora</small
+                >
+              </div>
               <div class="columnas equilibradas">
                 <div class="comparar">
                   <figure
                     class="lo-c escena"
-                    data-f="1"
-                    data-cue="Ruta existente"
+                    data-f="2"
+                    data-cue="De la ruta existente al cambio pequeño"
                   >
                     <figcaption class="lo-c-name">Ruta existente</figcaption>
                     <svg
@@ -461,11 +468,7 @@
                       Partimos de una <b>solución completa</b>.
                     </p>
                   </figure>
-                  <figure
-                    class="lo-c escena"
-                    data-f="2"
-                    data-cue="Pequeño cambio"
-                  >
+                  <figure class="lo-c escena" data-f="2">
                     <figcaption class="lo-c-name">Ruta modificada</figcaption>
                     <svg
                       viewBox="0 0 265 150"
@@ -552,7 +555,7 @@
                 <div class="pistas">
                   <figure class="lo-c escena" data-f="3" data-cue="Trayectoria">
                     <figcaption class="lo-c-name">
-                      Una solución que mejora paso a paso
+                      Método de trayectoria
                     </figcaption>
                     <svg
                       viewBox="0 0 650 122"
@@ -582,38 +585,52 @@
                       </text>
                       <circle cx="430" cy="60" r="7" fill="#3d5a98" />
                       <text x="430" y="106" text-anchor="middle">
-                        Versión actual
+                        Mejor versión
                       </text>
                     </svg>
                     <p class="lo-c-line pista">
-                      Método de <b>trayectoria</b>: trabajamos con una sola
-                      solución actual.
+                      <b>Una sola solución actual.</b> Si mejora, seguimos desde
+                      esa nueva versión.
                     </p>
                   </figure>
                 </div>
               </div>
-              <div class="" data-f="4" data-cue="Dónde encaja">
+              <div
+                class=""
+                data-f="4"
+                data-cue="Heurística frente a metaheurística"
+              >
                 <div class="comparar">
                   <div class="lo-c acento">
-                    <h2 class="lo-c-name">Heurística · Búsqueda Local</h2>
+                    <h2 class="lo-c-name">Heurística</h2>
                     <p class="lo-c-line pista">
-                      <b>Mejora directa</b> de una solución.
+                      Método que busca una <b>buena solución</b>.
                     </p>
                   </div>
                   <div class="lo-c neutro">
                     <h2 class="lo-c-name">Metaheurística</h2>
                     <p class="lo-c-line pista">
-                      <b>Estrategia general</b> para orientar la búsqueda.
+                      <b>Estrategia general</b> que organiza y orienta la
+                      exploración.
                     </p>
-                    <div class="fila">
-                      <span>Tabú</span> <span>Genético</span>
-                      <span>Colonia de Hormigas</span>
-                    </div>
+                    <p
+                      class="pista-breve"
+                      data-f="5"
+                      data-cue="Tabú añade memoria"
+                    >
+                      <b>Ejemplo · Búsqueda Tabú:</b> añade memoria a una
+                      búsqueda local para explorar más alternativas.
+                    </p>
                   </div>
                 </div>
               </div>
-              <div class="cierre" data-f="5" data-cue="Relevo">
-                Búsqueda Local: una solución que mejora paso a paso.<small
+              <div
+                class="cierre"
+                data-f="6"
+                data-cue="Paso a paso, una sola trayectoria"
+              >
+                Búsqueda Local: mejora paso a paso en una sola
+                trayectoria.<small
                   >Angie Loango · Componentes y funcionamiento</small
                 >
               </div>
@@ -657,7 +674,8 @@
             >
           </li>
           <li>
-            <strong>Muchas rutas posibles.</strong> El problema es que hay muchísimas rutas que podríamos escoger.
+            <strong>Muchas rutas posibles.</strong> El problema es que hay
+            muchísimas rutas que podríamos escoger.
             <em
               >Señala los recorridos alternativos y luego el globo. Avanza con
               «20 ciudades».</em
@@ -731,43 +749,39 @@
         <h3>Qué es y dónde encaja · 60 s</h3>
         <ol>
           <li>
-            <strong>Ruta existente.</strong> Partimos de una solución completa
-            que ya visita todos los destinos.
+            <strong>Heurística de mejora.</strong> La Búsqueda Local parte de
+            una solución completa. La intenta mejorar con cambios pequeños.
+            <em>Señala la primera banda.</em>
+          </li>
+          <li>
+            <strong>Un cambio sobre la ruta.</strong> Ya tenemos un recorrido.
+            Cambiamos una parte y comprobamos si mejora.
             <em
-              >Señala el primer carrito y su ruta. Avanza con «Pequeño
-              cambio».</em
+              >Compara las dos rutas. Avanza con «También es un método de
+              trayectoria».</em
             >
           </li>
           <li>
-            <strong>Pequeño cambio.</strong> Probamos un cambio pequeño y
-            buscamos mejorar la solución que teníamos.
-            <em
-              >Compara los mismos destinos en las dos rutas. Avanza con
-              «Trayectoria».</em
-            >
+            <strong>Trayectoria.</strong> Trabaja con una sola solución actual a
+            la vez. La modifica y, cuando encuentra una mejor, continúa desde
+            esa nueva solución. <em>Sigue el vehículo en el esquema.</em>
           </li>
           <li>
-            <strong>Trayectoria.</strong> Es un método de trayectoria porque
-            lleva una sola solución actual a la vez y la va modificando.
-            <em
-              >Sigue el único vehículo en el esquema. Avanza con «Dónde
-              encaja».</em
-            >
+            <strong>Heurística y metaheurística.</strong> Una heurística es un
+            método que busca una buena solución. Una metaheurística es una
+            estrategia más general que organiza y orienta la exploración.
+            <em>Señala las dos tarjetas.</em>
           </li>
           <li>
-            <strong>Dónde encaja.</strong> Local es una heurística de mejora
-            directa. Una metaheurística es una estrategia general que orienta la
-            búsqueda; Tabú, Genético y Colonia de Hormigas entran en esa
-            categoría. <em>Señala las dos categorías. Avanza con «Relevo».</em>
+            <strong>Tabú y memoria.</strong> La Búsqueda Tabú es una
+            metaheurística que añade memoria a una búsqueda local para explorar
+            más alternativas. <em>Señala el ejemplo en la segunda tarjeta.</em>
           </li>
           <li>
-            <strong>Relevo.</strong> Búsqueda Local mejora una solución paso a
-            paso. Ahora Angie Loango explicará sus componentes y su
-            funcionamiento.
-            <em
-              >Señala el relevo y avanza. Pulsa la flecha para pasar a la
-              siguiente sección.</em
-            >
+            <strong>Cierre.</strong> Búsqueda Local mejora una solución paso a
+            paso y trabaja con una sola trayectoria. Ahora Angie Loango
+            explicará sus componentes y funcionamiento.
+            <em>Señala el relevo y avanza.</em>
           </li>
         </ol>
       </section>
