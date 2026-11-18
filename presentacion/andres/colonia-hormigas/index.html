@@ -5,29 +5,301 @@
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <title>Andrés · Colonia de Hormigas</title>
  <link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../../shared/slides.css">
+ <link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../estilos.css">
 </head>
 <body>
 <main class="section-deck">
  <div class="slide-viewport">
   <div class="slide-canvas slide-theme" data-algo="aco">
+
+   <!-- D1 · Parámetros y regla de transición -->
    <article class="lo-slide is-current">
     <header>
      <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
-     <h1 class="lo-s-title">El agente viajero</h1>
+     <h1 class="lo-s-title">Dos hormigas salen de A</h1>
     </header>
     <div class="lo-s-body">
-     <section class="lo-c is-key">
-      <h2 class="lo-c-name">Problema de cinco ciudades</h2>
-      <p class="lo-c-line">Ejemplo numérico pendiente de incorporar.</p>
-     </section>
+     <p class="slide-lead">Como τ = 1 en todas las aristas, al inicio solo pesa la distancia: 1/d².</p>
+     <div class="an-split">
+      <figure class="an-fig"><svg class="an-graph" data-tau="1"></svg><figcaption>Grosor de cada arista ∝ feromona τ</figcaption></figure>
+      <div class="an-col">
+       <table class="an-matrix" data-check="matriz" aria-label="Matriz de distancias">
+        <thead><tr><th>d(i,j)</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+        <tbody>
+         <tr><th>A</th><td class="is-diag">–</td><td>6</td><td>4</td><td>2</td><td>10</td></tr>
+         <tr><th>B</th><td>6</td><td class="is-diag">–</td><td>7</td><td>6</td><td>6</td></tr>
+         <tr><th>C</th><td>4</td><td>7</td><td class="is-diag">–</td><td>9</td><td>2</td></tr>
+         <tr><th>D</th><td>2</td><td>6</td><td>9</td><td class="is-diag">–</td><td>5</td></tr>
+         <tr><th>E</th><td>10</td><td>6</td><td>2</td><td>5</td><td class="is-diag">–</td></tr>
+        </tbody>
+       </table>
+       <p class="formula">p(i→j) = τ<sub>ij</sub><sup>α</sup> · η<sub>ij</sub><sup>β</sup> / Σ τ<sup>α</sup> η<sup>β</sup></p>
+       <div class="an-row">
+        <span class="lo-pill is-m">τ₀ = 1</span>
+        <span class="lo-pill is-m">η = 1/d</span>
+        <span class="lo-pill">α = 1</span>
+        <span class="lo-pill">β = 2</span>
+        <span class="lo-pill">ρ = 0.5</span>
+        <span class="lo-pill">Q = 10</span>
+       </div>
+      </div>
+     </div>
     </div>
     <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
    </article>
+
+   <!-- D2 · Hormiga 1 desde A -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Hormiga 1, desde A</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Cuatro candidatas en orden alfabético; r = 0.30 cae en D.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau="1" data-path="A" data-ant="1" data-here="A"></svg></figure>
+      <div class="an-col">
+       <table class="an-table an-seq is-compact" data-check="aco" data-from="A" data-visited="A" data-r="0.30">
+        <thead><tr><th>A →</th><th class="is-num">d</th><th class="is-num">Peso 1/d²</th><th class="is-num">p</th><th class="is-num">Acumulada</th></tr></thead>
+        <tbody>
+         <tr><td>B</td><td class="is-num">6</td><td class="is-num">0.0278</td><td class="is-num">0.08</td><td class="is-num">0.08</td></tr>
+         <tr><td>C</td><td class="is-num">4</td><td class="is-num">0.0625</td><td class="is-num">0.18</td><td class="is-num">0.26</td></tr>
+         <tr class="is-pick"><td>D</td><td class="is-num">2</td><td class="is-num">0.2500</td><td class="is-num">0.71</td><td class="is-num">0.97</td></tr>
+         <tr><td>E</td><td class="is-num">10</td><td class="is-num">0.0100</td><td class="is-num">0.03</td><td class="is-num">1.00</td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td></td><td class="is-num">Suma 0.3503</td><td></td><td></td></tr></tfoot>
+       </table>
+       <div class="an-bar an-in" style="--d:3.5" data-p="B:0.08,C:0.18,D:0.71,E:0.03" data-r="0.30" data-pick="D" role="img" aria-label="r = 0.30 cae en D"></div>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D3 · Hormiga 1 desde D -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Hormiga 1, desde D</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">r = 0.45 cae en C, con p = 0.15: no era la más probable, así explora.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau="1" data-path="AD" data-ant="1" data-here="D"></svg></figure>
+      <div class="an-col">
+       <table class="an-table an-seq is-compact" data-check="aco" data-from="D" data-visited="AD" data-r="0.45">
+        <thead><tr><th>D →</th><th class="is-num">d</th><th class="is-num">Peso 1/d²</th><th class="is-num">p</th><th class="is-num">Acumulada</th></tr></thead>
+        <tbody>
+         <tr><td>B</td><td class="is-num">6</td><td class="is-num">0.0278</td><td class="is-num">0.35</td><td class="is-num">0.35</td></tr>
+         <tr class="is-pick"><td>C</td><td class="is-num">9</td><td class="is-num">0.0123</td><td class="is-num">0.15</td><td class="is-num">0.50</td></tr>
+         <tr><td>E</td><td class="is-num">5</td><td class="is-num">0.0400</td><td class="is-num">0.50</td><td class="is-num">1.00</td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td></td><td class="is-num">Suma 0.0801</td><td></td><td></td></tr></tfoot>
+       </table>
+       <div class="an-bar an-in" style="--d:3" data-p="B:0.35,C:0.15,E:0.50" data-r="0.45" data-pick="C" role="img" aria-label="r = 0.45 cae en C"></div>
+       <p class="an-msg an-in" style="--d:4">No era la más probable: así explora.</p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D4 · Hormiga 1 desde C y tour completo -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Hormiga 1, desde C</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">r = 0.40 cae en E; luego E → B es forzado y B vuelve a A.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau="1" data-tour="ADCEB" data-ant="1"></svg><figcaption data-tour="ADCEB" data-cost="25">Hormiga 1: A-D-C-E-B-A · <b>25</b></figcaption></figure>
+      <div class="an-col">
+       <table class="an-table an-seq is-compact" data-check="aco" data-from="C" data-visited="ADC" data-r="0.40">
+        <thead><tr><th>C →</th><th class="is-num">d</th><th class="is-num">Peso 1/d²</th><th class="is-num">p</th><th class="is-num">Acumulada</th></tr></thead>
+        <tbody>
+         <tr><td>B</td><td class="is-num">7</td><td class="is-num">0.0204</td><td class="is-num">0.08</td><td class="is-num">0.08</td></tr>
+         <tr class="is-pick"><td>E</td><td class="is-num">2</td><td class="is-num">0.2500</td><td class="is-num">0.92</td><td class="is-num">1.00</td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td></td><td class="is-num">Suma 0.2704</td><td></td><td></td></tr></tfoot>
+       </table>
+       <div class="an-bar an-in" style="--d:2" data-p="B:0.08,E:0.92" data-r="0.40" data-pick="E" role="img" aria-label="r = 0.40 cae en E"></div>
+       <p class="an-formula an-in" style="--d:3" data-tour="ADCEB">2 + 9 + 2 + 6 + 6 = <b>25</b></p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D5 · Hormiga 2 desde A -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Hormiga 2, desde A</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Misma tabla que la hormiga 1; r = 0.75 también cae en D.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau="1" data-path="A" data-ant="2" data-here="A"></svg></figure>
+      <div class="an-col">
+       <table class="an-table is-compact" data-check="aco" data-from="A" data-visited="A" data-r="0.75">
+        <thead><tr><th>A →</th><th class="is-num">d</th><th class="is-num">Peso 1/d²</th><th class="is-num">p</th><th class="is-num">Acumulada</th></tr></thead>
+        <tbody>
+         <tr><td>B</td><td class="is-num">6</td><td class="is-num">0.0278</td><td class="is-num">0.08</td><td class="is-num">0.08</td></tr>
+         <tr><td>C</td><td class="is-num">4</td><td class="is-num">0.0625</td><td class="is-num">0.18</td><td class="is-num">0.26</td></tr>
+         <tr class="is-pick"><td>D</td><td class="is-num">2</td><td class="is-num">0.2500</td><td class="is-num">0.71</td><td class="is-num">0.97</td></tr>
+         <tr><td>E</td><td class="is-num">10</td><td class="is-num">0.0100</td><td class="is-num">0.03</td><td class="is-num">1.00</td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td></td><td class="is-num">Suma 0.3503</td><td></td><td></td></tr></tfoot>
+       </table>
+       <div class="an-bar an-in" style="--d:0.5" data-p="B:0.08,C:0.18,D:0.71,E:0.03" data-r="0.75" data-pick="D" role="img" aria-label="r = 0.75 cae en D"></div>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D6 · Hormiga 2 desde D -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Hormiga 2, desde D</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Misma tabla que la hormiga 1; ahora r = 0.20 cae en B.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau="1" data-path="AD" data-ant="2" data-here="D"></svg></figure>
+      <div class="an-col">
+       <table class="an-table is-compact" data-check="aco" data-from="D" data-visited="AD" data-r="0.20">
+        <thead><tr><th>D →</th><th class="is-num">d</th><th class="is-num">Peso 1/d²</th><th class="is-num">p</th><th class="is-num">Acumulada</th></tr></thead>
+        <tbody>
+         <tr class="is-pick"><td>B</td><td class="is-num">6</td><td class="is-num">0.0278</td><td class="is-num">0.35</td><td class="is-num">0.35</td></tr>
+         <tr><td>C</td><td class="is-num">9</td><td class="is-num">0.0123</td><td class="is-num">0.15</td><td class="is-num">0.50</td></tr>
+         <tr><td>E</td><td class="is-num">5</td><td class="is-num">0.0400</td><td class="is-num">0.50</td><td class="is-num">1.00</td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td></td><td class="is-num">Suma 0.0801</td><td></td><td></td></tr></tfoot>
+       </table>
+       <div class="an-bar an-in" style="--d:0.5" data-p="B:0.35,C:0.15,E:0.50" data-r="0.20" data-pick="B" role="img" aria-label="r = 0.20 cae en B"></div>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D7 · Hormiga 2 desde B y tour completo -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Hormiga 2, desde B</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">r = 0.60 cae en E; luego E → C es forzado y C vuelve a A.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau="1" data-tour="ADBEC" data-ant="2"></svg><figcaption data-tour="ADBEC" data-cost="20">Hormiga 2: A-D-B-E-C-A · <b>20</b></figcaption></figure>
+      <div class="an-col">
+       <table class="an-table an-seq is-compact" data-check="aco" data-from="B" data-visited="ADB" data-r="0.60">
+        <thead><tr><th>B →</th><th class="is-num">d</th><th class="is-num">Peso 1/d²</th><th class="is-num">p</th><th class="is-num">Acumulada</th></tr></thead>
+        <tbody>
+         <tr><td>C</td><td class="is-num">7</td><td class="is-num">0.0204</td><td class="is-num">0.42</td><td class="is-num">0.42</td></tr>
+         <tr class="is-pick"><td>E</td><td class="is-num">6</td><td class="is-num">0.0278</td><td class="is-num">0.58</td><td class="is-num">1.00</td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td></td><td class="is-num">Suma 0.0482</td><td></td><td></td></tr></tfoot>
+       </table>
+       <div class="an-bar an-in" style="--d:2" data-p="C:0.42,E:0.58" data-r="0.60" data-pick="E" role="img" aria-label="r = 0.60 cae en E"></div>
+       <p class="an-formula an-in" style="--d:3" data-tour="ADBEC">2 + 6 + 6 + 2 + 4 = <b>20</b>, el óptimo</p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D8 · Evaporación -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Evaporación: toda la feromona baja</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Con ρ = 0.5, todas las aristas pasan de τ = 1 a τ = 0.5.</p>
+     <div class="an-split">
+      <figure class="an-fig"><svg class="an-graph" data-tau-from="1" data-tau="0.5"></svg><figcaption>Todas las aristas se adelgazan a la mitad</figcaption></figure>
+      <div class="an-col">
+       <p class="formula">τ ← (1 − ρ) · τ = 0.5 · 1 = <b>0.5</b></p>
+       <div class="an-row">
+        <span class="lo-pill">Hormiga 1: L₁ = 25</span>
+        <span class="lo-pill">Hormiga 2: L₂ = 20</span>
+       </div>
+       <p class="an-msg an-in" style="--d:2">Olvidar lo viejo evita que un camino domine demasiado pronto.</p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D9 · Depósito -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Depósito: las aristas usadas se refuerzan</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">La hormiga 1 suma 10/25 = 0.4 y la hormiga 2 suma 10/20 = 0.5.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau-from="0.5" data-tau="AD:1.4,BE:1.4,CE:1.4,AC:1.0,BD:1.0,AB:0.9,CD:0.9"></svg><figcaption>A-D, B-E y C-E: las dos hormigas pasaron</figcaption></figure>
+      <table class="an-table an-seq is-compact" data-check="feromona">
+       <thead><tr><th>Arista</th><th class="is-num">τ evaporada</th><th>+ Hormiga 1 (0.4)</th><th>+ Hormiga 2 (0.5)</th><th class="is-num">τ nueva</th></tr></thead>
+       <tbody>
+        <tr class="is-pick"><td>A-D</td><td class="is-num">0.5</td><td>✓</td><td>✓</td><td class="is-num">1.4</td></tr>
+        <tr class="is-pick"><td>B-E</td><td class="is-num">0.5</td><td>✓</td><td>✓</td><td class="is-num">1.4</td></tr>
+        <tr class="is-pick"><td>C-E</td><td class="is-num">0.5</td><td>✓</td><td>✓</td><td class="is-num">1.4</td></tr>
+        <tr><td>A-C</td><td class="is-num">0.5</td><td></td><td>✓</td><td class="is-num">1.0</td></tr>
+        <tr><td>B-D</td><td class="is-num">0.5</td><td></td><td>✓</td><td class="is-num">1.0</td></tr>
+        <tr><td>A-B</td><td class="is-num">0.5</td><td>✓</td><td></td><td class="is-num">0.9</td></tr>
+        <tr><td>C-D</td><td class="is-num">0.5</td><td>✓</td><td></td><td class="is-num">0.9</td></tr>
+        <tr><td>A-E</td><td class="is-num">0.5</td><td></td><td></td><td class="is-num">0.5</td></tr>
+        <tr><td>B-C</td><td class="is-num">0.5</td><td></td><td></td><td class="is-num">0.5</td></tr>
+        <tr><td>D-E</td><td class="is-num">0.5</td><td></td><td></td><td class="is-num">0.5</td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- D10 · Efecto en la siguiente iteración -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">D</span>Colonia de Hormigas<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Así aprende la colonia</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">En la siguiente iteración, el peso es τ/d² y P(A→D) sube de 0.71 a 0.79.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tau="AD:1.4,BE:1.4,CE:1.4,AC:1.0,BD:1.0,AB:0.9,CD:0.9" data-here="A"></svg></figure>
+      <div class="an-col">
+       <table class="an-table an-seq is-compact" data-check="aco-next">
+        <thead><tr><th>A →</th><th class="is-num">τ nueva</th><th class="is-num">d</th><th class="is-num">Peso τ/d²</th><th class="is-num">p nueva</th><th class="is-num">p antes</th></tr></thead>
+        <tbody>
+         <tr><td>B</td><td class="is-num">0.9</td><td class="is-num">6</td><td class="is-num">0.0250</td><td class="is-num">0.06</td><td class="is-num">0.08</td></tr>
+         <tr><td>C</td><td class="is-num">1.0</td><td class="is-num">4</td><td class="is-num">0.0625</td><td class="is-num">0.14</td><td class="is-num">0.18</td></tr>
+         <tr class="is-pick"><td>D</td><td class="is-num">1.4</td><td class="is-num">2</td><td class="is-num">0.3500</td><td class="is-num">0.79</td><td class="is-num">0.71</td></tr>
+         <tr><td>E</td><td class="is-num">0.5</td><td class="is-num">10</td><td class="is-num">0.0050</td><td class="is-num">0.01</td><td class="is-num">0.03</td></tr>
+        </tbody>
+       </table>
+       <div class="an-bar an-in" style="--d:3" data-p="B:0.06,C:0.14,D:0.79,E:0.01" data-pick="D" role="img" aria-label="Nuevas probabilidades desde A"></div>
+       <p class="an-msg is-good an-in" style="--d:3.8">Las aristas más usadas atraen a las próximas hormigas.</p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span>Continúa Carolina: análisis crítico</span><span class="section-progress"></span></footer>
+   </article>
+
   </div>
  </div>
 </main>
+<script src="../ejemplo.js"></script>
 <script src="../../shared/canvas.js"></script>
 <script src="../../shared/section.js"></script>
 <script src="../../visor-bridge.js"></script>

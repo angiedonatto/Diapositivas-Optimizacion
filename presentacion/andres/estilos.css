@@ -1,0 +1,182 @@
+/* =====================================================================
+   Andrés · Ejemplo en vivo
+   Complementa la plantilla compartida (tokens, slides, projection) con las
+   piezas del ejemplo numérico: grafo, tablas de vecinos, genes, ruleta,
+   barra de probabilidades y lista tabú. Todo usa el prefijo an-.
+   Medidas en px del lienzo 1600 × 900.
+   ===================================================================== */
+
+.slide-theme {
+  --an-B: #3d5a98;
+  --an-C: #c0670f;
+  --an-D: #2c7a3f;
+  --an-E: #6d4ba3;
+  --an-h1: #b3362d;
+  --an-h2: #2f5fb3;
+}
+
+/* ---------- Composición ---------- */
+.an-split { display: grid; grid-template-columns: 480px 1fr; gap: 48px; align-items: start; flex: 1; min-height: 0; }
+.an-split.is-narrow { grid-template-columns: 400px 1fr; }
+.an-split.is-even { grid-template-columns: 1fr 1fr; }
+.an-col { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.an-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.an-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.an-fig figcaption { font-size: 22px; color: var(--lo-ink-2); text-align: center; }
+.an-fig figcaption b { color: var(--lo-m); }
+.lo-s-body > .slide-lead { flex: none; }
+.an-msg { margin: 0; padding: 14px 22px; border-radius: 16px; background: var(--lo-m-soft); color: var(--lo-m); font-size: 26px; font-weight: 700; }
+.an-msg.is-stop { background: var(--bad-soft); color: var(--bad); }
+.an-msg.is-good { background: var(--good-soft); color: var(--good); }
+.slide-canvas .an-formula { margin: 0; font: 600 26px var(--lo-mono); color: var(--lo-ink-2); }
+.slide-canvas .an-formula b { color: var(--lo-m); }
+
+/* ---------- Grafo de las cinco ciudades ---------- */
+.an-graph { display: block; width: 100%; height: auto; overflow: visible; }
+.an-graph .an-e { stroke: var(--lo-line); stroke-width: 2.5; stroke-linecap: round; }
+.an-graph .an-e.is-tau { stroke: color-mix(in srgb, var(--lo-m) 55%, var(--lo-line)); }
+.an-graph .an-tour { fill: none; stroke: var(--lo-m); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+.an-graph .an-tour.is-h1 { stroke: var(--an-h1); }
+.an-graph .an-tour.is-h2 { stroke: var(--an-h2); }
+.an-graph .an-lbl rect { fill: var(--lo-paper); stroke: var(--lo-line); stroke-width: 1.5; }
+.an-graph .an-lbl text { font: 700 20px system-ui, sans-serif; fill: var(--lo-ink-2); text-anchor: middle; dominant-baseline: central; }
+.an-graph .an-lbl.is-on rect { fill: var(--lo-m); stroke: var(--lo-m); }
+.an-graph .an-lbl.is-on text { fill: #fff; }
+.an-graph .an-lbl.is-h1 rect { fill: var(--an-h1); stroke: var(--an-h1); }
+.an-graph .an-lbl.is-h2 rect { fill: var(--an-h2); stroke: var(--an-h2); }
+.an-graph .an-n circle { fill: var(--lo-surface); stroke: var(--lo-ink); stroke-width: 3; }
+.an-graph .an-n text { font: 750 26px system-ui, sans-serif; fill: var(--lo-ink); text-anchor: middle; dominant-baseline: central; }
+.an-graph .an-n.is-start circle { fill: var(--lo-ink); }
+.an-graph .an-n.is-start text { fill: #fff; }
+.an-graph .an-n.is-here circle { stroke: var(--lo-m); stroke-width: 6; }
+.an-graph .an-note { font: italic 17px system-ui, sans-serif; fill: var(--lo-ink-3); text-anchor: middle; }
+
+/* ---------- Tablas ---------- */
+.slide-canvas .an-table { font-size: 24px; line-height: 1.25; }
+.slide-canvas .an-table :is(th, td) { padding: 10px 16px; white-space: nowrap; }
+.slide-canvas .an-table.is-compact { font-size: 22px; }
+.slide-canvas .an-table.is-compact :is(th, td) { padding: 7px 14px; }
+.slide-canvas .an-table td.is-num, .slide-canvas .an-table th.is-num { text-align: right; }
+.slide-canvas .an-table tfoot td { border-bottom: 0; font-weight: 700; color: var(--lo-ink-2); }
+.slide-canvas .an-table tr.is-pick td { background: var(--lo-m-soft); color: var(--lo-m); font-weight: 750; }
+.slide-canvas .an-table tr.is-best td { box-shadow: inset 0 -2px 0 var(--lo-m); font-weight: 650; }
+.slide-canvas .an-table tr.is-tabu td { background: var(--lo-surface-2); color: var(--lo-ink-3); }
+.slide-canvas .an-table tr.is-tabu td:not(:last-child) { text-decoration: line-through; text-decoration-thickness: 2px; }
+
+.slide-canvas .an-matrix { width: auto; font-size: 23px; }
+.slide-canvas .an-matrix :is(th, td) { padding: 7px 18px; text-align: center; border-bottom: 1px solid var(--lo-line); }
+.slide-canvas .an-matrix tbody th { background: var(--lo-m-soft); }
+.slide-canvas .an-matrix td.is-diag { color: var(--lo-ink-3); }
+
+.an-tag { display: inline-block; border-radius: 999px; padding: 2px 14px; font-size: 20px; font-weight: 700; background: var(--lo-surface-2); color: var(--lo-ink-2); }
+.an-tag.is-pick { background: var(--lo-m); color: #fff; }
+.an-tag.is-tabu { background: var(--lo-ink-3); color: #fff; letter-spacing: .04em; }
+
+/* ---------- Genes y cromosomas ---------- */
+.an-genes { display: inline-flex; gap: 8px; align-items: center; vertical-align: middle; }
+.an-g { width: 46px; height: 46px; border-radius: 11px; display: inline-grid; place-items: center; color: #fff; font-weight: 750; font-size: 24px; background: var(--lo-ink-3); position: relative; }
+.an-genes.is-sm .an-g { width: 36px; height: 36px; border-radius: 9px; font-size: 20px; }
+.an-genes.is-lg .an-g { width: 64px; height: 64px; border-radius: 14px; font-size: 30px; }
+.an-g.g-A { background: var(--lo-surface-2); color: var(--lo-ink-2); border: 1.5px solid var(--lo-line); }
+.an-g.g-B { background: var(--an-B); }
+.an-g.g-C { background: var(--an-C); }
+.an-g.g-D { background: var(--an-D); }
+.an-g.g-E { background: var(--an-E); }
+.an-g.is-plain { background: var(--lo-surface); color: var(--lo-ink); border: 2px solid var(--lo-line); }
+.an-g.is-seg { box-shadow: 0 0 0 4px var(--lo-paper), 0 0 0 7px var(--lo-ink); }
+.an-cut { width: 4px; height: 76px; border-radius: 2px; background: var(--lo-ink); margin: 0 4px; }
+.an-slot { width: 64px; height: 64px; border-radius: 14px; border: 2.5px dashed var(--lo-line); display: inline-grid; place-items: center; }
+.an-skip::after { content: ""; position: absolute; left: -6px; right: -6px; top: 50%; height: 5px; border-radius: 3px; background: var(--lo-ink); transform: rotate(-35deg) scaleX(0); }
+.lo-slide.is-current .an-skip::after { animation: an-strike .4s var(--lo-ease) both; animation-delay: calc(var(--s, 0) * 1s + .2s); }
+@keyframes an-strike { to { transform: rotate(-35deg) scaleX(1); } }
+
+/* ---------- Individuos de la población ---------- */
+.an-ind { display: inline-flex; align-items: center; gap: 14px; padding: 10px 16px; border-radius: 16px; background: var(--lo-surface); border: 1.5px solid var(--lo-line); font-size: 24px; font-weight: 700; position: relative; }
+.an-ind.is-key { border-color: var(--lo-m); box-shadow: 0 0 0 4px var(--lo-m-soft); }
+.an-ind.is-out { opacity: .45; }
+.an-ind.is-out::after { content: ""; position: absolute; left: 8px; right: 8px; top: 50%; height: 4px; border-radius: 2px; background: var(--bad); }
+.an-pop { display: grid; grid-template-columns: auto auto; gap: 10px 22px; justify-content: start; }
+.an-pop > span { display: inline-flex; align-items: center; gap: 10px; }
+
+/* ---------- Pasos del cruce OX ---------- */
+.an-ox { display: grid; grid-template-columns: 280px 1fr; gap: 20px 28px; align-items: center; }
+.an-ox-label { font-size: 24px; font-weight: 700; color: var(--lo-ink-2); }
+.an-ox-label small { display: block; font-size: 19px; font-weight: 600; color: var(--lo-ink-3); }
+.an-ox-note { font-size: 22px; color: var(--lo-ink-2); margin-left: 18px; }
+
+/* ---------- Intercambio (swap) ---------- */
+.an-swap { display: flex; gap: 12px; padding: 26px 0 8px; }
+.an-swap .an-g { width: 76px; height: 76px; font-size: 32px; border-radius: 16px; }
+.lo-slide.is-current .an-swap .is-l { animation: an-swap-l 1.4s var(--lo-ease) 1s both; }
+.lo-slide.is-current .an-swap .is-r { animation: an-swap-r 1.4s var(--lo-ease) 1s both; }
+@keyframes an-swap-l { 0% { transform: none; } 50% { transform: translate(88px, -46px); } 100% { transform: translateX(176px); } }
+@keyframes an-swap-r { 0% { transform: none; } 50% { transform: translate(-88px, 46px); } 100% { transform: translateX(-176px); } }
+
+/* ---------- Lista tabú y mejor solución ---------- */
+.an-state { display: flex; gap: 22px; align-items: stretch; flex: none; }
+.an-box { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 18px; padding: 10px 22px; display: flex; align-items: center; gap: 16px; }
+.an-box-name { font-size: 20px; font-weight: 700; color: var(--lo-ink-3); text-transform: uppercase; letter-spacing: .05em; }
+.an-box-val { font-size: 32px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.an-box.is-best { border-color: var(--lo-m); box-shadow: 0 0 0 4px var(--lo-m-soft); }
+.an-box.is-best .an-box-val { color: var(--lo-m); }
+.an-tabu { display: flex; gap: 10px; overflow: hidden; padding: 2px; }
+.an-tabu > span { width: 104px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; font-weight: 750; background: var(--lo-ink-3); color: #fff; }
+.an-tabu > span.is-empty { background: none; border: 2px dashed var(--lo-line); }
+.an-tabu > span.is-out { width: 0; margin-right: -10px; }
+.lo-slide.is-current .an-tabu > span.is-new { animation: an-enter .7s var(--lo-ease) .5s both; }
+.lo-slide.is-current .an-tabu > span.is-out { animation: an-leave .7s var(--lo-ease) .2s backwards; }
+@keyframes an-enter { from { transform: translateX(140px); opacity: 0; } }
+@keyframes an-leave { from { width: 104px; margin-right: 0; opacity: 1; } 60% { opacity: 0; transform: translateX(-60px); } to { width: 0; margin-right: -10px; opacity: 0; } }
+
+/* ---------- Ruleta, barra de probabilidades y evolución del costo ---------- */
+.an-pie, .an-chart { display: block; width: 100%; height: auto; overflow: visible; }
+.an-pie .an-slice { stroke: var(--lo-paper); stroke-width: 4; }
+.an-pie text { font: 700 22px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; }
+.an-pie .an-spin line { stroke: var(--lo-ink); stroke-width: 5; stroke-linecap: round; }
+.an-pie .an-spin circle { fill: var(--lo-ink); }
+.an-pie .an-spin text { fill: #fff; font-size: 19px; }
+
+.an-bar { position: relative; display: flex; height: 64px; border-radius: 14px; overflow: visible; margin: 8px 0 44px; }
+.an-bar > span { display: grid; place-items: center; color: #fff; font-weight: 750; font-size: 21px; background: color-mix(in srgb, var(--lo-m) 45%, var(--lo-line)); border-right: 3px solid var(--lo-paper); overflow: hidden; white-space: nowrap; }
+.an-bar > span:first-child { border-radius: 14px 0 0 14px; }
+.an-bar > span:last-of-type { border-radius: 0 14px 14px 0; border-right: 0; }
+.an-bar > span.is-pick { background: var(--lo-m); }
+.an-bar-r { position: absolute; top: -10px; bottom: -10px; width: 4px; margin-left: -2px; background: var(--lo-ink); border-radius: 2px; }
+.an-bar-r::after { content: attr(data-label); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 4px; font-size: 21px; font-weight: 750; white-space: nowrap; color: var(--lo-ink); }
+.lo-slide.is-current .an-bar-r { animation: an-drop .6s var(--lo-ease) .9s both; }
+@keyframes an-drop { from { opacity: 0; transform: translateY(-24px); } }
+
+.an-chart .an-axis { stroke: var(--lo-line); stroke-width: 2; }
+.an-chart .an-grid-t { font: 600 18px system-ui, sans-serif; fill: var(--lo-ink-3); }
+.an-chart .an-line { fill: none; stroke: var(--lo-m); stroke-width: 5; stroke-linejoin: round; }
+.an-chart .an-line.is-best { stroke: var(--lo-ink); stroke-dasharray: 10 8; stroke-width: 3; }
+.an-chart .an-pt { fill: var(--lo-m); }
+.an-chart .an-pt-t { font: 750 24px system-ui, sans-serif; fill: var(--lo-m); text-anchor: middle; }
+.an-chart .an-key { font: 600 19px system-ui, sans-serif; fill: var(--lo-ink-2); }
+
+/* ---------- Apariciones al entrar en la diapositiva ----------
+   Una sola pulsación por paso: las piezas entran solas, en orden. */
+.lo-slide.is-current .an-in { animation: an-fade .5s var(--lo-ease) both; animation-delay: calc(var(--d, 0) * .8s + .3s); }
+.lo-slide.is-current .an-seq > tbody > tr { animation: an-fade .45s var(--lo-ease) both; }
+.lo-slide.is-current .an-seq > tbody > tr:nth-child(2) { animation-delay: .45s; }
+.lo-slide.is-current .an-seq > tbody > tr:nth-child(3) { animation-delay: .9s; }
+.lo-slide.is-current .an-seq > tbody > tr:nth-child(4) { animation-delay: 1.35s; }
+.lo-slide.is-current .an-seq > tbody > tr:nth-child(5) { animation-delay: 1.8s; }
+.lo-slide.is-current .an-seq > tbody > tr:nth-child(6) { animation-delay: 2.25s; }
+.lo-slide.is-current .an-seq > tbody > tr:nth-child(n+7) { animation-delay: 2.7s; }
+.lo-slide.is-current .an-seq > tbody > tr.is-pick td,
+.lo-slide.is-current .an-seq > tbody > tr.is-best td { animation: an-mark .5s var(--lo-ease) 3.1s backwards; }
+.lo-slide.is-current .an-graph .an-tour { stroke-dasharray: 1; animation: an-draw 1.6s var(--lo-ease) .4s both; }
+.lo-slide.is-current .an-graph .is-anim { animation: an-width 1.2s var(--lo-ease) both; animation-delay: var(--wd, .8s); }
+.lo-slide.is-current .an-pie .an-spin { animation: an-fade .5s var(--lo-ease) both; animation-delay: calc(var(--d, 0) * .8s + .3s); }
+.lo-slide.is-current .an-chart .an-line { stroke-dasharray: 1; animation: an-draw 1.8s var(--lo-ease) .4s both; }
+.lo-slide.is-current .an-chart .an-line.is-best { stroke-dasharray: 10 8; animation: an-fade .6s var(--lo-ease) 2s both; }
+@keyframes an-fade { from { opacity: 0; transform: translateY(10px); } }
+@keyframes an-mark { from { background: transparent; color: inherit; box-shadow: none; } }
+@keyframes an-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes an-width { from { stroke-width: var(--w0); } to { stroke-width: var(--w1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lo-slide.is-current :is(.an-in, .an-seq > tbody > tr, .an-seq td, .an-tour, .is-anim, .an-spin, .an-line, .an-bar-r, .an-tabu > span, .an-swap .an-g),
+  .lo-slide.is-current .an-skip::after { animation-duration: 1ms !important; animation-delay: 0s !important; }
+}

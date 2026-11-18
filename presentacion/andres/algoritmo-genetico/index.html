@@ -5,29 +5,262 @@
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <title>Andrés · Algoritmos Genéticos</title>
  <link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../../shared/slides.css">
+ <link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../estilos.css">
 </head>
 <body>
 <main class="section-deck">
  <div class="slide-viewport">
   <div class="slide-canvas slide-theme" data-algo="ga">
+
+   <!-- C1 · Problema y codificación -->
    <article class="lo-slide is-current">
     <header>
      <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
-     <h1 class="lo-s-title">El agente viajero</h1>
+     <h1 class="lo-s-title">Un tour es un cromosoma de 4 genes</h1>
     </header>
     <div class="lo-s-body">
-     <section class="lo-c is-key">
-      <h2 class="lo-c-name">Problema de cinco ciudades</h2>
-      <p class="lo-c-line">Ejemplo numérico pendiente de incorporar.</p>
-     </section>
+     <p class="slide-lead">A va fija al inicio: B C D E significa el tour A-B-C-D-E-A.</p>
+     <div class="an-split">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCDE"></svg></figure>
+      <div class="an-col">
+       <table class="an-matrix" data-check="matriz" aria-label="Matriz de distancias">
+        <thead><tr><th>d(i,j)</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+        <tbody>
+         <tr><th>A</th><td class="is-diag">–</td><td>6</td><td>4</td><td>2</td><td>10</td></tr>
+         <tr><th>B</th><td>6</td><td class="is-diag">–</td><td>7</td><td>6</td><td>6</td></tr>
+         <tr><th>C</th><td>4</td><td>7</td><td class="is-diag">–</td><td>9</td><td>2</td></tr>
+         <tr><th>D</th><td>2</td><td>6</td><td>9</td><td class="is-diag">–</td><td>5</td></tr>
+         <tr><th>E</th><td>10</td><td>6</td><td>2</td><td>5</td><td class="is-diag">–</td></tr>
+        </tbody>
+       </table>
+       <div class="an-row">
+        <span class="an-genes is-lg"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span></span>
+        <span class="an-box-val" aria-hidden="true">→</span>
+        <span class="lo-pill is-m">A-B-C-D-E-A</span>
+       </div>
+       <div class="an-row">
+        <span class="lo-pill">Población 4</span>
+        <span class="lo-pill">Aptitud 100 / costo</span>
+        <span class="lo-pill">pc = 0.9</span>
+        <span class="lo-pill">pm = 0.1</span>
+       </div>
+      </div>
+     </div>
     </div>
     <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
    </article>
+
+   <!-- C2 · Población inicial -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Generación 0: cuatro individuos</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Menor costo, mayor aptitud y más probabilidad de ser elegido.</p>
+     <table class="an-table an-seq" data-check="poblacion">
+      <thead><tr><th>Ind.</th><th>Cromosoma</th><th>Tour</th><th class="is-num">Costo</th><th class="is-num">Aptitud</th><th class="is-num">Probabilidad</th><th class="is-num">Acumulada</th></tr></thead>
+      <tbody>
+       <tr><td>P1</td><td><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span></span></td><td>A-B-C-D-E-A</td><td class="is-num">37</td><td class="is-num">2.70</td><td class="is-num">0.19</td><td class="is-num">0.19</td></tr>
+       <tr><td>P2</td><td><span class="an-genes is-sm"><span class="an-g g-E">E</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-B">B</span></span></td><td>A-E-C-D-B-A</td><td class="is-num">33</td><td class="is-num">3.03</td><td class="is-num">0.21</td><td class="is-num">0.40</td></tr>
+       <tr><td>P3</td><td><span class="an-genes is-sm"><span class="an-g g-C">C</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-D">D</span></span></td><td>A-C-B-E-D-A</td><td class="is-num">24</td><td class="is-num">4.17</td><td class="is-num">0.29</td><td class="is-num">0.69</td></tr>
+       <tr><td>P4</td><td><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span></td><td>A-B-D-E-C-A</td><td class="is-num">23</td><td class="is-num">4.35</td><td class="is-num">0.31</td><td class="is-num">1.00</td></tr>
+      </tbody>
+      <tfoot><tr><td></td><td></td><td></td><td class="is-num">Promedio 29.25</td><td class="is-num">Suma 14.25</td><td class="is-num">1.00</td><td></td></tr></tfoot>
+     </table>
+     <p class="an-formula an-in" style="--d:3">Aptitud = 100 / costo · Probabilidad = aptitud / 14.25</p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- C3 · Selección por ruleta -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Selección por ruleta: cuatro giros</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Supongamos que salen estos números aleatorios.</p>
+     <div class="an-split">
+      <figure class="an-fig"><svg class="an-pie" data-p="P1:0.19,P2:0.21,P3:0.29,P4:0.31" data-r="0.62,0.81,0.35,0.08" role="img" aria-label="Ruleta con P1 0.19, P2 0.21, P3 0.29 y P4 0.31; giros en 0.62, 0.81, 0.35 y 0.08" style="max-width:430px"></svg></figure>
+      <div class="an-col">
+       <table class="an-table" data-check="ruleta">
+        <thead><tr><th>Giro</th><th class="is-num">r</th><th>Intervalo donde cae</th><th>Seleccionado</th></tr></thead>
+        <tbody>
+         <tr class="an-in" style="--d:1"><td>1</td><td class="is-num">0.62</td><td>(0.40, 0.69]</td><td><b>P3</b></td></tr>
+         <tr class="an-in" style="--d:2"><td>2</td><td class="is-num">0.81</td><td>(0.69, 1.00]</td><td><b>P4</b></td></tr>
+         <tr class="an-in" style="--d:3"><td>3</td><td class="is-num">0.35</td><td>(0.19, 0.40]</td><td><b>P2</b></td></tr>
+         <tr class="an-in" style="--d:4"><td>4</td><td class="is-num">0.08</td><td>[0, 0.19]</td><td><b>P1</b></td></tr>
+        </tbody>
+       </table>
+       <div class="an-row an-in" style="--d:5">
+        <span class="an-box-name">Parejas</span>
+        <span class="lo-pill is-m">(P3, P4)</span>
+        <span class="lo-pill is-m">(P2, P1)</span>
+       </div>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- C4 · Cruce OX, hijo 1 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Cruce OX: hijo 1 = OX(P3, P4)</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">r de cruce = 0.30 &lt; 0.9: se cruzan. Se copia el segmento de P3 y P4 llena los huecos.</p>
+     <div class="an-ox" data-check="ox" data-p1="CBED" data-p2="BDEC" data-child="DBEC">
+      <span class="an-ox-label">Padre P3</span>
+      <span class="an-genes is-lg"><span class="an-g g-C">C</span><i class="an-cut"></i><span class="an-g g-B is-seg">B</span><span class="an-g g-E is-seg">E</span><i class="an-cut"></i><span class="an-g g-D">D</span></span>
+      <span class="an-ox-label">Padre P4</span>
+      <span class="an-genes is-lg"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>
+      <span class="an-ox-label">Recorrido de P4<small>desde la posición 4, dando la vuelta</small></span>
+      <span class="an-row"><span class="an-genes is-lg"><span class="an-g g-C an-in" style="--d:1.8">C</span><span class="an-g g-B an-in an-skip" style="--d:2.1;--s:3.2">B</span><span class="an-g g-D an-in" style="--d:2.4">D</span><span class="an-g g-E an-in an-skip" style="--d:2.7;--s:3.2">E</span></span><span class="an-ox-note an-in" style="--d:3.8">B y E ya están: quedan <b>C, D</b></span></span>
+      <span class="an-ox-label">Hijo 1</span>
+      <span class="an-genes is-lg"><span class="an-slot"><span class="an-g g-D an-in" style="--d:5">D</span></span><i class="an-cut"></i><span class="an-slot"><span class="an-g g-B an-in" style="--d:1">B</span></span><span class="an-slot"><span class="an-g g-E an-in" style="--d:1">E</span></span><i class="an-cut"></i><span class="an-slot"><span class="an-g g-C an-in" style="--d:4.5">C</span></span></span>
+     </div>
+     <p class="an-formula an-in" style="--d:5.8" data-tour="ADBEC">A-D-B-E-C-A = 2 + 6 + 6 + 2 + 4 = <b>20</b></p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- C5 · Cruce OX, hijo 2 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Cruce OX: hijo 2 = OX(P4, P3)</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">A veces el hijo sale idéntico a un padre; por eso la mutación importa.</p>
+     <div class="an-ox" data-check="ox" data-p1="BDEC" data-p2="CBED" data-child="BDEC">
+      <span class="an-ox-label">Padre P4</span>
+      <span class="an-genes is-lg"><span class="an-g g-B">B</span><i class="an-cut"></i><span class="an-g g-D is-seg">D</span><span class="an-g g-E is-seg">E</span><i class="an-cut"></i><span class="an-g g-C">C</span></span>
+      <span class="an-ox-label">Padre P3</span>
+      <span class="an-genes is-lg"><span class="an-g g-C">C</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-D">D</span></span>
+      <span class="an-ox-label">Recorrido de P3<small>desde la posición 4, dando la vuelta</small></span>
+      <span class="an-row"><span class="an-genes is-lg"><span class="an-g g-D an-in an-skip" style="--d:1.8;--s:3.2">D</span><span class="an-g g-C an-in" style="--d:2.1">C</span><span class="an-g g-B an-in" style="--d:2.4">B</span><span class="an-g g-E an-in an-skip" style="--d:2.7;--s:3.2">E</span></span><span class="an-ox-note an-in" style="--d:3.8">D y E ya están: quedan <b>C, B</b></span></span>
+      <span class="an-ox-label">Hijo 2</span>
+      <span class="an-genes is-lg"><span class="an-slot"><span class="an-g g-B an-in" style="--d:5">B</span></span><i class="an-cut"></i><span class="an-slot"><span class="an-g g-D an-in" style="--d:1">D</span></span><span class="an-slot"><span class="an-g g-E an-in" style="--d:1">E</span></span><i class="an-cut"></i><span class="an-slot"><span class="an-g g-C an-in" style="--d:4.5">C</span></span></span>
+     </div>
+     <p class="an-formula an-in" style="--d:5.8" data-tour="ABDEC">A-B-D-E-C-A = 6 + 6 + 5 + 2 + 4 = <b>23</b>, igual que P4</p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- C6 · Pareja 2 sin cruce -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Pareja 2: no hay cruce</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">r de cruce = 0.95 &gt; 0.9: los hijos son copias de sus padres.</p>
+     <div class="an-ox">
+      <span class="an-ox-label">P2 → Hijo 3</span>
+      <span class="an-row"><span class="an-ind an-in" style="--d:0.5" data-tour="AECDB" data-cost="33"><span class="an-genes"><span class="an-g g-E">E</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-B">B</span></span>33</span></span>
+      <span class="an-ox-label">P1 → Hijo 4</span>
+      <span class="an-row"><span class="an-ind an-in" style="--d:1.2" data-tour="ABCDE" data-cost="37"><span class="an-genes"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span></span>37</span></span>
+     </div>
+     <p class="an-msg an-in" style="--d:2">Con pc = 0.9, en promedio 1 de cada 10 parejas pasa sin cruzarse.</p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- C7 · Mutación -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Mutación: pm = 0.1 por hijo</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Solo muta el hijo con r &lt; 0.1: sus genes 3 y 4 se intercambian.</p>
+     <table class="an-table an-seq" data-check="mutacion">
+      <thead><tr><th>Hijo</th><th>Cromosoma</th><th class="is-num">r de mutación</th><th>¿Muta?</th><th>Resultado</th><th class="is-num">Costo</th></tr></thead>
+      <tbody>
+       <tr><td>H1</td><td><span class="an-genes is-sm"><span class="an-g g-D">D</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span></td><td class="is-num">0.47</td><td>no</td><td><span class="an-genes is-sm"><span class="an-g g-D">D</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span></td><td class="is-num">20</td></tr>
+       <tr><td>H2</td><td><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span></td><td class="is-num">0.66</td><td>no</td><td><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span></td><td class="is-num">23</td></tr>
+       <tr><td>H3</td><td><span class="an-genes is-sm"><span class="an-g g-E">E</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-B">B</span></span></td><td class="is-num">0.23</td><td>no</td><td><span class="an-genes is-sm"><span class="an-g g-E">E</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-B">B</span></span></td><td class="is-num">33</td></tr>
+       <tr class="is-pick"><td>H4</td><td><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span></span></td><td class="is-num">0.05</td><td>sí</td><td><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-E">E</span><span class="an-g g-D">D</span></span></td><td class="is-num">22</td></tr>
+      </tbody>
+     </table>
+     <p class="an-formula an-in" style="--d:4" data-tour="ABCED">A-B-C-E-D-A = 6 + 7 + 2 + 5 + 2 = <b>22</b> (antes 37)</p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- C8 · Elitismo -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Elitismo: el mejor padre no se pierde</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">El peor hijo, E C D B (33), se reemplaza por el mejor padre, B D E C (23).</p>
+     <div class="an-ox">
+      <span class="an-ox-label">Hijos</span>
+      <span class="an-row">
+       <span class="an-ind" data-tour="ADBEC" data-cost="20"><span class="an-genes is-sm"><span class="an-g g-D">D</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>20</span>
+       <span class="an-ind" data-tour="ABDEC" data-cost="23"><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>23</span>
+       <span class="an-ind is-out" data-tour="AECDB" data-cost="33"><span class="an-genes is-sm"><span class="an-g g-E">E</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-B">B</span></span>33</span>
+       <span class="an-ind" data-tour="ABCED" data-cost="22"><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-E">E</span><span class="an-g g-D">D</span></span>22</span>
+      </span>
+      <span class="an-ox-label">Mejor padre</span>
+      <span class="an-row"><span class="an-ind is-key an-in" style="--d:1" data-tour="ABDEC" data-cost="23"><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>23</span><span class="an-ox-note an-in" style="--d:1">P4 entra en lugar de E C D B</span></span>
+      <span class="an-ox-label">Generación 1</span>
+      <span class="an-row an-in" style="--d:2">
+       <span class="an-ind" data-tour="ADBEC" data-cost="20"><span class="an-genes is-sm"><span class="an-g g-D">D</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>20</span>
+       <span class="an-ind" data-tour="ABDEC" data-cost="23"><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>23</span>
+       <span class="an-ind is-key" data-tour="ABDEC" data-cost="23"><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>23</span>
+       <span class="an-ind" data-tour="ABCED" data-cost="22"><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-E">E</span><span class="an-g g-D">D</span></span>22</span>
+      </span>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- C9 · Generación 0 frente a generación 1 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">C</span>Algoritmos Genéticos<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Una generación después</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">El mejor costo baja de 23 a 20, el óptimo, y el promedio de 29.25 a 22.</p>
+     <table class="an-table" data-check="generaciones">
+      <thead><tr><th></th><th>Generación 0</th><th>Generación 1</th></tr></thead>
+      <tbody>
+       <tr><th>Individuos</th>
+        <td><div class="an-pop" data-pop="BCDE,ECDB,CBED,BDEC">
+         <span><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span></span>37</span>
+         <span><span class="an-genes is-sm"><span class="an-g g-E">E</span><span class="an-g g-C">C</span><span class="an-g g-D">D</span><span class="an-g g-B">B</span></span>33</span>
+         <span><span class="an-genes is-sm"><span class="an-g g-C">C</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-D">D</span></span>24</span>
+         <span><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>23</span>
+        </div></td>
+        <td><div class="an-pop" data-pop="DBEC,BDEC,BDEC,BCED">
+         <span><span class="an-genes is-sm"><span class="an-g g-D">D</span><span class="an-g g-B">B</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>20</span>
+         <span><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>23</span>
+         <span><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-D">D</span><span class="an-g g-E">E</span><span class="an-g g-C">C</span></span>23</span>
+         <span><span class="an-genes is-sm"><span class="an-g g-B">B</span><span class="an-g g-C">C</span><span class="an-g g-E">E</span><span class="an-g g-D">D</span></span>22</span>
+        </div></td>
+       </tr>
+       <tr><th>Mejor costo</th><td>23</td><td><b>20 (óptimo)</b></td></tr>
+       <tr><th>Costo promedio</th><td>29.25</td><td><b>22.00</b></td></tr>
+      </tbody>
+     </table>
+     <p class="an-msg is-stop an-in" style="--d:1.5">B D E C aparece dos veces: se pierde diversidad, riesgo de convergencia prematura.</p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span>Continúa Carolina: análisis crítico</span><span class="section-progress"></span></footer>
+   </article>
+
   </div>
  </div>
 </main>
+<script src="../ejemplo.js"></script>
 <script src="../../shared/canvas.js"></script>
 <script src="../../shared/section.js"></script>
 <script src="../../visor-bridge.js"></script>
