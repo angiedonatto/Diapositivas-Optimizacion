@@ -155,19 +155,41 @@
        <p class="lo-c-line"><strong>Una solución actual a la vez</strong></p>
       </div>
      </div>
-     <div class="local-split local-classification">
-      <div class="lo-c local-compare" data-f="4" data-cue="Local mejora mediante vecinos, Tabú incorpora memoria">
-       <h2 class="lo-c-name">Heurística frente a metaheurística</h2>
-       <div class="local-duo">
-        <div><strong>Búsqueda Local</strong><p>Mejora mediante vecinos</p></div>
-        <div><strong>Búsqueda Tabú</strong><p>Incorpora memoria para ampliar la exploración</p></div>
-       </div>
+     <section class="lo-c local-compare" data-f="4" data-cue="Heurística de mejora: regla concreta. Metaheurística: estrategia general que orienta la exploración.">
+      <h2 class="lo-c-name">Heurística frente a metaheurística</h2>
+      <div class="local-duo">
+       <div><strong>Búsqueda Local · Heurística de mejora</strong><p>Aplica una <b>regla concreta</b>: solo acepta vecinos que mejoran.</p></div>
+       <div><strong>Búsqueda Tabú · Ejemplo de metaheurística</strong><p><b>Estrategia general</b> que <b>orienta la exploración</b>. Tabú usa memoria.</p></div>
       </div>
-      <div class="lo-c local-limit" data-f="5" data-cue="Puede detenerse en un óptimo local">
-       <h2 class="lo-c-name">Límite de la mejora</h2>
-       <p class="lo-c-line">Puede detenerse en un óptimo local.</p>
-      </div>
-     </div>
+      <figure class="local-escape" data-f="5" data-cue="Local se atasca en la cima cercana. Tabú usa memoria y puede aceptar un paso peor para explorar otra región.">
+       <svg viewBox="0 0 1320 112" role="img" aria-label="Dos recorridos en el mismo paisaje. Local sube hasta la cima cercana y se detiene. Tabú puede bajar temporalmente y explorar otra región, donde hay una cima más alta.">
+        <defs>
+         <path id="comparison-land" d="M26 98 75 85 149 47 204 85 268 91 361 70 486 22 547 60 604 87"/>
+         <path id="comparison-ascent" d="M26 98 75 85 149 47"/>
+        </defs>
+        <rect width="644" height="112" rx="12" fill="#eef1f7"/>
+        <rect x="676" width="644" height="112" rx="12" fill="#fcf4e5"/>
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+         <use href="#comparison-land" stroke="#a5b4a9" stroke-width="3"/>
+         <use href="#comparison-ascent" stroke="#3d5a98" stroke-width="5"/>
+         <use href="#comparison-land" x="676" stroke="#a5b4a9" stroke-width="3"/>
+         <use href="#comparison-ascent" x="676" stroke="#a8620a" stroke-width="5"/>
+         <path d="m825 47 55 38 64 6" stroke="#a8620a" stroke-width="5" stroke-dasharray="7 9"/>
+         <path d="m944 91 93-21 125-48m-12 0 12 0-8 10" stroke="#1f7a4d" stroke-width="5"/>
+        </g>
+        <circle cx="149" cy="47" r="10" fill="#3d5a98"/>
+        <path d="M145 47h8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="825" cy="47" r="7" fill="#a8620a"/>
+        <text x="149" y="28" text-anchor="middle" fill="#3d5a98">Óptimo local</text>
+        <text x="873" y="55" fill="#80501c">Paso peor</text>
+        <text x="1124" y="99" fill="#1f6243">Otra región</text>
+       </svg>
+       <figcaption class="local-duo">
+        <span><b>Se atasca</b> · ningún vecino mejora.</span>
+        <span><b>Puede salir del atasco</b> · memoria y un paso temporalmente peor.</span>
+       </figcaption>
+      </figure>
+     </section>
      <div class="local-takeaway local-handoff" data-f="6" data-cue="Componentes y funcionamiento, continúa Angie Loango">
       <strong>Componentes y funcionamiento</strong><span>Continúa Angie Loango <b aria-hidden="true">→</b></span>
      </div>
@@ -225,14 +247,14 @@
   <h3>3. Origen, clasificación y limitación · 55 segundos</h3>
   <p>En cuanto a su origen, la Búsqueda Local no tiene un único creador. Es una idea clásica de optimización, con antecedentes como el método 2-opt de Croes, publicado en 1958, y el trabajo de Lin–Kernighan, en 1973, aplicados al problema del agente viajero.</p>
   <p>También es importante saber cómo se clasifica. Es una heurística de mejora: parte de una solución y la modifica para mejorarla. Se considera un método de trayectoria, porque trabaja con una sola solución actual a la vez y trata de mejorarla progresivamente.</p>
-  <p>Además, es una heurística y no una metaheurística. Las metaheurísticas son estrategias más generales que permiten orientar la exploración y tratar de superar problemas como el estancamiento en óptimos locales. Por ejemplo, Búsqueda Tabú incorpora memoria para continuar explorando.</p>
+  <p>La Búsqueda Local es una heurística de mejora: aplica una regla concreta, aceptar solo vecinos que mejoren. Una metaheurística es una estrategia más general que orienta la exploración. Por ejemplo, Tabú incorpora memoria. Si Local llega a una cima donde ningún paso cercano mejora, se detiene. Tabú puede aceptar un paso temporalmente peor para salir del atasco e intentar explorar otra región.</p>
   <p>Con esta idea general, mi compañera Angie Loango les va a explicar cuáles son los componentes de la Búsqueda Local y cómo funciona el algoritmo.</p>
   <ol>
    <li><b>1958, 1973.</b> Señala cada hito. Avanza con «También es importante saber cómo se clasifica».</li>
    <li><b>Solución, cambio, mejora.</b> Recorre el esquema. Avanza con «¿Cuántas soluciones tiene a la vez?».</li>
    <li><b>Trayectoria.</b> Recorre x₀ → x₁ → x₂. Avanza con «Además, es una heurística».</li>
-   <li><b>Vecinos, memoria.</b> Señala Local y luego Tabú. Avanza con «Volvamos a la cima menor».</li>
-   <li><b>Estancamiento.</b> Señala el recordatorio de óptimo local. Avanza con «Con esta idea general…».</li>
+   <li><b>Regla concreta, estrategia general.</b> Señala primero la regla de Local y luego la definición de metaheurística. Avanza con «Veamos qué ocurre cuando se agotan las mejoras».</li>
+   <li><b>Atasco, paso peor, otra región.</b> Señala el punto azul, el tramo punteado y luego la flecha verde. Avanza con «Con esta idea general…».</li>
    <li><b>Angie Loango.</b> Señala el relevo. Avanza para iniciar su bloque.</li>
   </ol>
  </section>
