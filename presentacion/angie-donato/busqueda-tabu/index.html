@@ -153,16 +153,24 @@
                       </p>
                     </div>
                   </div>
-                  <div class="lo-c" data-f="6" data-cue="Estancamiento">
-                    <h2 class="lo-c-name">Estancamiento</h2>
+                  <div class="lo-c" data-f="6" data-cue="Búsqueda Local">
+                    <h2 class="lo-c-name">Búsqueda Local</h2>
                     <p class="lo-c-line pista">
-                      Se agotan las mejoras cercanas.
+                      Mejora una solución haciendo <b>pequeños cambios</b>.
+                    </p>
+                    <p
+                      class="lo-c-line pista"
+                      data-f="7"
+                      data-cue="Estancamiento"
+                    >
+                      <b>Estancamiento.</b> Ya no encuentra mejoras cercanas,
+                      aunque existan soluciones mejores en otra parte.
                     </p>
                   </div>
                 </div>
               </div>
-              <div class="cierre" data-f="7" data-cue="Tabú añade memoria">
-                Búsqueda Tabú → memoria para continuar explorando<span
+              <div class="cierre" data-f="8" data-cue="Tabú incorpora memoria">
+                Búsqueda Tabú incorpora memoria para continuar explorando<span
                   aria-hidden="true"
                   >→</span
                 >
@@ -618,12 +626,17 @@
             no puedan garantizar que sean las mejores de todas.
           </li>
           <li>
-            <strong>Estancamiento.</strong> A veces, la búsqueda se estanca
-            porque se agotan las mejoras cercanas.
+            <strong>Búsqueda Local.</strong> Una de ellas es la Búsqueda Local,
+            que mejora una solución haciendo pequeños cambios.
           </li>
           <li>
-            <strong>Tabú añade memoria.</strong> Precisamente para superar ese
-            estancamiento surge la Búsqueda Tabú, que incorpora memoria para
+            <strong>Estancamiento.</strong> Sin embargo, puede llegar a un punto
+            donde ya no encuentra mejoras cercanas, aunque existan soluciones
+            mejores en otra parte.
+          </li>
+          <li>
+            <strong>Tabú incorpora memoria.</strong> Y precisamente para superar
+            ese estancamiento surge la Búsqueda Tabú, que incorpora memoria para
             continuar explorando.
           </li>
         </ol>
