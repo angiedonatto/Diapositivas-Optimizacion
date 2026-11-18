@@ -1,0 +1,412 @@
+/* La geometría del lienzo y la navegación del iframe son las del visor común. */
+.apertura .section-deck {
+  margin-inline: auto;
+}
+.apertura .lo-s-title {
+  font-size: 52px;
+}
+.apertura .lo-s-body {
+  gap: 16px;
+  margin-top: 24px;
+}
+.apertura .lo-slide [data-f]:not(.is-in) {
+  visibility: hidden;
+}
+.apertura .notes:not([hidden]) {
+  display: block;
+}
+.apertura .notes p + p {
+  margin-top: 0.65em;
+}
+.apertura .notes li + li {
+  margin-top: 0.35em;
+}
+.apertura .lo-c {
+  margin: 0;
+  padding: 16px 19px;
+  gap: 8px;
+}
+.apertura .lo-c-name {
+  margin: 0;
+  font-size: 27px;
+}
+.apertura .lo-c-line {
+  font-size: 21px;
+  line-height: 1.26;
+}
+.apertura .pista {
+  line-height: 1.27;
+}
+.apertura .pista strong {
+  color: var(--lo-m);
+}
+.apertura .acento {
+  background: var(--lo-m-soft);
+  border-color: transparent;
+}
+.apertura .neutro {
+  background: var(--lo-bg);
+  border-color: transparent;
+}
+.apertura .comparar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.apertura .tres {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.apertura .columnas {
+  display: grid;
+  grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+.apertura .columnas.equilibradas {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.apertura .pistas {
+  display: grid;
+  gap: 10px;
+}
+.apertura .escena {
+  gap: 10px;
+}
+.apertura .escena > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  background: var(--lo-bg);
+}
+.apertura svg text {
+  font:
+    700 20px system-ui,
+    sans-serif;
+}
+.apertura svg text:not([fill]) {
+  fill: var(--lo-ink-2);
+}
+.apertura .fila {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.apertura .fila span,
+.apertura .ficha {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 4px 9px;
+  background: var(--lo-m-soft);
+  color: var(--lo-m);
+  font-size: 20px;
+  font-weight: 700;
+}
+.apertura .formula {
+  font: 750 43px/1.08 var(--lo-math);
+  color: var(--lo-m);
+  margin: 0;
+}
+.apertura .formula sup {
+  font-size: 0.6em;
+}
+.apertura .globo {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin: 0;
+}
+.apertura .globo img {
+  width: 85px;
+  height: auto;
+  flex: 0 0 85px;
+}
+.apertura blockquote {
+  position: relative;
+  flex: 1;
+  margin: 0;
+  padding: 12px 15px;
+  border-radius: 14px;
+  background: var(--lo-m-soft);
+  color: var(--lo-m);
+  font-size: 23px;
+  font-weight: 720;
+  line-height: 1.19;
+}
+.apertura blockquote::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  border: 8px solid transparent;
+  border-right-color: var(--lo-m-soft);
+}
+.apertura .cierre {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: var(--lo-m-soft);
+  color: var(--lo-m);
+  border-left: 5px solid var(--lo-m);
+  border-radius: 10px;
+  margin: 0;
+  padding: 11px 18px;
+  font-size: 25px;
+  font-weight: 750;
+  line-height: 1.15;
+}
+.apertura .cierre small {
+  color: var(--lo-deep);
+  font-size: 18px;
+}
+.apertura .historia {
+  padding: 0;
+}
+.apertura .historia .donato-history {
+  padding: 13px;
+  gap: 12px;
+  background: transparent;
+}
+.apertura .historia .donato-portrait {
+  flex-basis: 94px;
+  height: 94px;
+}
+.apertura .historia figcaption {
+  display: grid;
+  gap: 1px;
+}
+.apertura .historia figcaption strong {
+  font-size: 23px;
+}
+.apertura .historia .donato-credit {
+  margin-top: 1px;
+}
+.apertura .clave {
+  color: var(--lo-m);
+  font-weight: 750;
+}
+.apertura .cronologia {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+  border-top: 3px solid var(--lo-m);
+  padding-top: 12px;
+}
+.apertura .cronologia svg {
+  width: 100%;
+  height: 76px;
+  background: var(--lo-bg);
+  border-radius: 9px;
+}
+.apertura .cronologia time {
+  display: block;
+  color: var(--lo-m);
+  font-size: 31px;
+  font-weight: 800;
+}
+.apertura .ap-progress {
+  min-width: 8ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.apertura .ap-cue {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  margin: 0;
+}
+.apertura .ciudad {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.apertura .ciudad img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.apertura .ciudad svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.apertura .trazo {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 5;
+}
+.apertura .pista-breve {
+  font-size: 21px;
+  line-height: 1.24;
+  margin: 0;
+  padding: 8px 12px;
+  background: var(--lo-bg);
+  border-radius: 9px;
+}
+.apertura .cifras {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 19px;
+}
+.apertura .cifras span {
+  background: var(--lo-bg);
+  border-radius: 6px;
+  padding: 3px 7px;
+}
+.apertura .cuentas.is-in span {
+  animation: cifra-entrada 0.42s var(--lo-ease) both;
+}
+.apertura .cuentas.is-in span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.apertura .cuentas.is-in span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+@keyframes cifra-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.apertura .is-in .viaje {
+  animation: recorrer var(--duracion, 1.2s) linear both;
+}
+.viaje {
+  offset-rotate: auto;
+  offset-distance: var(--destino, 100%);
+}
+@keyframes recorrer {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: var(--destino, 100%);
+  }
+}
+.apertura .niebla {
+  opacity: 0.35;
+  transition: opacity 0.35s;
+}
+.apertura [data-appearance='4'] .niebla {
+  opacity: 0.92;
+}
+.apertura [data-appearance='5'] .niebla {
+  opacity: 0.72;
+}
+.apertura .huella-larga {
+  transition: opacity 0.4s;
+}
+.apertura [data-appearance='7'] .huella-larga {
+  opacity: 0.2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .apertura .is-in .viaje,
+  .apertura .cuentas.is-in span {
+    animation: none;
+  }
+  .apertura .niebla,
+  .apertura .huella-larga {
+    transition: none;
+  }
+}
+
+.apertura [data-algo='local'] #etapa-2[data-appearance='5'] .escalador-inicial,
+.apertura
+  [data-algo='tabu']
+  #etapa-1:is([data-appearance='4'], [data-appearance='5'])
+  .escalador-inicial,
+.apertura [data-algo='tabu'] #etapa-2:not([data-appearance='3']) .maze-repeat {
+  visibility: hidden;
+}
+.apertura .maze-walker {
+  transform: translate(399px, 132px);
+}
+.apertura #etapa-2[data-appearance='3'] .maze-walker {
+  animation: retroceder 1s var(--lo-ease) both;
+}
+.apertura
+  #etapa-2:is([data-appearance='4'], [data-appearance='5'])
+  .maze-walker {
+  transform: translate(274px, 220px);
+}
+.apertura #etapa-2[data-appearance='6'] .maze-walker {
+  animation: desvio 1.6s linear both;
+}
+@keyframes retroceder {
+  0% {
+    transform: translate(399px, 132px);
+  }
+  52% {
+    transform: translate(274px, 132px);
+  }
+  100% {
+    transform: translate(274px, 220px);
+  }
+}
+@keyframes desvio {
+  0% {
+    transform: translate(274px, 220px);
+  }
+  14% {
+    transform: translate(274px, 340px);
+  }
+  46% {
+    transform: translate(530px, 340px);
+  }
+  64% {
+    transform: translate(530px, 190px);
+  }
+  77% {
+    transform: translate(636px, 190px);
+  }
+  92% {
+    transform: translate(636px, 63px);
+  }
+  100% {
+    transform: translate(698px, 63px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .apertura #etapa-2[data-appearance='3'] .maze-walker {
+    animation: none;
+    transform: translate(274px, 220px);
+  }
+  .apertura #etapa-2[data-appearance='6'] .maze-walker {
+    animation: none;
+    transform: translate(698px, 63px);
+  }
+}
+
+.apertura .pensamiento {
+  border-radius: 14px 14px 14px 3px;
+  background: var(--lo-m-soft);
+}
+.apertura
+  [data-algo='aco']
+  #etapa-2:is(
+    [data-appearance='5'],
+    [data-appearance='6'],
+    [data-appearance='7']
+  )
+  .exploradoras {
+  visibility: hidden;
+}
+.apertura [data-algo='ga'] .pistas .lo-c svg {
+  width: 100%;
+  height: 58px;
+  border-radius: 8px;
+  background: var(--lo-bg);
+}

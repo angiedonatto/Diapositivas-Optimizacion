@@ -1,105 +1,951 @@
 <!doctype html>
 <html lang="es" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Angie Donato · Colonia de Hormigas</title>
-<link rel="stylesheet" href="../estilos.css">
-<link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
-<link rel="stylesheet" href="../visuales.css">
-</head>
-<body>
-<header class="topbar">
- <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
- <div class="actions">
-  <a href="../../carolina/colonia-hormigas/index.html">Análisis crítico · Carolina</a>
-  <a href="../../angie-loango/colonia-hormigas/index.html">Componentes · Angie Loango</a>
-  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
-  <button id="fullBtn" type="button">Pantalla completa (F)</button>
- </div>
-</header>
-<nav class="methods" aria-label="Escoger algoritmo">
- 
- 
- 
- <button data-method="aco" aria-selected="false"><b>D</b> Colonia de Hormigas</button>
-</nav>
-<main class="stage-wrap">
- <div class="slide-viewport" id="stage">
-  <div class="slide-canvas slide-theme" id="donatoCanvas">
-   <article class="lo-slide is-current" aria-live="polite">
-    <header>
-     <p class="lo-s-kicker"><span class="lo-s-letter" id="letter"></span><span id="methodName"></span><span class="lo-s-chap">Fundamentos</span></p>
-     <h1 class="lo-s-title" id="title"></h1>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Angie Donato · Colonia de Hormigas</title>
+    <link rel="stylesheet" href="../estilos.css" />
+    <link rel="stylesheet" href="../../shared/tokens.css" />
+    <link rel="stylesheet" href="../../shared/slides.css" />
+    <link rel="stylesheet" href="../../shared/projection.css" />
+    <link rel="stylesheet" href="../visuales.css" />
+    <link rel="stylesheet" href="../aperturas.css" />
+  </head>
+  <body class="apertura">
+    <header class="topbar">
+      <div class="brand">Universidad Externado de Colombia · Optimización</div>
+      <div class="actions">
+        <a href="../../angie-loango/colonia-hormigas/index.html"
+          >Componentes · Angie Loango</a
+        >
+        <a href="../../carolina/colonia-hormigas/index.html"
+          >Análisis crítico · Carolina</a
+        >
+        <button
+          id="notesBtn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="notes"
+        >
+          Notas para ensayar (N)
+        </button>
+        <button id="fullBtn" type="button">Pantalla completa (F)</button>
+      </div>
     </header>
-    <div class="lo-s-body">
-     <p class="slide-lead" id="lead"></p>
-     <div class="slide-columns">
-      <section class="lo-c is-key"><h2 class="lo-c-name" id="mini"></h2><p class="slide-quote" id="quote"></p><div id="resource" class="donato-resource"></div><div class="slide-route" id="path"></div></section>
-      <div class="slide-stack" id="facts"></div>
-     </div>
+    <main
+      class="stage-wrap section-deck"
+      data-topic="aco"
+      data-next="../../angie-loango/colonia-hormigas/index.html"
+    >
+      <div class="slide-viewport" id="stage">
+        <div class="slide-canvas slide-theme" data-algo="aco" id="apCanvas">
+          <article
+            class="lo-slide is-current"
+            id="etapa-1"
+            aria-labelledby="titulo-1"
+            aria-hidden="false"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">D</span>Colonia de Hormigas
+                <span class="lo-s-chap">Contexto</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-1">
+                ¿Cómo encontramos buenos caminos sin un líder?
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas">
+                <figure class="lo-c escena" data-f="1" data-cue="Muchas rutas">
+                  <figcaption class="lo-c-name">
+                    Muchos caminos entre el hormiguero y la comida
+                  </figcaption>
+                  <svg
+                    viewBox="0 0 780 410"
+                    role="img"
+                    aria-label="Dos caminos posibles entre el hormiguero y el alimento, con hormigas explorando. Como en el agente viajero, hay varios destinos."
+                  >
+                    <rect width="780" height="368" fill="#edf0e4" />
+                    <path
+                      d="M0 165C180 101 205 201 352 174S623 98 780 156v212H0Z"
+                      fill="#e3e9d9"
+                    />
+                    <path
+                      d="M0 269c139-26 206 18 343 7 162-21 251-5 437 17v75H0z"
+                      fill="#d7e4d3"
+                    />
+                    <path
+                      d="m80 297-8-25m8 25 14-19m629 9-16-20m16 20 8-18M347 84l-12-14m12 14-2-20 11-8"
+                      fill="none"
+                      stroke="#89a98c"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      class="trazo"
+                      d="M127 198C276 133 416 137 643 183"
+                      stroke="#b29f84"
+                      style="stroke-width: 4px"
+                      stroke-dasharray="8 10"
+                    />
+                    <path
+                      class="trazo"
+                      d="M127 198C172 316 270 329 403 298S535 321 643 183"
+                      stroke="#b29f84"
+                      style="stroke-width: 4px"
+                      stroke-dasharray="8 10"
+                    />
+                    <path
+                      d="M29 200c18-16 34-69 71-69 36 1 43 47 69 70-36 16-108 18-140-1Z"
+                      fill="#baa080"
+                    />
+                    <path
+                      d="M81 200c1-21 13-27 22-27s17 13 16 27Z"
+                      fill="#5f4c3d"
+                    />
+                    <path
+                      d="M645 194c8-7 34-6 38 4-11 14-32 14-38-4Z"
+                      fill="#af7249"
+                    />
+                    <path
+                      d="M674 176c-6-24 17-29 29-35 4 15-9 33-29 35Z"
+                      fill="#789968"
+                    />
+                    <path
+                      d="M681 192c8-18 25-15 37-4-7 13-28 13-37 4Zm-25-15c1-12 14-18 27-12-2 13-17 18-27 12Z"
+                      fill="#c18c51"
+                    />
+                    <text x="34" y="124">Hormiguero</text>
+                    <text x="641" y="130">Alimento</text>
+                    <g class="" data-f="4" data-cue="Hormigas">
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path('M127 198C276 133 416 137 643 183');
+                          --duracion: 1.6s;
+                          --destino: 85%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #a33a5b"
+                        />
+                      </g>
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path(
+                            'M127 198C172 316 270 329 403 298S535 321 643 183'
+                          );
+                          --duracion: 2.7s;
+                          --destino: 85%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #6a785d"
+                        />
+                      </g>
+                      <use
+                        href="../recursos/escenas.svg#hormiga"
+                        x="342"
+                        y="139"
+                        width="42"
+                        height="33"
+                        style="color: #a33a5b"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#hormiga"
+                        x="312"
+                        y="297"
+                        width="43"
+                        height="33"
+                        style="color: #6e775a"
+                      />
+                    </g>
+                    <rect
+                      x="19"
+                      y="351"
+                      width="742"
+                      height="47"
+                      rx="11"
+                      fill="#fbfaf6"
+                    />
+                    <text x="37" y="382">Agente viajero</text>
+                    <path
+                      class="trazo"
+                      d="M225 374h82m125 0h75"
+                      stroke="#83968b"
+                      style="stroke-width: 3px"
+                      stroke-dasharray="5 6"
+                    />
+                    <text x="321" y="381">Depósito</text>
+                    <text x="523" y="381">Varios destinos</text>
+                  </svg>
+                  <p class="lo-c-line pista">
+                    Como en el agente viajero, hay varios
+                    <b>destinos y recorridos posibles</b>.
+                  </p>
+                </figure>
+                <div class="pistas">
+                  <div
+                    class="comparacion-metodos"
+                    data-f="2"
+                    data-cue="Exacto y heurística"
+                  >
+                    <div class="comparar">
+                      <div class="lo-c" data-f="2">
+                        <h2 class="lo-c-name">Método exacto</h2>
+                        <p class="lo-c-line pista">
+                          Busca el óptimo con <b>garantía</b>.
+                        </p>
+                      </div>
+                      <div class="lo-c" data-f="2">
+                        <h2 class="lo-c-name">Heurística</h2>
+                        <p class="lo-c-line pista">
+                          Busca una <b>buena solución</b> sin garantizar el
+                          óptimo.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lo-c acento" data-f="3" data-cue="Metaheurística">
+                    <h2 class="lo-c-name">Metaheurística</h2>
+                    <p class="lo-c-line pista">
+                      <strong>Estrategia general</strong> que orienta la
+                      exploración.
+                    </p>
+                  </div>
+                  <div class="lo-c" data-f="4">
+                    <h2 class="lo-c-name">Exploración en paralelo</h2>
+                    <p class="lo-c-line pista">
+                      Varias hormigas prueban <b>caminos distintos</b>.
+                    </p>
+                  </div>
+                  <figure class="globo" data-f="5" data-cue="Sin líder">
+                    <img
+                      src="../busqueda-local/repartidora.svg"
+                      width="150"
+                      height="156"
+                      alt="Repartidora pensando"
+                    />
+                    <blockquote>
+                      ¿Cómo pueden encontrar un buen camino sin que una hormiga
+                      dirija a las demás?
+                    </blockquote>
+                  </figure>
+                </div>
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-now">Contexto</li>
+                <li class="">Origen e inspiración</li>
+                <li class="">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+
+          <article
+            class="lo-slide"
+            id="etapa-2"
+            aria-labelledby="titulo-2"
+            aria-hidden="true"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">D</span>Colonia de Hormigas
+                <span class="lo-s-chap">Origen e inspiración</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-2">
+                Marco Dorigo y el comportamiento de las hormigas
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas">
+                <figure
+                  class="lo-c escena"
+                  data-f="2"
+                  data-cue="Hormiguero y comida"
+                >
+                  <figcaption class="lo-c-name">
+                    De la exploración a un camino reforzado
+                  </figcaption>
+                  <svg
+                    viewBox="0 0 780 368"
+                    role="img"
+                    aria-label="Hormiguero y comida unidos por caminos de distinta longitud. La feromona se refuerza en el camino de recorridos más frecuentes y se evapora en los menos usados."
+                  >
+                    <rect width="780" height="368" fill="#edf0e4" />
+                    <path
+                      d="M0 165C180 101 205 201 352 174S623 98 780 156v212H0Z"
+                      fill="#e3e9d9"
+                    />
+                    <path
+                      d="M0 269c139-26 206 18 343 7 162-21 251-5 437 17v75H0z"
+                      fill="#d7e4d3"
+                    />
+                    <path
+                      d="m80 297-8-25m8 25 14-19m629 9-16-20m16 20 8-18M347 84l-12-14m12 14-2-20 11-8"
+                      fill="none"
+                      stroke="#89a98c"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                    />
+                    <g class="" data-f="2">
+                      <path
+                        class="trazo"
+                        d="M127 198C276 133 416 137 643 183"
+                        stroke="#b29f84"
+                        style="stroke-width: 4px"
+                        stroke-dasharray="8 10"
+                      />
+                      <path
+                        class="trazo"
+                        d="M127 198C172 316 270 329 403 298S535 321 643 183"
+                        stroke="#b29f84"
+                        style="stroke-width: 4px"
+                        stroke-dasharray="8 10"
+                      />
+                      <path
+                        d="M29 200c18-16 34-69 71-69 36 1 43 47 69 70-36 16-108 18-140-1Z"
+                        fill="#baa080"
+                      />
+                      <path
+                        d="M81 200c1-21 13-27 22-27s17 13 16 27Z"
+                        fill="#5f4c3d"
+                      />
+                      <path
+                        d="M645 194c8-7 34-6 38 4-11 14-32 14-38-4Z"
+                        fill="#af7249"
+                      />
+                      <path
+                        d="M674 176c-6-24 17-29 29-35 4 15-9 33-29 35Z"
+                        fill="#789968"
+                      />
+                      <path
+                        d="M681 192c8-18 25-15 37-4-7 13-28 13-37 4Zm-25-15c1-12 14-18 27-12-2 13-17 18-27 12Z"
+                        fill="#c18c51"
+                      />
+                      <text x="34" y="124">Hormiguero</text>
+                      <text x="641" y="130">Alimento</text>
+                    </g>
+                    <g class="exploradoras" data-f="3" data-cue="Exploración">
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path('M127 198C276 133 416 137 643 183');
+                          --duracion: 1.8s;
+                          --destino: 85%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #a33a5b"
+                        />
+                      </g>
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path(
+                            'M127 198C172 316 270 329 403 298S535 321 643 183'
+                          );
+                          --duracion: 2.8s;
+                          --destino: 85%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #6b775e"
+                        />
+                      </g>
+                      <use
+                        href="../recursos/escenas.svg#hormiga"
+                        x="265"
+                        y="141"
+                        width="39"
+                        height="30"
+                        style="color: #a33a5b"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#hormiga"
+                        x="225"
+                        y="300"
+                        width="39"
+                        height="30"
+                        style="color: #6b775e"
+                      />
+                    </g>
+                    <g class="" data-f="4" data-cue="Feromona">
+                      <g opacity=".48">
+                        <path
+                          class="trazo"
+                          d="M127 198C276 133 416 137 643 183"
+                          stroke="#a33a5b"
+                          style="stroke-width: 6px"
+                          stroke-dasharray="3 9"
+                        />
+                      </g>
+                      <g class="huella-larga" opacity=".75">
+                        <path
+                          class="trazo"
+                          d="M127 198C172 316 270 329 403 298S535 321 643 183"
+                          stroke="#a33a5b"
+                          style="stroke-width: 6px"
+                          stroke-dasharray="3 9"
+                        />
+                      </g>
+                      <text x="333" y="116">Feromona</text>
+                    </g>
+                    <g class="" data-f="5" data-cue="Regreso temprano">
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path('M643 183C416 137 276 133 127 198');
+                          --duracion: 1.1s;
+                          --destino: 100%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #a33a5b"
+                        />
+                      </g>
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path(
+                            'M643 183C535 321 500 274 403 298S172 316 127 198'
+                          );
+                          --duracion: 2.7s;
+                          --destino: 59%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #6b775e"
+                        />
+                      </g>
+                      <text x="275" y="89">Camino corto · regresan antes</text>
+                      <text x="230" y="353">
+                        Camino largo · todavía en camino
+                      </text>
+                    </g>
+                    <g class="" data-f="6" data-cue="Refuerzo">
+                      <path
+                        class="trazo"
+                        d="M127 198C276 133 416 137 643 183"
+                        stroke="#a33a5b"
+                        style="stroke-width: 7px"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#hormiga"
+                        x="190"
+                        y="154"
+                        width="40"
+                        height="31"
+                        style="color: #a33a5b"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#hormiga"
+                        x="369"
+                        y="135"
+                        width="39"
+                        height="30"
+                        style="color: #a33a5b"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#hormiga"
+                        x="500"
+                        y="143"
+                        width="39"
+                        height="30"
+                        style="color: #a33a5b"
+                      />
+                    </g>
+                    <g
+                      class=""
+                      data-f="7"
+                      data-cue="Evaporación y coordinación"
+                    >
+                      <text x="511" y="316">Evaporación</text>
+                    </g>
+                  </svg>
+                </figure>
+                <div class="pistas">
+                  <figure
+                    class="lo-c historia"
+                    data-f="1"
+                    data-cue="Dorigo, 1992, Ant System"
+                  >
+                    <div class="donato-history">
+                      <div
+                        class="donato-portrait dorigo"
+                        role="img"
+                        aria-label="Retrato ilustrado de Marco Dorigo"
+                      ></div>
+                      <figcaption>
+                        <strong>Marco Dorigo · 1992</strong
+                        ><span>Tesis doctoral en Milán</span
+                        ><span>Primera versión: <b>Ant System</b></span
+                        ><span class="donato-credit">Ilustración generada</span>
+                      </figcaption>
+                    </div>
+                  </figure>
+                  <p class="pista-breve" data-f="2">
+                    <b>Hormiguero y alimento.</b> Dos caminos para llegar.
+                  </p>
+                  <p class="pista-breve" data-f="3">
+                    <b>Exploración.</b> Las hormigas prueban rutas distintas.
+                  </p>
+                  <p class="pista-breve" data-f="4">
+                    <b>Feromona:</b> señal química que dejan al pasar.
+                  </p>
+                  <p class="pista-breve" data-f="5">
+                    <b>Camino corto:</b> regresan antes y pueden pasar más
+                    veces.
+                  </p>
+                  <p class="pista-breve" data-f="6">
+                    <b>Refuerzo.</b> Más hormigas tienden a seguir la señal más
+                    intensa.
+                  </p>
+                  <p class="pista-breve" data-f="7">
+                    <b>Evaporación.</b> La señal disminuye con el tiempo.
+                    <b>Sin un director central.</b>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-past">Contexto</li>
+                <li class="is-now">Origen e inspiración</li>
+                <li class="">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+
+          <article
+            class="lo-slide"
+            id="etapa-3"
+            aria-labelledby="titulo-3"
+            aria-hidden="true"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">D</span>Colonia de Hormigas
+                <span class="lo-s-chap">Qué es y dónde encaja</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-3">
+                Una metaheurística constructiva y poblacional
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas">
+                <figure class="lo-c escena" data-f="2" data-cue="Una hormiga">
+                  <figcaption class="lo-c-name">
+                    Varias hormigas, recorridos distintos
+                  </figcaption>
+                  <svg
+                    viewBox="0 0 760 340"
+                    role="img"
+                    aria-label="Ciudades conectadas. Una hormiga construye un recorrido y las otras hormigas construyen recorridos diferentes."
+                  >
+                    <rect width="760" height="340" fill="#eef0e5" />
+                    <path
+                      class="trazo"
+                      d="M85 202 211 101 455 50 654 135 429 257 85 202m126-101 218 156m26-207L85 202 m570-67-444-34"
+                      stroke="#a9baab"
+                      style="stroke-width: 2px"
+                      stroke-dasharray="5 8"
+                    />
+                    <circle
+                      cx="85"
+                      cy="202"
+                      r="18"
+                      fill="#fbfaf6"
+                      stroke="#829d8d"
+                      stroke-width="2"
+                    />
+                    <text x="85" y="209" text-anchor="middle">A</text>
+                    <circle
+                      cx="211"
+                      cy="101"
+                      r="18"
+                      fill="#fbfaf6"
+                      stroke="#829d8d"
+                      stroke-width="2"
+                    />
+                    <text x="211" y="108" text-anchor="middle">B</text>
+                    <circle
+                      cx="455"
+                      cy="50"
+                      r="18"
+                      fill="#fbfaf6"
+                      stroke="#829d8d"
+                      stroke-width="2"
+                    />
+                    <text x="455" y="57" text-anchor="middle">C</text>
+                    <circle
+                      cx="654"
+                      cy="135"
+                      r="18"
+                      fill="#fbfaf6"
+                      stroke="#829d8d"
+                      stroke-width="2"
+                    />
+                    <text x="654" y="142" text-anchor="middle">D</text>
+                    <circle
+                      cx="429"
+                      cy="257"
+                      r="18"
+                      fill="#fbfaf6"
+                      stroke="#829d8d"
+                      stroke-width="2"
+                    />
+                    <text x="429" y="264" text-anchor="middle">E</text>
+                    <g class="" data-f="2">
+                      <path
+                        class="trazo"
+                        d="M85 202 211 101 455 50 654 135 429 257 85 202"
+                        stroke="#a33a5b"
+                        style="stroke-width: 4px"
+                      />
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path(
+                            'M85 202 211 101 455 50 654 135 429 257'
+                          );
+                          --duracion: 2.3s;
+                          --destino: 85%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #a33a5b"
+                        />
+                      </g>
+                      <text x="38" y="319">Ruta de la hormiga 1</text>
+                    </g>
+                    <g class="" data-f="3" data-cue="Otras hormigas">
+                      <path
+                        class="trazo"
+                        d="M85 202 429 257 211 101 654 135 455 50 85 202"
+                        stroke="#2c7a3f"
+                        style="stroke-width: 4px"
+                        stroke-dasharray="5 9"
+                      />
+                      <path
+                        class="trazo"
+                        d="M85 202 455 50 211 101 429 257 654 135 85 202"
+                        stroke="#a8620a"
+                        style="stroke-width: 3px"
+                        stroke-dasharray="2 10"
+                      />
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path('M85 202 429 257 211 101 654 135');
+                          --duracion: 2.8s;
+                          --destino: 85%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #2c7a3f"
+                        />
+                      </g>
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path('M85 202 455 50 211 101 429 257');
+                          --duracion: 2.7s;
+                          --destino: 85%;
+                        "
+                      >
+                        <use
+                          href="../recursos/escenas.svg#hormiga"
+                          x="-20"
+                          y="-16"
+                          width="41"
+                          height="32"
+                          style="color: #a8620a"
+                        />
+                      </g>
+                      <text x="478" y="319">Otros recorridos</text>
+                    </g>
+                  </svg>
+                </figure>
+                <div class="pistas">
+                  <div class="lo-c acento" data-f="1" data-cue="Metaheurística">
+                    <h2 class="lo-c-name">Metaheurística</h2>
+                    <p class="lo-c-line pista">
+                      <strong>Estrategia general</strong> que orienta la
+                      exploración.
+                    </p>
+                  </div>
+                  <p class="pista-breve" data-f="2">
+                    <b>Una hormiga</b> empieza a recorrer ciudades.
+                  </p>
+                  <p class="pista-breve" data-f="3">
+                    <b>Otras hormigas</b> toman sus propios caminos.
+                  </p>
+                  <div class="lo-c" data-f="4" data-cue="Constructiva">
+                    <h2 class="lo-c-name">Constructiva</h2>
+                    <p class="lo-c-line pista">
+                      Construye la solución <b>paso a paso</b>.
+                    </p>
+                  </div>
+                  <div class="lo-c acento" data-f="5" data-cue="Poblacional">
+                    <h2 class="lo-c-name">Poblacional</h2>
+                    <p class="lo-c-line pista">
+                      <b>Varias soluciones</b> en una misma iteración.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="" data-f="6" data-cue="Dónde encaja">
+                <div class="comparar tres">
+                  <div class="lo-c neutro">
+                    <p class="lo-c-line pista">
+                      <b>Local y Tabú</b> · modifican una solución existente.
+                    </p>
+                  </div>
+                  <div class="lo-c neutro">
+                    <p class="lo-c-line pista">
+                      <b>Genético</b> · hace evolucionar una población.
+                    </p>
+                  </div>
+                  <div class="lo-c acento">
+                    <p class="lo-c-line pista">
+                      <b>Hormigas</b> · construyen soluciones guiadas por
+                      señales colectivas.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="cierre" data-f="7" data-cue="Relevo">
+                Muchas hormigas construyen soluciones y comparten información
+                mediante feromonas<small
+                  >Angie Loango · Feromona, probabilidades y
+                  funcionamiento</small
+                >
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-past">Contexto</li>
+                <li class="is-past">Origen e inspiración</li>
+                <li class="is-now">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </main>
+    <div class="controlbar">
+      <p>
+        <kbd>←</kbd> <kbd>→</kbd> apariciones · <kbd>N</kbd> notas ·
+        <kbd>F</kbd> pantalla completa
+      </p>
+      <div class="pager">
+        <button id="prevBtn" type="button">← Anterior</button>
+        <strong id="count" aria-live="polite"></strong>
+        <button id="nextBtn" type="button">Siguiente →</button>
+      </div>
     </div>
-    <footer class="lo-s-foot"><span>Angie Donato · Apertura</span><span id="handoff"></span><span id="progress"></span></footer>
-   </article>
-  </div>
- </div>
-</main>
-<div class="controlbar">
- <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
- <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
-</div>
-<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
-<script src="../visuales.js"></script>
-<script>
-(function () {
- 'use strict';
- var all={
- aco:{name:'Colonia de Hormigas',accent:'#a33a5b',soft:'#f8e6ec',slides:[
- {title:'¿Cómo encontrar buenas rutas sin un director central?',lead:'En el agente viajero, necesitamos decidir qué ciudad visitar después y construir rutas completas.',mini:'El problema de rutas',quote:'Muchas exploraciones pequeñas pueden producir una buena solución colectiva.',path:['Ciudad','Siguiente ciudad','Ruta completa'],facts:[['Método exacto','Puede certificar el mejor recorrido, pero el número de combinaciones crece rápidamente.'],['Heurística','Aprovecha información del problema para hallar rutas prometedoras.'],['Metaheurística','Usa una estrategia de exploración que aprende de soluciones anteriores.']],notes:'Buenos días. Nos correspondió Optimización por Colonia de Hormigas. Pensemos en el agente viajero, donde debemos construir una ruta que visite varias ciudades y regrese al inicio. Si las ciudades aumentan, aparecen muchísimas combinaciones. Una heurística busca recorridos útiles sin la garantía de un método exacto. La colonia de hormigas es una metaheurística que usa múltiples agentes que construyen rutas y aprenden colectivamente de cuáles funcionaron mejor.'},
- {title:'Marco Dorigo se inspiró en las hormigas reales',lead:'Propuso Ant System en 1992: un método inspirado en señales colectivas de feromona.',mini:'Origen e inspiración',quote:'Las hormigas dejan señales en los caminos; los recorridos favorecidos atraen a otras.',path:['Caminar','Depositar feromona','Reforzar'],facts:[['Origen','Marco Dorigo, tesis doctoral de 1992.'],['Feromona','Una señal que ayuda a conservar información sobre recorridos utilizados.'],['Evaporación','Las señales se debilitan con el tiempo y permiten olvidar caminos poco convenientes.']],notes:'La propuesta se debe a Marco Dorigo, en 1992, con una primera versión llamada Ant System. Se inspiró en las hormigas reales: al caminar dejan feromonas, sustancias químicas que influyen en las decisiones de otras hormigas. Los caminos que reciben más uso pueden quedar reforzados, mientras que la feromona de los demás se evapora. El resultado es una forma de coordinación colectiva sin un director central.'},
- {title:'Una metaheurística poblacional y constructiva',lead:'Cada hormiga crea una solución desde cero; la colonia refuerza las aristas presentes en buenos recorridos.',mini:'Dónde encaja',quote:'No hereda rutas como el Genético: construye nuevas rutas guiada por feromona y distancia.',path:['Construir','Evaluar','Actualizar feromona'],facts:[['Poblacional','Varias hormigas crean rutas durante una iteración.'],['Constructiva','Cada hormiga elige la siguiente ciudad hasta completar la ruta.'],['Exploración','La elección es probabilística: una arista poco atractiva aún puede elegirse.']],handoff:'Continúa Angie Loango: probabilidades y feromona',notes:'A diferencia de Búsqueda Local y Tabú, que modifican una ruta existente, ACO es una metaheurística constructiva: cada hormiga va decidiendo paso a paso qué ciudad visitar. También es poblacional porque muchas hormigas producen recorridos. Y a diferencia del Algoritmo Genético, no combina dos padres; usa señales de feromona y la cercanía entre ciudades para elegir probabilísticamente el siguiente paso. Angie Loango explicará la fórmula de transición, los parámetros alfa y beta y cómo se actualiza la feromona.'}
- ]}
- };
- var method='aco',i=0;
- var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
- function render(){
-  var group=all[method],s=group.slides[i];
-  document.getElementById('donatoCanvas').dataset.algo=method;
-  document.getElementById('letter').textContent={local:'A',tabu:'B',ga:'C',aco:'D'}[method];
-  document.getElementById('methodName').textContent=group.name;document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
-  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
-  DonatoVisuals.render(document.getElementById('resource'), method, i);
-  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
-  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='lo-c slide-fact';var number=document.createElement('div');number.className='lo-c-num';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];h.className='lo-c-name';var p=document.createElement('p');p.className='lo-c-line';p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
-  nodes.handoff.textContent=s.handoff||'';nodes.progress.textContent=(i+1)+' / '+group.slides.length;
-  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
-  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
-  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
-  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
- }
- function choose(m){if(!all[m])return;method=m;i=0;render()}
- function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
- function prev(){if(i>0){i--;render()}}
- document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
- document.getElementById('nextBtn').addEventListener('click',next);
- document.getElementById('prevBtn').addEventListener('click',prev);
- document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
- document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
- document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
-  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
-  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
-  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
- });
- var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash&&all[hash[1]]){method=hash[1];i=Number(hash[2])-1}
- render();
-})();
-</script>
-<script src="../../shared/canvas.js"></script>
-<script>SlideCanvas.fit(document.getElementById('stage'), document.getElementById('donatoCanvas'));</script>
-<script src="../../visor-bridge.js"></script>
-</body>
+    <p class="ap-cue" id="cue" aria-live="polite"></p>
+    <aside id="notes" class="notes" hidden aria-label="Notas para ensayar">
+      <h2>Guion para ensayar</h2>
+      <section data-notes>
+        <h3>Contexto · 55 s</h3>
+        <ol>
+          <li>
+            <strong>Muchas rutas.</strong> Entre un origen y varios destinos hay
+            muchos caminos posibles, como en el problema del agente viajero.
+            <em
+              >Señala los dos caminos alternativos. Avanza con «Exacto y
+              heurística».</em
+            >
+          </li>
+          <li>
+            <strong>Exacto y heurística.</strong> Un método exacto busca el
+            óptimo con garantía. Una heurística busca una buena solución sin
+            garantía de óptimo.
+            <em>Señala ambas tarjetas. Avanza con «Metaheurística».</em>
+          </li>
+          <li>
+            <strong>Metaheurística.</strong> Para explorar problemas difíciles
+            podemos utilizar una estrategia general que guíe la búsqueda.
+            <em>Señala la tarjeta metaheurística. Avanza con «Hormigas».</em>
+          </li>
+          <li>
+            <strong>Hormigas.</strong> Veamos una colonia: varias hormigas
+            exploran distintas rutas al mismo tiempo.
+            <em>Sigue las hormigas que se separan. Avanza con «Sin líder».</em>
+          </li>
+          <li>
+            <strong>Sin líder.</strong> ¿Cómo encuentran un buen camino sin que
+            una hormiga dirija a las demás? La respuesta viene de las señales
+            que dejan.
+            <em
+              >Señala la pregunta y pasa al origen. Pulsa la flecha para pasar a
+              la siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+      <section data-notes hidden>
+        <h3>Origen e inspiración · 75 s</h3>
+        <ol>
+          <li>
+            <strong>Dorigo, 1992, Ant System.</strong> Marco Dorigo propuso Ant
+            System en su tesis doctoral en Milán, en 1992, inspirado en el
+            comportamiento de las hormigas reales.
+            <em
+              >Señala el retrato y la primera versión. Avanza con «Hormiguero y
+              comida».</em
+            >
+          </li>
+          <li>
+            <strong>Hormiguero y comida.</strong> Imaginemos un hormiguero a un
+            lado y comida al otro. Hay un camino corto y otro más largo.
+            <em
+              >Recorre ambos caminos entre los extremos. Avanza con
+              «Exploración».</em
+            >
+          </li>
+          <li>
+            <strong>Exploración.</strong> Al comienzo distintas hormigas pueden
+            explorar por caminos diferentes.
+            <em>Sigue las dos hormigas en el dibujo. Avanza con «Feromona».</em>
+          </li>
+          <li>
+            <strong>Feromona.</strong> Al pasar dejan feromona, una señal
+            química que otras hormigas pueden percibir.
+            <em
+              >Señala las huellas punteadas. Avanza con «Regreso temprano».</em
+            >
+          </li>
+          <li>
+            <strong>Regreso temprano.</strong> En el camino corto pueden
+            regresar antes y hacer más recorridos en el mismo tiempo,
+            reforzándolo más frecuentemente.
+            <em
+              >Compara las dos hormigas de regreso y las dos etiquetas. Avanza
+              con «Refuerzo».</em
+            >
+          </li>
+          <li>
+            <strong>Refuerzo.</strong> Otras hormigas tienden a utilizar el
+            camino con una señal más intensa, que se sigue reforzando.
+            <em
+              >Señala las hormigas en el tramo reforzado. Avanza con
+              «Evaporación y coordinación».</em
+            >
+          </li>
+          <li>
+            <strong>Evaporación y coordinación.</strong> En los caminos menos
+            usados, la señal disminuye por evaporación. Así se coordinan con las
+            señales que dejan, sin un director central.
+            <em
+              >Señala el rastro largo que se desvanece. Pulsa la flecha para
+              pasar a la siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+      <section data-notes hidden>
+        <h3>Qué es y dónde encaja · 50 s</h3>
+        <ol>
+          <li>
+            <strong>Metaheurística.</strong> La colonia de hormigas es una
+            metaheurística: una estrategia general que guía la búsqueda.
+            <em
+              >Señala el encabezado de estrategia. Avanza con «Una hormiga».</em
+            >
+          </li>
+          <li>
+            <strong>Una hormiga.</strong> Una hormiga va eligiendo una ciudad
+            después de otra hasta recorrer todas.
+            <em>Sigue el primer recorrido. Avanza con «Otras hormigas».</em>
+          </li>
+          <li>
+            <strong>Otras hormigas.</strong> Otras hormigas construyen rutas
+            distintas al mismo tiempo.
+            <em
+              >Señala los recorridos coloreados. Avanza con «Constructiva».</em
+            >
+          </li>
+          <li>
+            <strong>Constructiva.</strong> Es constructiva porque va armando
+            cada solución paso a paso.
+            <em>Señala las visitas consecutivas. Avanza con «Poblacional».</em>
+          </li>
+          <li>
+            <strong>Poblacional.</strong> Es poblacional porque varias hormigas
+            construyen soluciones en una misma iteración.
+            <em>Señala varias hormigas a la vez. Avanza con «Dónde encaja».</em>
+          </li>
+          <li>
+            <strong>Dónde encaja.</strong> Local y Tabú modifican una solución
+            existente, Genético hace evolucionar una población y las hormigas
+            construyen soluciones guiadas por señales colectivas.
+            <em>Señala las tres tarjetas. Avanza con «Relevo».</em>
+          </li>
+          <li>
+            <strong>Relevo.</strong> Muchas hormigas construyen soluciones y
+            comparten información mediante feromonas. Ahora Angie Loango
+            explicará cómo funciona.
+            <em
+              >Señala el relevo y avanza. Pulsa la flecha para pasar a la
+              siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+    </aside>
+    <script src="../../shared/canvas.js"></script>
+    <script src="../aperturas.js"></script>
+    <script src="../../visor-bridge.js"></script>
+  </body>
 </html>
