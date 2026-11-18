@@ -3,7 +3,7 @@
   const params = new URLSearchParams(location.search);
   if (params.get('integrada') !== '1' || window.parent === window) return;
 
-  const people = { 'angie-donato': 'donato', 'angie-loango': 'loango', andres: 'andres', carolina: 'carolina' };
+  const people = { 'angie-donato': 'donato', 'angie-loango': 'loango', andres: 'andres', carolina: 'carolina', titulo: 'titulo' };
   const person = location.pathname.split('/').map(part => people[part]).find(Boolean);
   if (!person) return;
 
@@ -21,7 +21,7 @@
     SlideCanvas.fit(document.querySelector('.lo-viewport'), document.querySelector('.lo-deck'), document.querySelector('.lo-frame'));
   }
 
-  const deck = document.querySelector('.section-deck')?.slideNavigation;
+  let deck;
   const counter = document.querySelector(loango ? '.lo-count' : '#count');
   const previous = document.querySelector(loango ? '[data-lo="prev"]' : '#prevBtn');
   const next = document.querySelector(loango ? '[data-lo="next"]' : '#nextBtn');
@@ -41,7 +41,9 @@
     else (direction === 'next' ? next : previous).click();
   }
 
-  function initialize(atEnd) {
+  async function initialize(atEnd) {
+    await window.sectionReady;
+    deck = document.querySelector('.section-deck')?.slideNavigation;
     if (deck) deck.reset(atEnd);
     else {
       const selector = loango ? '#lo-tab-' + theme : '[data-method="' + theme + '"]';

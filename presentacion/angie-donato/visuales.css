@@ -1,0 +1,56 @@
+.donato-resource {
+  margin: 0 0 6px;
+  color: var(--lo-ink-2);
+}
+.donato-resource figure { margin: 0; }
+.donato-resource canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--lo-bg);
+  border-radius: 14px;
+}
+.donato-history {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--lo-bg);
+  padding: 16px;
+  border-radius: 14px;
+}
+.donato-history strong, .donato-history span { display: block; }
+.donato-history strong { color: var(--lo-ink); font-size: 24px; }
+.donato-history span { font-size: 18px; }
+.donato-history .donato-portrait {
+  flex: 0 0 136px;
+  height: 136px;
+  border-radius: 10px;
+  background-color: var(--lo-paper);
+  background-image: url("recursos/retratos.webp");
+  background-size: 300% auto;
+  background-repeat: no-repeat;
+}
+.donato-portrait.glover { background-position: left center; }
+.donato-portrait.holland { background-position: center center; }
+.donato-portrait.dorigo { background-position: right center; }
+.donato-history .donato-credit { margin-top: 6px; font-size: 15px; }
+.donato-timeline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+.donato-timeline li {
+  background: var(--lo-m-soft);
+  border-top: 3px solid var(--lo-m);
+  border-radius: 0 0 12px 12px;
+  padding: 13px 16px;
+  font-size: 18px;
+}
+.donato-timeline time { display: block; font-size: 26px; color: var(--lo-m); font-weight: 750; }
+#donatoCanvas .slide-quote { font-size: 28px; margin-bottom: 6px; }
+#donatoCanvas .slide-route { gap: 7px; font-size: 19px; }
+#donatoCanvas .slide-route span { padding: 4px 9px; }
+#donatoCanvas .slide-route span + span::before { margin-right: 7px; }

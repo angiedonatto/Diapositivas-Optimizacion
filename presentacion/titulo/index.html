@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Heurísticas y Metaheurísticas · Título</title>
+ <link rel="stylesheet" href="../shared/tokens.css">
+ <link rel="stylesheet" href="../shared/slides.css">
+ <link rel="stylesheet" href="../shared/projection.css">
+</head>
+<body>
+<main class="section-deck">
+ <div class="slide-viewport">
+  <div class="slide-canvas slide-theme">
+   <article class="lo-slide is-current title-slide">
+    <header>
+     <p class="lo-s-kicker">Universidad Externado de Colombia <span class="lo-s-chap">Ciencia de Datos · Optimización</span></p>
+    </header>
+    <div class="lo-s-body">
+     <div>
+      <h1 class="lo-s-title">Heurísticas y Metaheurísticas</h1>
+      <p class="slide-lead" id="selected-topic">Estrategias de búsqueda para problemas de optimización</p>
+     </div>
+     <ul class="title-team">
+      <li>Angie Donato</li>
+      <li>Angie Loango</li>
+      <li>Andrés Escobar</li>
+      <li>Carolina Umbarila</li>
+     </ul>
+    </div>
+    <footer class="lo-s-foot"><span class="section-progress"></span></footer>
+   </article>
+  </div>
+ </div>
+</main>
+<script>
+ const topic = new URLSearchParams(location.search).get('tema');
+ const titles = new Map([
+   ['local', 'Búsqueda Local'],
+   ['tabu', 'Búsqueda Tabú'],
+   ['ga', 'Algoritmos Genéticos'],
+   ['aco', 'Colonia de Hormigas']
+ ]);
+ if (titles.has(topic)) {
+   document.querySelector('.slide-canvas').dataset.algo = topic;
+   document.getElementById('selected-topic').textContent = titles.get(topic);
+ }
+</script>
+<script src="../shared/canvas.js"></script>
+<script src="../shared/section.js"></script>
+<script src="../visor-bridge.js"></script>
+</body>
+</html>

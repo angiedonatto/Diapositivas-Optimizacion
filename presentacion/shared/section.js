@@ -1,5 +1,5 @@
 /* Bloques académicos que comparten la composición de las diapositivas de Loango. */
-(() => {
+window.sectionReady = (async () => {
   const source = document.querySelector('.study-page');
   const panel = source?.querySelector('.panel[data-m]');
   const deck = document.querySelector('.section-deck');
@@ -9,34 +9,65 @@
   }
 
   if (panel) {
-    const label = panel.querySelector('.label').textContent.trim();
+    const [letter, topic] = panel.querySelector('.label').textContent.trim().split(' · ');
     const hero = panel.querySelector('.hero');
-    const cards = [...panel.querySelectorAll('.stack .card')];
-    const groups = [
-      [hero.querySelector('h3').textContent, [hero.querySelector('.stat-row')]],
-      ['Ventajas y limitaciones', cards.slice(0, 2)],
-      [cards[2].querySelector('h3').textContent, [cards[2]]],
-      ['Comparación y aplicación', cards.slice(3)],
-      ['Conclusión', [panel.querySelector('.closer')]]
-    ];
-    deck.querySelector('.slide-canvas').dataset.algo = panel.dataset.m;
-    for (const [title, content] of groups) {
+    const stack = panel.querySelector('.stack');
+    const focus = stack.querySelector('.card.focus');
+    const canvas = deck.querySelector('.slide-canvas');
+    canvas.dataset.algo = panel.dataset.m;
+
+    function addSlide(title, items, layout = '') {
       const slide = document.querySelector('#section-slide').content.cloneNode(true);
-      slide.querySelector('.lo-s-letter').textContent = label.split(' · ')[0];
-      slide.querySelector('.section-topic').textContent = label.split(' · ')[1];
+      slide.querySelector('.lo-s-letter').textContent = letter;
+      slide.querySelector('.section-topic').textContent = topic;
       slide.querySelector('.lo-s-title').textContent = title;
       const body = slide.querySelector('.lo-s-body');
-      if (content.length === 2) body.classList.add('slide-columns');
-      for (const item of content) {
+      if (layout) body.classList.add(layout);
+      for (const item of items) {
         const card = document.createElement('div');
         card.className = 'lo-c section-card';
         const copy = item.cloneNode(true);
-        if (copy.querySelector('h3')?.textContent === title) copy.querySelector('h3').remove();
-        if (copy.classList.contains('card')) card.append(...copy.childNodes);
+        const heading = copy.querySelector('h3');
+        if (heading?.textContent === title) heading.remove();
+        if (copy.matches('.card, .idea')) card.append(...copy.childNodes);
         else card.append(copy);
         body.append(card);
       }
-      deck.querySelector('.slide-canvas').append(slide);
+      canvas.append(slide);
+    }
+
+    addSlide(hero.querySelector('h3').textContent, [hero.querySelector('.stat-row')]);
+    addSlide('Ventajas y limitaciones', stack.querySelectorAll('.pros, .cons'), 'slide-columns');
+    addSlide('Comparación y aplicación', stack.querySelectorAll(':scope > .grid-2 > .card:not(.pros, .cons)'), 'slide-columns');
+    addSlide(focus.querySelector('h3').textContent, [focus], 'section-focus');
+    addSlide('Conclusión', [stack.querySelector('.closer')]);
+
+    const originalUrl = new URL('../index.html#comparacion', location.href);
+    try {
+      // La tabla del respaldo es la fuente de verdad para los cuatro temas.
+      const response = await fetch(originalUrl, { signal: AbortSignal.timeout(6000) });
+      if (!response.ok) throw new Error('No se pudo cargar la comparación');
+      const original = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const comparison = original.querySelector('#comparacion');
+      const table = comparison.querySelector('table');
+      const rows = [...table.tBodies[0].rows];
+      if (!rows.length) throw new Error('La comparación no contiene filas');
+
+      addSlide('Los cuatro métodos en una frase', comparison.querySelectorAll('.idea'), 'slide-columns');
+      const rowsPerSlide = 4;
+      const pages = Math.ceil(rows.length / rowsPerSlide);
+      for (let i = 0; i < pages; i++) {
+        const part = table.cloneNode(true);
+        part.tBodies[0].replaceChildren(...rows.slice(i * rowsPerSlide, (i + 1) * rowsPerSlide));
+        addSlide('Comparación general · ' + (i + 1) + ' de ' + pages, [part], 'section-comparison');
+      }
+    } catch {
+      const link = document.createElement('a');
+      link.href = originalUrl;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = 'Abrir la tabla de comparación en el anexo';
+      addSlide('Comparación general', [link]);
     }
     deck.hidden = false;
   }
