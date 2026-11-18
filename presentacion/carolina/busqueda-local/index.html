@@ -1,0 +1,174 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carolina · Búsqueda Local · Análisis crítico</title><link rel="stylesheet" href="../estilos.css"></head>
+<body><header class="top"><div class="wrap"><div class="eyebrow">Universidad Externado de Colombia · Optimización</div>
+<h1>Carolina · Búsqueda Local</h1><p class="muted">Análisis crítico y cierre · 2,5 minutos</p>
+<button id="themeBtn" type="button" class="theme-btn" aria-label="Cambiar tema claro u oscuro">◐ Tema</button></div></header>
+<section class="block" id="carolina"><div class="wrap">
+<header><div class="eyebrow">Tema seleccionado</div><h2>Búsqueda Local</h2>
+<p class="muted">Ventajas, limitaciones, comparación y aplicación real.</p></header>
+<div class="tabs-bar"><div class="tablist" role="tablist" aria-label="Método">
+<button role="tab" id="tab-local" data-m="local" aria-controls="p-local" aria-selected="true">Búsqueda Local</button>
+</div><div class="timer" id="timer" aria-live="off"><span class="t" id="timerText">2:30</span>
+<button id="timerToggle" type="button">Iniciar</button><button id="timerReset" type="button" aria-label="Reiniciar cronómetro">↺</button></div></div>
+<div class="panel" id="p-local" data-m="local" role="tabpanel" aria-labelledby="tab-local">
+      <div class="hero">
+        <div class="eyebrow label">A · Búsqueda Local</div>
+        <h3>Mejora rápido, pero se detiene en el primer óptimo local.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>37 → 22</b><span>en un solo movimiento</span></div>
+          <div class="stat"><b>22</b><span>óptimo local: ahí se detiene</span></div>
+          <div class="stat"><b>20</b><span>óptimo global, que no ve</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Es sencilla de implementar.</li>
+              <li>Tiene bajo costo computacional y casi no tiene parámetros.</li>
+              <li>Mejora rápidamente una solución inicial.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Se queda atrapada en óptimos locales.</li>
+              <li>Depende mucho de la solución inicial.</li>
+              <li>No garantiza encontrar el óptimo global.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>¿Por qué se queda en un óptimo local?</h3>
+          <p>Solo acepta movimientos que <b>mejoran</b>. Desde A‑B‑C‑E‑D‑A (22), los 6 vecinos por swap cuestan entre 23 y 37: todos son peores. Para llegar a 20 habría que pasar primero por una solución peor, y el método no lo permite.</p>
+          <p style="margin:0"><b>Remedio clásico:</b> <i>multi-start</i>, es decir, correrla desde muchas soluciones iniciales y quedarse con la mejor, o usar una metaheurística.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación con los otros métodos</h3>
+            <ul>
+              <li><span class="chip c-tabu">Tabú</span> ataca justo este problema: desde 22 se movería al mejor vecino aunque sea peor (23) y usaría una memoria de movimientos prohibidos para no devolverse.</li>
+              <li><span class="chip c-ga">Genético</span> y <span class="chip c-aco">ACO</span> no siguen una sola trayectoria: trabajan con una población y exploran varias regiones a la vez, a cambio de más evaluaciones.</li>
+              <li>Aun así, casi siempre está <b>dentro</b> de ellos: muchas implementaciones refinan los mejores individuos o tours con 2-opt.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Optimización de rutas de última milla.</b> Los movimientos 2-opt y 3-opt reorganizan los recorridos que construyó otra heurística para reducir distancias y tiempos de entrega.</p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> Las rutas cambian a diario y se necesita una respuesta en segundos.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>Una solución puede ser la mejor entre sus vecinos sin ser la mejor de todo el problema.</p></div>
+      </div>
+    </div></div></section>
+<section class="block" id="preguntas"><div class="wrap"><header><div class="eyebrow">Repaso</div>
+<h2>Preguntas frecuentes · Búsqueda Local</h2><p class="muted">Preguntas generales y del algoritmo elegido.</p></header>
+<div class="faq" id="faq"><details data-t="gen">
+        <summary>¿Cuál de los cuatro métodos es mejor?</summary>
+        <div class="a"><p>No existe uno universalmente mejor: depende del problema, de su representación y de los recursos disponibles. Por ejemplo, ACO encaja con problemas de caminos en grafos; el Genético con codificaciones binarias o espacios sin derivadas; la Tabú con problemas donde hay movimientos naturales, como horarios. En nuestro ejemplo los tres metaheurísticos llegaron a 20, pero con 5 ciudades eso dice poco.</p></div>
+      </details>
+<details data-t="local tabu">
+        <summary>¿Cuál es la diferencia principal entre Búsqueda Local y Tabú?</summary>
+        <div class="a"><p>La memoria. La Tabú usa una lista para no deshacer movimientos recientes y, gracias a ella, puede aceptar soluciones temporalmente peores sin ciclar. En el ejemplo, la Local se detuvo en 22 y la Tabú pasó por 23 para llegar a 20.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Se pueden combinar estos métodos?</summary>
+        <div class="a"><p>Sí. Los algoritmos meméticos combinan un Genético con Búsqueda Local aplicada a cada hijo. También es común que ACO refine los tours de sus hormigas con 2-opt.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Cuáles trabajan con una sola solución y cuáles con una población? ¿Cuáles usan memoria?</summary>
+        <div class="a"><p><b>Una sola solución (trayectoria):</b> Búsqueda Local y Tabú. <b>Población:</b> Genético y ACO. <b>Memoria:</b> la Tabú usa la lista tabú (y frecuencias a largo plazo), el Genético usa la población y ACO la feromona. La Búsqueda Local no tiene memoria explícita.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Alguno garantiza encontrar el óptimo?</summary>
+        <div class="a"><p>No. Ninguno de los cuatro lo garantiza; eso solo lo hace un método exacto. En el ejemplo sabemos que 20 es óptimo porque probamos los 12 tours posibles, pero con 20 ciudades ya hay unos 6 × 10¹⁶ tours (19!/2), así que no se puede verificar así.</p></div>
+      </details>
+<details data-t="local">
+        <summary>¿Qué influencia tiene la solución inicial en la Búsqueda Local?</summary>
+        <div class="a"><p>Mucha: el óptimo local al que llega depende de dónde empieza. Por eso se usa el <i>multi-start</i>: correrla desde muchas soluciones iniciales distintas y quedarse con la mejor.</p></div>
+      </details>
+<details data-t="ga tabu local aco">
+        <summary>Si el problema fuera la mochila, ¿qué cambia?</summary>
+        <div class="a"><p>La representación. En la mochila una solución es un vector binario (qué objetos van). Para Local y Tabú el movimiento natural es cambiar un bit; en el Genético el cromosoma es ese vector y la mutación voltea un bit. ACO, pensado originalmente para caminos en grafos, requiere adaptar qué significa la feromona (por ejemplo, sobre cada objeto).</p></div>
+      </details></div></div></section>
+<footer><div class="wrap">Optimización · Ciencia de Datos · Universidad Externado de Colombia · <a href="../index.html">Versión anterior completa</a></div></footer>
+<script>
+(function () {
+  // Theme toggle (remembered per browser, optional)
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = i === j;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+    try { localStorage.setItem('tab', i); } catch (e) {}
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { select((i + 1) % tabs.length, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft')  { select((i + tabs.length - 1) % tabs.length, true); e.preventDefault(); }
+    });
+  });
+  try { var st = parseInt(localStorage.getItem('tab'), 10); if (st >= 0 && st < tabs.length) select(st); } catch (e) {}
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+    var n = parseInt(e.key, 10);
+    if (n >= 1 && n <= tabs.length) { select(n - 1); document.getElementById('carolina').scrollIntoView(); }
+  });
+
+  // 2:30 timer
+  var TOTAL = 150, left = TOTAL, id = null;
+  var box = document.getElementById('timer'), txt = document.getElementById('timerText'), btn = document.getElementById('timerToggle');
+  function draw() {
+    var neg = left < 0, s = Math.abs(left);
+    txt.textContent = (neg ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    box.classList.toggle('warn', left <= 30 && left >= 0);
+    box.classList.toggle('over', left < 0);
+  }
+  btn.addEventListener('click', function () {
+    if (id) { clearInterval(id); id = null; btn.textContent = 'Seguir'; }
+    else { id = setInterval(function () { left--; draw(); }, 1000); btn.textContent = 'Pausa'; }
+  });
+  document.getElementById('timerReset').addEventListener('click', function () {
+    clearInterval(id); id = null; left = TOTAL; btn.textContent = 'Iniciar'; draw();
+  });
+
+  // FAQ filter
+  var fbtns = document.querySelectorAll('.faq-filter button');
+  var items = document.querySelectorAll('#faq details');
+  var chipName = { gen: null, local: ['c-local', 'Local'], tabu: ['c-tabu', 'Tabú'], ga: ['c-ga', 'Genético'], aco: ['c-aco', 'ACO'] };
+  items.forEach(function (d) {
+    var tags = d.getAttribute('data-t').split(' ');
+    var holder = document.createElement('span'); holder.className = 'tags';
+    tags.forEach(function (t) { if (chipName[t]) { var c = document.createElement('span'); c.className = 'chip ' + chipName[t][0]; c.textContent = chipName[t][1]; holder.appendChild(c); } });
+    if (holder.childNodes.length) d.querySelector('summary').appendChild(holder);
+  });
+  fbtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-f');
+      fbtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      items.forEach(function (d) { d.hidden = f !== 'all' && d.getAttribute('data-t').split(' ').indexOf(f) === -1; });
+    });
+  });
+})();
+</script><script src="../../visor-bridge.js"></script></body></html>

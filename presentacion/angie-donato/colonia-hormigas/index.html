@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angie Donato · Colonia de Hormigas</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
+ <div class="actions">
+  <a href="../../carolina/colonia-hormigas/index.html">Análisis crítico · Carolina</a>
+  <a href="../../angie-loango/colonia-hormigas/index.html">Componentes · Angie Loango</a>
+  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
+  <button id="fullBtn" type="button">Pantalla completa (F)</button>
+ </div>
+</header>
+<nav class="methods" aria-label="Escoger algoritmo">
+ 
+ 
+ 
+ <button data-method="aco" aria-selected="false"><b>D</b> Colonia de Hormigas</button>
+</nav>
+<main class="stage-wrap">
+ <section class="stage" id="stage" aria-live="polite">
+  <article class="slide">
+   <div class="slide-meta"><span class="pill" id="category"><span class="dot"></span> Apertura</span><span id="eyebrow">ANGIE DONATO · 3 MINUTOS</span></div>
+   <h1 class="title" id="title"></h1>
+   <p class="lead" id="lead"></p>
+   <div class="slide-body">
+    <div class="bigidea"><span class="mini" id="mini"></span><div class="quote" id="quote"></div><div class="path" id="path"></div></div>
+    <div class="detail" id="facts"></div>
+   </div>
+   <div class="bottom"><span>Optimización · Ciencia de Datos · Guion del equipo</span><span class="handoff" id="handoff"></span><span class="progress" id="progress"></span></div>
+  </article>
+ </section>
+</main>
+<div class="controlbar">
+ <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
+ <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
+</div>
+<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
+<script>
+(function () {
+ 'use strict';
+ var all={
+ aco:{name:'Colonia de Hormigas',accent:'#a33a5b',soft:'#f8e6ec',slides:[
+ {title:'¿Cómo encontrar buenas rutas sin un director central?',lead:'En el agente viajero, necesitamos decidir qué ciudad visitar después y construir rutas completas.',mini:'El problema de rutas',quote:'Muchas exploraciones pequeñas pueden producir una buena solución colectiva.',path:['Ciudad','Siguiente ciudad','Ruta completa'],facts:[['Método exacto','Puede certificar el mejor recorrido, pero el número de combinaciones crece rápidamente.'],['Heurística','Aprovecha información del problema para hallar rutas prometedoras.'],['Metaheurística','Usa una estrategia de exploración que aprende de soluciones anteriores.']],notes:'Buenos días. Nos correspondió Optimización por Colonia de Hormigas. Pensemos en el agente viajero, donde debemos construir una ruta que visite varias ciudades y regrese al inicio. Si las ciudades aumentan, aparecen muchísimas combinaciones. Una heurística busca recorridos útiles sin la garantía de un método exacto. La colonia de hormigas es una metaheurística que usa múltiples agentes que construyen rutas y aprenden colectivamente de cuáles funcionaron mejor.'},
+ {title:'Marco Dorigo se inspiró en las hormigas reales',lead:'Propuso Ant System en 1992: un método inspirado en señales colectivas de feromona.',mini:'Origen e inspiración',quote:'Las hormigas dejan señales en los caminos; los recorridos favorecidos atraen a otras.',path:['Caminar','Depositar feromona','Reforzar'],facts:[['Origen','Marco Dorigo, tesis doctoral de 1992.'],['Feromona','Una señal que ayuda a conservar información sobre recorridos utilizados.'],['Evaporación','Las señales se debilitan con el tiempo y permiten olvidar caminos poco convenientes.']],notes:'La propuesta se debe a Marco Dorigo, en 1992, con una primera versión llamada Ant System. Se inspiró en las hormigas reales: al caminar dejan feromonas, sustancias químicas que influyen en las decisiones de otras hormigas. Los caminos que reciben más uso pueden quedar reforzados, mientras que la feromona de los demás se evapora. El resultado es una forma de coordinación colectiva sin un director central.'},
+ {title:'Una metaheurística poblacional y constructiva',lead:'Cada hormiga crea una solución desde cero; la colonia refuerza las aristas presentes en buenos recorridos.',mini:'Dónde encaja',quote:'No hereda rutas como el Genético: construye nuevas rutas guiada por feromona y distancia.',path:['Construir','Evaluar','Actualizar feromona'],facts:[['Poblacional','Varias hormigas crean rutas durante una iteración.'],['Constructiva','Cada hormiga elige la siguiente ciudad hasta completar la ruta.'],['Exploración','La elección es probabilística: una arista poco atractiva aún puede elegirse.']],handoff:'Continúa Angie Loango: probabilidades y feromona',notes:'A diferencia de Búsqueda Local y Tabú, que modifican una ruta existente, ACO es una metaheurística constructiva: cada hormiga va decidiendo paso a paso qué ciudad visitar. También es poblacional porque muchas hormigas producen recorridos. Y a diferencia del Algoritmo Genético, no combina dos padres; usa señales de feromona y la cercanía entre ciudades para elegir probabilísticamente el siguiente paso. Angie Loango explicará la fórmula de transición, los parámetros alfa y beta y cómo se actualiza la feromona.'}
+ ]}
+ };
+ var method='aco',i=0;
+ var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
+ function render(){
+  var group=all[method],s=group.slides[i];document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
+  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
+  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
+  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='fact';var number=document.createElement('div');number.className='number';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];var p=document.createElement('p');p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
+  nodes.handoff.textContent=s.handoff||'';nodes.progress.replaceChildren();group.slides.forEach(function(_,n){var v=document.createElement('i');if(n<=i)v.className='on';nodes.progress.appendChild(v)});
+  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
+  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
+  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
+ }
+ function choose(m){if(!all[m])return;method=m;i=0;render()}
+ function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
+ function prev(){if(i>0){i--;render()}}
+ document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
+ document.getElementById('nextBtn').addEventListener('click',next);
+ document.getElementById('prevBtn').addEventListener('click',prev);
+ document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
+ document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
+ document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
+  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
+  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
+  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
+ });
+ var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash){method=hash[1];i=Number(hash[2])-1}
+ render();
+})();
+</script>
+<script src="../../visor-bridge.js"></script>
+</body>
+</html>

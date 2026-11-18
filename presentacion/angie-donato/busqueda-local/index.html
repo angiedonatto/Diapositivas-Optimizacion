@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angie Donato · Búsqueda Local</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
+ <div class="actions">
+  <a href="../../carolina/busqueda-local/index.html">Análisis crítico · Carolina</a>
+  <a href="../../angie-loango/busqueda-local/index.html">Componentes · Angie Loango</a>
+  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
+  <button id="fullBtn" type="button">Pantalla completa (F)</button>
+ </div>
+</header>
+<nav class="methods" aria-label="Escoger algoritmo">
+ <button data-method="local" aria-selected="true"><b>A</b> Búsqueda Local</button>
+ 
+ 
+ 
+</nav>
+<main class="stage-wrap">
+ <section class="stage" id="stage" aria-live="polite">
+  <article class="slide">
+   <div class="slide-meta"><span class="pill" id="category"><span class="dot"></span> Apertura</span><span id="eyebrow">ANGIE DONATO · 3 MINUTOS</span></div>
+   <h1 class="title" id="title"></h1>
+   <p class="lead" id="lead"></p>
+   <div class="slide-body">
+    <div class="bigidea"><span class="mini" id="mini"></span><div class="quote" id="quote"></div><div class="path" id="path"></div></div>
+    <div class="detail" id="facts"></div>
+   </div>
+   <div class="bottom"><span>Optimización · Ciencia de Datos · Guion del equipo</span><span class="handoff" id="handoff"></span><span class="progress" id="progress"></span></div>
+  </article>
+ </section>
+</main>
+<div class="controlbar">
+ <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
+ <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
+</div>
+<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
+<script>
+(function () {
+ 'use strict';
+ var all={
+ local:{name:'Búsqueda Local',accent:'#3d5a98',soft:'#e7ecf7',slides:[
+ {title:'¿Por qué buscar buenas rutas sin probarlas todas?',lead:'El agente viajero busca el recorrido más corto que visite todas las ciudades y regrese al inicio.',mini:'El desafío de optimización',quote:'Una solución útil ahora puede valer más que esperar a comprobar todas las posibilidades.',path:['A','B','C','D','E','A'],facts:[['Método exacto','Busca una solución óptima con garantía, cuando se aplica al problema y termina.'],['Heurística','Busca una buena respuesta en un tiempo razonable, sin garantía de óptimo global.'],['20 ciudades','Con distancias simétricas hay 19!/2 ≈ 6 × 10¹⁶ recorridos distintos.']],notes:'Buenos días. Nos correspondió Búsqueda Local. Pensemos en el agente viajero: necesitamos visitar varias ciudades y volver al punto de partida usando la menor distancia posible. Si intentáramos comparar todas las rutas, el número crece rápidamente: con 20 ciudades, incluso fijando el inicio y considerando las rutas inversas equivalentes, hay aproximadamente seis por diez a la dieciséis opciones. Por eso diferenciamos un método exacto, que ofrece garantías de optimalidad, de una heurística, que intenta encontrar una buena solución sin revisar todas las posibilidades.'},
+ {title:'Búsqueda Local: cambiar un poco para mejorar',lead:'Parte de una solución completa y explora pequeñas modificaciones cercanas.',mini:'Origen e intuición',quote:'Como subir una montaña en la niebla: solo vemos los próximos pasos.',path:['Ruta inicial','Vecino','Mejor ruta'],facts:[['Historia','No tiene un único autor; es una familia clásica de métodos de mejora.'],['Antecedente','Croes publicó 2-opt en 1958; Lin–Kernighan desarrolló otra técnica para rutas en 1973.'],['Movimiento','Se pueden intercambiar ciudades, insertarlas o modificar aristas de una ruta.']],notes:'Búsqueda Local es una heurística de mejora: no construye todo desde cero cada vez, sino que toma una solución completa y prueba cambios pequeños. No tiene un creador único. En el agente viajero, técnicas conocidas son 2-opt, de Croes en 1958, y Lin–Kernighan, de 1973. Para imaginársela, piensen en una persona que sube una montaña con niebla: observa solamente los pasos que tiene al lado y se mueve hacia uno mejor.'},
+ {title:'Una solución, un vecindario y un límite',lead:'La Búsqueda Local mejora una trayectoria; puede detenerse antes de alcanzar el mejor recorrido posible.',mini:'Dónde encaja',quote:'Es una heurística de mejora, no una estrategia general de exploración.',path:['Una solución','Mejor vecino','Óptimo local'],facts:[['Una sola solución','En cada momento conserva una solución actual que intenta mejorar.'],['Óptimo local','Ningún movimiento del vecindario elegido mejora la solución actual.'],['Después','Una metaheurística como Tabú añade estrategias para seguir explorando.']],handoff:'Continúa Angie Loango: componentes y pseudocódigo',notes:'La gran diferencia con un algoritmo genético o con la colonia de hormigas es que la Búsqueda Local trabaja con una sola solución a la vez. Es una heurística de mejora, mientras que una metaheurística aporta reglas generales para guiar o ampliar la exploración. Su principal límite es el óptimo local: una solución mejor que todas sus vecinas, pero no necesariamente la mejor de todo el problema. Ahora Angie Loango explica la representación, la función objetivo, el vecindario y cómo funciona el algoritmo.'}
+ ]}
+ };
+ var method='local',i=0;
+ var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
+ function render(){
+  var group=all[method],s=group.slides[i];document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
+  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
+  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
+  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='fact';var number=document.createElement('div');number.className='number';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];var p=document.createElement('p');p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
+  nodes.handoff.textContent=s.handoff||'';nodes.progress.replaceChildren();group.slides.forEach(function(_,n){var v=document.createElement('i');if(n<=i)v.className='on';nodes.progress.appendChild(v)});
+  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
+  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
+  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
+ }
+ function choose(m){if(!all[m])return;method=m;i=0;render()}
+ function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
+ function prev(){if(i>0){i--;render()}}
+ document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
+ document.getElementById('nextBtn').addEventListener('click',next);
+ document.getElementById('prevBtn').addEventListener('click',prev);
+ document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
+ document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
+ document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
+  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
+  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
+  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
+ });
+ var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash){method=hash[1];i=Number(hash[2])-1}
+ render();
+})();
+</script>
+<script src="../../visor-bridge.js"></script>
+</body>
+</html>
