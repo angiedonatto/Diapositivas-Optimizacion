@@ -51,139 +51,134 @@
                 <span class="lo-s-chap">Contexto</span>
               </p>
               <h1 class="lo-s-title" id="titulo-1">
-                ¿Cómo seguimos buscando cuando el camino parece terminar?
+                ¿Por qué necesitamos Búsqueda Tabú?
               </h1>
             </header>
             <div class="lo-s-body">
               <div class="columnas">
-                <figure class="lo-c escena" data-f="1" data-cue="Muchas rutas">
+                <figure
+                  class="lo-c escena"
+                  data-f="1"
+                  data-cue="Empresa y destinos"
+                >
                   <figcaption class="lo-c-name">
-                    Muchas soluciones posibles
+                    Un turno de entregas por la ciudad
                   </figcaption>
-                  <svg
-                    viewBox="0 0 760 365"
-                    role="img"
-                    aria-label="Paisaje de montañas: una persona sube mediante mejoras cercanas y hay otra cima más alta a distancia."
-                  >
-                    <rect width="760" height="365" fill="#e8ece7" />
-                    <path
-                      d="M0 240 120 156 181 183 299 87 408 172 531 68 657 120 760 50v315H0Z"
-                      fill="#d4e1d8"
+                  <div class="ciudad">
+                    <img
+                      src="../busqueda-local/ciudad.svg"
+                      width="920"
+                      height="500"
+                      alt="Bodega, viviendas, tiendas, hospital, oficinas, fábrica y biblioteca conectados por calles."
                     />
-                    <path
-                      d="M0 323 96 279 169 221 290 136 356 192 436 242 603 88 760 223v142H0Z"
-                      fill="#8ca595"
-                    />
-                    <path
-                      d="M0 365 128 316 290 136 356 192 436 242l-136 81-40 42ZM436 365l167-277 157 135v142Z"
-                      fill="#6f8c7d"
-                    />
-                    <path
-                      d="m42 340 88-35 110-70 92-20 79 34m-298 85 77-48 134-39 94 28"
-                      fill="none"
-                      stroke="#acd0b9"
-                      stroke-width="2"
-                    />
-                    <g class="" data-f="3" data-cue="Solo mejoras">
+                    <svg
+                      viewBox="0 0 920 500"
+                      role="img"
+                      aria-label="Carrito que sale de la bodega y recorridos alternativos"
+                    >
                       <path
                         class="trazo"
-                        d="M96 279 169 221 235 175"
-                        stroke="#fbfaf6"
+                        d="M154 204v25q0 22 24 22h241"
+                        stroke="#3d5a98"
                         style="stroke-width: 5px"
-                        stroke-dasharray="7 9"
+                        stroke-dasharray="8 9"
                       />
-                      <g class="escalador-inicial">
+                      <g
+                        class="viaje"
+                        style="
+                          offset-path: path('M154 223Q154 248 178 248H451');
+                          --duracion: 1.6s;
+                        "
+                      >
                         <use
-                          href="../recursos/escenas.svg#escalador"
-                          x="213"
-                          y="111"
-                          width="46"
-                          height="64"
-                          style="color: #a8620a"
+                          href="../recursos/escenas.svg#camion"
+                          x="-48"
+                          y="-29"
+                          width="96"
+                          height="58"
+                          style="color: #3d5a98"
                         />
                       </g>
-                    </g>
-                    <g class="" data-f="4" data-cue="Cima cercana">
-                      <path
-                        class="trazo"
-                        d="M235 175 290 136"
-                        stroke="#fbfaf6"
-                        style="stroke-width: 5px"
-                        stroke-dasharray="7 9"
-                      />
-                      <use
-                        href="../recursos/escenas.svg#escalador"
-                        x="265"
-                        y="73"
-                        width="48"
-                        height="65"
-                        style="color: #a8620a"
-                      />
-                      <circle cx="290" cy="138" r="8" fill="#a8620a" />
-                    </g>
-                    <g class="" data-f="5" data-cue="Más allá">
-                      <path
-                        class="trazo"
-                        d="M290 137 357 193 436 242 603 88"
-                        stroke="#a8620a"
-                        style="stroke-width: 5px"
-                        stroke-dasharray="8 11"
-                      />
-                      <text x="578" y="63">Otra región</text>
-                    </g>
-                  </svg>
+                      <g data-f="2" data-cue="Muchas rutas posibles">
+                        <path
+                          class="trazo"
+                          d="M154 205v45h410V10H889v240H154"
+                          stroke="#2c7a3f"
+                          style="stroke-width: 4px"
+                          stroke-dasharray="10 8"
+                        />
+                        <path
+                          class="trazo"
+                          d="M154 205v45H33v234h856V250H154"
+                          stroke="#a8620a"
+                          style="stroke-width: 4px"
+                          stroke-dasharray="9 9"
+                        />
+                      </g>
+                    </svg>
+                  </div>
                   <p class="lo-c-line pista">
-                    Entre muchas rutas, <b>revisar todas</b> puede ser costoso.
+                    <b>Visitar todos los destinos</b> → volver a la bodega →
+                    <b>menor distancia</b>
                   </p>
                 </figure>
                 <div class="pistas">
+                  <figure class="globo" data-f="2" data-cue="Muchísimas rutas">
+                    <img
+                      src="../busqueda-local/repartidora.svg"
+                      width="150"
+                      height="156"
+                      alt="Repartidora pensando"
+                    />
+                    <blockquote>
+                      El problema es que hay muchísimas rutas que podríamos
+                      escoger.
+                    </blockquote>
+                  </figure>
+                  <div class="comparar">
+                    <div class="lo-c" data-f="3" data-cue="Método exacto">
+                      <h2 class="lo-c-name">Método exacto</h2>
+                      <p class="lo-c-line pista">
+                        La mejor solución <b>con garantía de que es óptima</b>.
+                      </p>
+                      <p class="pista-breve" data-f="4" data-cue="Mucho tiempo">
+                        En el agente viajero, <b>puede tomar mucho tiempo</b>.
+                      </p>
+                    </div>
+                    <div class="lo-c acento" data-f="5" data-cue="Heurística">
+                      <h2 class="lo-c-name">Heurística</h2>
+                      <p class="lo-c-line pista">
+                        <b>Buena solución en un tiempo razonable</b>, sin
+                        garantía de óptimo.
+                      </p>
+                    </div>
+                  </div>
                   <div
-                    class="comparacion-metodos"
-                    data-f="2"
-                    data-cue="Exacto y heurística"
+                    class="lo-c"
+                    data-f="6"
+                    data-cue="Búsqueda Local y estancamiento"
                   >
-                    <div class="comparar">
-                      <div class="lo-c" data-f="2">
-                        <h2 class="lo-c-name">Método exacto</h2>
-                        <p class="lo-c-line pista">
-                          Busca el óptimo con <b>garantía</b>.
-                        </p>
-                      </div>
-                      <div class="lo-c" data-f="2">
-                        <h2 class="lo-c-name">Heurística</h2>
-                        <p class="lo-c-line pista">
-                          Busca una <b>buena solución</b> sin garantizar el
-                          óptimo.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="lo-c" data-f="3">
                     <h2 class="lo-c-name">Búsqueda Local</h2>
-                    <p class="lo-c-line pista">
-                      En la versión estudiada <b>solo acepta mejoras</b>.
-                    </p>
                     <div class="fila">
-                      <span>Solución actual</span> <span>→</span>
-                      <span>Vecino mejor</span>
+                      <span>Ruta actual</span><b aria-hidden="true">→</b
+                      ><span>Cambios pequeños</span>
                     </div>
-                  </div>
-                  <div class="lo-c neutro" data-f="4">
-                    <h2 class="lo-c-name">Cima cercana</h2>
-                    <p class="lo-c-line pista">
-                      Si ningún paso cercano mejora, llega a un
-                      <b>óptimo local</b>.
-                    </p>
-                  </div>
-                  <div class="lo-c acento" data-f="5">
-                    <h2 class="lo-c-name">Metaheurística</h2>
-                    <p class="lo-c-line pista">
-                      <strong>Estrategia general</strong> que orienta la
-                      exploración.
-                      <strong>Necesitamos explorar más allá.</strong>
+                    <p
+                      class="lo-c-line pista"
+                      data-f="7"
+                      data-cue="Óptimo local"
+                    >
+                      <b>Óptimo local.</b> Se agotan las mejoras cercanas,
+                      aunque pueda existir una ruta más corta en otra parte.
                     </p>
                   </div>
                 </div>
+              </div>
+              <div class="cierre" data-f="8" data-cue="Tabú añade memoria">
+                Búsqueda Tabú → memoria para seguir explorando<span
+                  aria-hidden="true"
+                  >→</span
+                >
               </div>
             </div>
             <footer class="lo-s-foot">
@@ -209,19 +204,13 @@
                 <span class="lo-s-chap">Origen e inspiración</span>
               </p>
               <h1 class="lo-s-title" id="titulo-2">
-                Fred Glover y la memoria como inspiración
+                Un laberinto y la memoria humana
               </h1>
             </header>
             <div class="lo-s-body">
               <div class="columnas">
-                <figure
-                  class="lo-c escena"
-                  data-f="2"
-                  data-cue="Memoria humana"
-                >
-                  <figcaption class="lo-c-name">
-                    Del callejón a la salida
-                  </figcaption>
+                <figure class="lo-c escena" data-f="2" data-cue="Laberinto">
+                  <figcaption class="lo-c-name">Un laberinto</figcaption>
                   <svg
                     viewBox="0 0 720 408"
                     role="img"
@@ -281,22 +270,29 @@
                         stroke-width="31"
                       />
                       <path
-                        data-f="4"
-                        data-cue="Huellas"
-                        data-cue="Huellas"
-                        data-cue="Huellas"
+                        data-f="5"
                         d="M6 304H130V220H274V132H407"
                         stroke="#c28951"
                         stroke-width="4.5"
                         stroke-dasharray="6 7"
                       />
                       <g
-                        class="maze-repeat"
+                        class="maze-dead-end"
                         data-f="3"
-                        data-cue="Camino repetido"
-                        data-cue="Camino repetido"
-                        data-cue="Camino repetido"
+                        stroke="#a8620a"
+                        stroke-width="4"
                       >
+                        <path
+                          d="M27 304H130V220H274V132H397"
+                          marker-end="url(#maze-arrow-amber)"
+                        />
+                        <path
+                          d="M396 141H283V211"
+                          stroke-dasharray="6 7"
+                          marker-end="url(#maze-arrow-amber)"
+                        />
+                      </g>
+                      <g class="maze-repeat" data-f="4">
                         <path
                           d="M405 140H282V212"
                           stroke="#a8620a"
@@ -311,13 +307,7 @@
                           marker-end="url(#maze-arrow-amber)"
                         />
                       </g>
-                      <g
-                        class="maze-memory"
-                        data-f="5"
-                        data-cue="Evitar volver"
-                        data-cue="Evitar volver"
-                        data-cue="Evitar volver"
-                      >
+                      <g class="maze-memory" data-f="5">
                         <path
                           d="M274 188V132H407"
                           stroke="#a3392c"
@@ -347,13 +337,7 @@
                           stroke-width="2"
                         />
                       </g>
-                      <g
-                        class="maze-detour"
-                        data-f="6"
-                        data-cue="Alternativa"
-                        data-cue="Alternativa"
-                        data-cue="Alternativa"
-                      >
+                      <g class="maze-detour" data-f="6">
                         <path
                           d="M274 220v120h256V190h106V63h68"
                           stroke="#1f7a4d"
@@ -369,7 +353,9 @@
                     </g>
                     <g fill="#324840">
                       <text x="17" y="280">Entrada</text>
-                      <text x="337" y="103">Callejón sin salida</text>
+                      <text x="337" y="103" data-f="3">
+                        Callejón sin salida
+                      </text>
                       <text x="646" y="31" fill="#1f7a4d">Salida</text>
                     </g>
                     <g class="maze-walker">
@@ -391,9 +377,6 @@
                       />
                     </g>
                   </svg>
-                  <p class="lo-c-line pista">
-                    La inspiración es la <b>memoria humana</b>.
-                  </p>
                 </figure>
                 <div class="pistas">
                   <figure
@@ -415,20 +398,42 @@
                       </figcaption>
                     </div>
                   </figure>
-                  <p class="pista-breve" data-f="3">
-                    <b>Callejón y vuelta.</b> Sin memoria podemos repetir el
-                    mismo camino.
+                  <p class="pista-breve" data-f="2">
+                    <b>Encuentra la salida.</b> Hay varios pasillos para
+                    explorar.
                   </p>
-                  <p class="pista-breve" data-f="4">
-                    <b>Huellas.</b> Recordar los movimientos recientes.
+                  <p
+                    class="pista-breve"
+                    data-f="3"
+                    data-cue="Callejón y vuelta"
+                  >
+                    <b>Callejón sin salida.</b> Entra, descubre el bloqueo y
+                    regresa.
                   </p>
-                  <p class="pista-breve" data-f="5">
-                    <b>Evitar volver</b> inmediatamente por el mismo camino.
+                  <p class="pista-breve" data-f="4" data-cue="El mismo camino">
+                    <b>Sin memoria</b>, podría repetir el mismo camino una y
+                    otra vez.
                   </p>
-                  <p class="pista-breve" data-f="6">
-                    <b>Alternativa.</b> Explorar otra salida.
+                  <p
+                    class="pista-breve"
+                    data-f="5"
+                    data-cue="Movimientos recientes"
+                  >
+                    <b>Recuerda los movimientos recientes</b> y evita repetirlos
+                    de inmediato.
+                  </p>
+                  <p
+                    class="pista-breve"
+                    data-f="6"
+                    data-cue="Explorar otra alternativa"
+                  >
+                    <b>Otro pasillo.</b> Explora una alternativa.
                   </p>
                 </div>
+              </div>
+              <div class="cierre" data-f="7" data-cue="Memoria humana">
+                Memoria humana → recordar por dónde pasamos para dejar de dar
+                vueltas<span aria-hidden="true">→</span>
               </div>
             </div>
             <footer class="lo-s-foot">
@@ -454,108 +459,117 @@
                 <span class="lo-s-chap">Qué es y dónde encaja</span>
               </p>
               <h1 class="lo-s-title" id="titulo-3">
-                Una metaheurística de trayectoria con memoria
+                ¿Qué es la Búsqueda Tabú?
               </h1>
             </header>
             <div class="lo-s-body">
-              <div class="columnas">
+              <h2
+                class="cierre guion-definicion"
+                data-f="1"
+                data-cue="Clasificación"
+              >
+                Metaheurística de trayectoria basada en memoria
+              </h2>
+              <div class="columnas equilibradas">
                 <div class="pistas">
                   <figure
                     class="lo-c escena"
-                    data-f="2"
-                    data-cue="Una trayectoria"
+                    data-f="3"
+                    data-cue="Una solución actual"
                   >
                     <figcaption class="lo-c-name">
                       Una solución actual a la vez
                     </figcaption>
                     <svg
-                      viewBox="0 0 650 122"
+                      viewBox="0 0 760 152"
                       role="img"
-                      aria-label="Una única solución pasa por tres estados en una trayectoria"
+                      aria-label="Un mismo carrito avanza de una versión de la ruta a otra en una sola trayectoria"
                     >
+                      <rect width="760" height="152" fill="#f6f0e5" />
                       <path
+                        d="M105 77C218 42 269 96 380 77S558 50 655 77"
                         class="trazo"
-                        d="M90 63C160 38 211 89 267 62S380 43 430 60 540 53 603 37"
                         stroke="#a8620a"
-                        style="stroke-width: 4px"
-                        stroke-dasharray="7 7"
+                        stroke-dasharray="9 8"
                       />
+                      <path
+                        d="m212 60 13 6-13 6m242-6 13 4-10 9"
+                        fill="none"
+                        stroke="#a8620a"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <g fill="#a8620a">
+                        <circle cx="105" cy="77" r="9" />
+                        <circle cx="380" cy="77" r="9" />
+                        <circle cx="655" cy="77" r="9" />
+                      </g>
                       <use
-                        href="../recursos/escenas.svg#escalador"
-                        x="570"
-                        y="0"
-                        width="36"
-                        height="49"
+                        href="../recursos/escenas.svg#camion"
+                        x="615"
+                        y="19"
+                        width="88"
+                        height="52"
                         style="color: #a8620a"
                       />
-                      <circle cx="90" cy="63" r="7" fill="#a8620a" />
-                      <text x="90" y="106" text-anchor="middle">Solución</text>
-                      <circle cx="268" cy="62" r="7" fill="#a8620a" />
-                      <text x="268" y="106" text-anchor="middle">
-                        Otra versión
+                      <text x="105" y="125" text-anchor="middle">
+                        Ruta inicial
                       </text>
-                      <circle cx="430" cy="60" r="7" fill="#a8620a" />
-                      <text x="430" y="106" text-anchor="middle">
-                        Versión actual
+                      <text x="380" y="125" text-anchor="middle">
+                        Modificamos la ruta
                       </text>
-                      <g class="" data-f="3" data-cue="Memoria reciente">
-                        <path
-                          d="M268 62C313 38 356 44 430 60"
-                          fill="none"
-                          stroke="#a8620a"
-                          stroke-width="11"
-                          opacity=".35"
-                        />
-                        <text x="294" y="31">Rastro reciente</text>
-                      </g>
+                      <text x="655" y="125" text-anchor="middle">
+                        Ruta actual
+                      </text>
                     </svg>
-                    <p class="lo-c-line pista">
-                      Método de <b>trayectoria</b>: trabajamos con una sola
-                      solución actual.
-                    </p>
                   </figure>
-                  <div class="lo-c" data-f="3">
-                    <h2 class="lo-c-name">Rastro de memoria</h2>
-                    <div class="fila">
-                      <span>Movimiento reciente</span> <span>→</span>
-                      <span>Evitar deshacerlo</span>
-                    </div>
-                    <p class="lo-c-line pista">
-                      Recuerda por dónde pasó la <b>solución actual</b>.
-                    </p>
-                  </div>
                 </div>
                 <div class="pistas">
-                  <div class="lo-c acento" data-f="1" data-cue="Metaheurística">
+                  <div
+                    class="lo-c acento"
+                    data-f="2"
+                    data-cue="Estrategia adicional"
+                  >
                     <h2 class="lo-c-name">Metaheurística</h2>
                     <p class="lo-c-line pista">
-                      <strong>Estrategia general</strong> que orienta la
-                      exploración.
+                      <b>La memoria</b> aporta una estrategia adicional para
+                      <b>orientar la exploración</b>.
                     </p>
                   </div>
-                  <div class="" data-f="4" data-cue="Seguir explorando">
-                    <div class="comparar">
-                      <div class="lo-c neutro">
-                        <h2 class="lo-c-name">Búsqueda Local</h2>
-                        <p class="lo-c-line pista">
-                          Se detiene si no hay mejora.
-                        </p>
-                      </div>
-                      <div class="lo-c acento">
-                        <h2 class="lo-c-name">Búsqueda Tabú</h2>
-                        <p class="lo-c-line pista">
-                          Puede aceptar otro movimiento permitido, aunque
-                          empeore temporalmente.
-                        </p>
-                      </div>
+                  <div
+                    class="lo-c"
+                    data-f="4"
+                    data-cue="Empeorar temporalmente"
+                  >
+                    <h2 class="lo-c-name">Puede aceptar un desvío</h2>
+                    <div
+                      class="guion-secuencia"
+                      aria-label="Ejemplo: de 28 kilómetros a 31 kilómetros y después a otra opción de 24 kilómetros"
+                    >
+                      <span><b>28 km</b><small>Ruta actual</small></span
+                      ><b aria-hidden="true">→</b>
+                      <span class="guion-desvio"
+                        ><b>31 km</b><small>Empeora por un paso</small></span
+                      ><b aria-hidden="true">→</b>
+                      <span
+                        ><b>24 km</b><small>Otra opción posible</small></span
+                      >
                     </div>
+                    <p class="lo-c-line pista">
+                      Ejemplo: un movimiento permitido puede abrir
+                      <b>otras posibilidades</b>.
+                    </p>
                   </div>
                 </div>
               </div>
-              <div class="cierre" data-f="5" data-cue="Relevo">
+              <div
+                class="cierre"
+                data-f="5"
+                data-cue="Búsqueda Local guiada por memoria"
+              >
                 Búsqueda Tabú = Búsqueda Local guiada por memoria<small
-                  >Angie Loango · Componentes y funcionamiento de la
-                  memoria</small
+                  >Angie Loango · Componentes y funcionamiento</small
                 >
               </div>
             </div>
@@ -587,128 +601,114 @@
     <aside id="notes" class="notes" hidden aria-label="Notas para ensayar">
       <h2>Guion para ensayar</h2>
       <section data-notes>
-        <h3>Contexto · 60 s</h3>
+        <h3>Contexto</h3>
         <ol>
           <li>
-            <strong>Muchas rutas.</strong> Entre todas las soluciones de un
-            problema de rutas queremos encontrar una buena; revisar todas puede
-            salir muy caro.
-            <em
-              >Señala el paisaje y las posibilidades que presenta. Avanza con
-              «Exacto y heurística».</em
-            >
+            <strong>Empresa de entregas.</strong> Buenos días. Nos correspondió
+            Búsqueda Tabú. Antes de explicar qué es, imaginen que tenemos una
+            empresa de entregas y necesitamos visitar varias ciudades, pero
+            queremos hacerlo recorriendo la menor distancia posible y regresando
+            al punto de partida.
           </li>
           <li>
-            <strong>Exacto y heurística.</strong> El método exacto busca una
-            garantía de optimalidad. Una heurística busca una buena solución sin
-            esa garantía.
-            <em>Contrasta las dos tarjetas. Avanza con «Solo mejoras».</em>
+            <strong>Muchísimas rutas.</strong> El problema es que hay muchísimas
+            rutas que podríamos escoger. Aquí aparecen dos conceptos
+            importantes.
           </li>
           <li>
-            <strong>Solo mejoras.</strong> La Búsqueda Local estudiada avanza
-            desde la solución actual a un vecino mejor, como el escalador que
-            sube paso a paso.
-            <em
-              >Sigue las huellas y el movimiento. Avanza con «Cima cercana».</em
-            >
+            <strong>Método exacto.</strong> Primero, están los métodos exactos,
+            que buscan encontrar la mejor solución con garantía de que realmente
+            es la óptima.
           </li>
           <li>
-            <strong>Cima cercana.</strong> Si ningún paso cercano permite
-            mejorar, el escalador se detiene en esa cima, aunque haya una región
-            mejor. <em>Señala el punto ámbar. Avanza con «Más allá».</em>
+            <strong>Mucho tiempo.</strong> Pero en problemas difíciles, como el
+            agente viajero, encontrar esa solución puede requerir muchísimo
+            tiempo.
           </li>
           <li>
-            <strong>Más allá.</strong> Para seguir buscando, una metaheurística
-            aporta una estrategia general que orienta la exploración.
-            <em
-              >Señala otra región y pasa a Glover. Pulsa la flecha para pasar a
-              la siguiente sección.</em
-            >
+            <strong>Heurística.</strong> Por eso también utilizamos heurísticas:
+            métodos que buscan soluciones buenas en un tiempo razonable, aunque
+            no puedan garantizar que sean las mejores de todas.
+          </li>
+          <li>
+            <strong>Búsqueda Local.</strong> Una de ellas es la Búsqueda Local,
+            que mejora una solución haciendo pequeños cambios.
+          </li>
+          <li>
+            <strong>Óptimo local.</strong> Sin embargo, puede llegar a un punto
+            donde ya no encuentra mejoras cercanas, aunque existan soluciones
+            mejores en otra parte.
+          </li>
+          <li>
+            <strong>Tabú añade memoria.</strong> Y precisamente para superar ese
+            estancamiento surge la Búsqueda Tabú, que incorpora memoria para
+            continuar explorando.
           </li>
         </ol>
       </section>
       <section data-notes hidden>
-        <h3>Origen e inspiración · 65 s</h3>
+        <h3>Origen e inspiración</h3>
         <ol>
           <li>
-            <strong>Glover y 1986.</strong> Fred Glover propuso la Búsqueda Tabú
-            en 1986 y en ese trabajo introdujo el término metaheurística.
-            <em>Señala la ficha y el año. Avanza con «Memoria humana».</em>
+            <strong>Fred Glover.</strong> La Búsqueda Tabú fue propuesta por
+            Fred Glover en 1986, quien también introdujo el término
+            metaheurística.
           </li>
           <li>
-            <strong>Memoria humana.</strong> Su inspiración se entiende con la
-            memoria humana: imagina que buscas la salida de un laberinto.
-            <em
-              >Señala al personaje, la entrada y la salida. Avanza con «Camino
-              repetido».</em
-            >
+            <strong>Laberinto.</strong> Pero para entender la idea no
+            necesitamos comenzar con matemáticas. Imaginen a una persona que
+            está intentando salir de un laberinto.
           </li>
           <li>
-            <strong>Camino repetido.</strong> Al llegar a un callejón hay que
-            volver; si olvido por dónde vine, puedo repetir el mismo camino.
-            <em>Sigue la vuelta marcada en ámbar. Avanza con «Huellas».</em>
+            <strong>Callejón y vuelta.</strong> Entra por un pasillo, descubre
+            que no tiene salida y regresa.
           </li>
           <li>
-            <strong>Huellas.</strong> Con memoria puedo recordar mis movimientos
-            recientes.
-            <em>Señala las huellas punteadas. Avanza con «Evitar volver».</em>
+            <strong>El mismo camino.</strong> Pero si no recuerda por dónde
+            pasó, podría volver a recorrer el mismo camino una y otra vez.
           </li>
           <li>
-            <strong>Evitar volver.</strong> Ese recuerdo me ayuda a evitar
-            regresar inmediatamente por el mismo camino.
-            <em>Señala la marca roja. Avanza con «Alternativa».</em>
+            <strong>Movimientos recientes.</strong> En cambio, si recuerda sus
+            movimientos recientes, puede evitar repetirlos
           </li>
           <li>
-            <strong>Alternativa.</strong> Así puedo explorar una alternativa,
-            aunque al comienzo parezca alejarme de la salida.
-            <em
-              >Sigue la ruta verde. Pulsa la flecha para pasar a la siguiente
-              sección.</em
-            >
+            <strong>Otra alternativa.</strong> y explorar otras alternativas.
+          </li>
+          <li>
+            <strong>Memoria humana.</strong> Esa es la inspiración de la
+            Búsqueda Tabú: la memoria humana. Es como darle memoria a una
+            búsqueda para que no se quede dando vueltas por los mismos lugares.
           </li>
         </ol>
       </section>
       <section data-notes hidden>
-        <h3>Qué es y dónde encaja · 55 s</h3>
+        <h3>Qué es y dónde encaja</h3>
         <ol>
           <li>
-            <strong>Metaheurística.</strong> Tabú es una metaheurística: añade
-            una estrategia que orienta la exploración.
-            <em
-              >Señala el encabezado de la estrategia. Avanza con «Una
-              trayectoria».</em
-            >
-          </li>
-          <li>
-            <strong>Una trayectoria.</strong> Trabaja con una sola solución
-            actual a la vez y avanza por distintas posiciones.
-            <em
-              >Sigue al único personaje en el rastro. Avanza con «Memoria
-              reciente».</em
-            >
-          </li>
-          <li>
-            <strong>Memoria reciente.</strong> Recuerda movimientos recientes
-            para evitar deshacerlos inmediatamente.
-            <em
-              >Señala el rastro y la marca de memoria. Avanza con «Seguir
-              explorando».</em
-            >
-          </li>
-          <li>
-            <strong>Seguir explorando.</strong> Si no hay mejora, Local se
-            detiene. Tabú puede seguir con otro movimiento permitido, incluso si
-            empeora temporalmente.
-            <em>Contrasta las dos tarjetas. Avanza con «Relevo».</em>
-          </li>
-          <li>
-            <strong>Relevo.</strong> Búsqueda Tabú es Búsqueda Local guiada por
-            memoria. Angie Loango explicará sus componentes y cómo funciona esa
+            <strong>Clasificación.</strong> Entonces, ¿qué es exactamente la
+            Búsqueda Tabú? Es una metaheurística de trayectoria basada en
             memoria.
-            <em
-              >Señala el relevo y avanza. Pulsa la flecha para pasar a la
-              siguiente sección.</em
-            >
+          </li>
+          <li>
+            <strong>Estrategia adicional.</strong> Es una metaheurística porque
+            utiliza una estrategia adicional para orientar la exploración.
+          </li>
+          <li>
+            <strong>Una solución actual.</strong> Y es de trayectoria porque
+            trabaja con una sola solución actual a la vez, que va modificando
+            progresivamente.
+          </li>
+          <li>
+            <strong>Empeorar temporalmente.</strong> Una característica
+            importante es que puede aceptar un movimiento que empeore
+            temporalmente la solución, si eso le permite explorar otras
+            posibilidades.
+          </li>
+          <li>
+            <strong>Búsqueda Local guiada por memoria.</strong> Por eso, lo
+            importante es recordar que la Búsqueda Tabú es una Búsqueda Local
+            guiada por memoria. Ahora Angie Loango nos explicará sus componentes
+            y cómo funciona.
           </li>
         </ol>
       </section>

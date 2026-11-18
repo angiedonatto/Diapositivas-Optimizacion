@@ -161,6 +161,34 @@
   color: var(--lo-deep);
   font-size: 18px;
 }
+.apertura .guion-definicion {
+  font-size: 31px;
+}
+.apertura .guion-secuencia {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  color: var(--lo-m);
+}
+.apertura .guion-secuencia > span {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--lo-bg);
+  font-size: 24px;
+  line-height: 1.13;
+}
+.apertura .guion-secuencia small {
+  color: var(--lo-ink-2);
+  font-size: 17px;
+}
+.apertura .guion-secuencia .guion-desvio {
+  background: var(--lo-m-soft);
+}
 .apertura .historia {
   padding: 0;
 }
@@ -309,12 +337,33 @@
 .apertura .huella-larga {
   transition: opacity 0.4s;
 }
-.apertura [data-appearance='7'] .huella-larga {
+.apertura
+  #etapa-2:is([data-appearance='7'], [data-appearance='8'])
+  .huella-larga {
   opacity: 0.2;
+}
+.apertura .ruta-construida {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.apertura .is-in > .ruta-construida {
+  animation: construir-ruta 2.3s linear both;
+}
+@keyframes construir-ruta {
+  from {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 0;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .apertura .is-in .viaje,
-  .apertura .cuentas.is-in span {
+  .apertura .cuentas.is-in span,
+  .apertura .is-in > .ruta-construida {
     animation: none;
   }
   .apertura .niebla,
@@ -324,32 +373,65 @@
 }
 
 .apertura [data-algo='local'] #etapa-2[data-appearance='5'] .escalador-inicial,
-.apertura
-  [data-algo='tabu']
-  #etapa-1:is([data-appearance='4'], [data-appearance='5'])
-  .escalador-inicial,
-.apertura [data-algo='tabu'] #etapa-2:not([data-appearance='3']) .maze-repeat {
+.apertura #etapa-2:not([data-appearance='3']) .maze-dead-end,
+.apertura #etapa-2:not([data-appearance='4']) .maze-repeat {
   visibility: hidden;
 }
 .apertura .maze-walker {
-  transform: translate(399px, 132px);
+  transform: translate(27px, 304px);
 }
 .apertura #etapa-2[data-appearance='3'] .maze-walker {
-  animation: retroceder 1s var(--lo-ease) both;
+  animation: callejon 2s linear both;
 }
-.apertura
-  #etapa-2:is([data-appearance='4'], [data-appearance='5'])
-  .maze-walker {
+.apertura #etapa-2[data-appearance='4'] .maze-walker {
+  animation: retroceder 1.45s linear both;
+}
+.apertura #etapa-2[data-appearance='5'] .maze-walker {
   transform: translate(274px, 220px);
 }
 .apertura #etapa-2[data-appearance='6'] .maze-walker {
   animation: desvio 1.6s linear both;
 }
-@keyframes retroceder {
+.apertura #etapa-2[data-appearance='7'] .maze-walker {
+  transform: translate(698px, 63px);
+}
+@keyframes callejon {
   0% {
+    transform: translate(27px, 304px);
+  }
+  15% {
+    transform: translate(130px, 304px);
+  }
+  27% {
+    transform: translate(130px, 220px);
+  }
+  47% {
+    transform: translate(274px, 220px);
+  }
+  58% {
+    transform: translate(274px, 132px);
+  }
+  75% {
     transform: translate(399px, 132px);
   }
-  52% {
+  90% {
+    transform: translate(274px, 132px);
+  }
+  100% {
+    transform: translate(274px, 220px);
+  }
+}
+@keyframes retroceder {
+  0% {
+    transform: translate(274px, 220px);
+  }
+  20% {
+    transform: translate(274px, 132px);
+  }
+  50% {
+    transform: translate(399px, 132px);
+  }
+  80% {
     transform: translate(274px, 132px);
   }
   100% {
@@ -380,7 +462,9 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .apertura #etapa-2[data-appearance='3'] .maze-walker {
+  .apertura
+    #etapa-2:is([data-appearance='3'], [data-appearance='4'])
+    .maze-walker {
     animation: none;
     transform: translate(274px, 220px);
   }
@@ -399,16 +483,16 @@
   #etapa-2:is(
     [data-appearance='5'],
     [data-appearance='6'],
-    [data-appearance='7']
+    [data-appearance='7'],
+    [data-appearance='8']
   )
   .exploradoras {
   visibility: hidden;
 }
-.apertura [data-algo='ga'] .pistas .lo-c svg {
-  width: 100%;
-  height: 58px;
-  border-radius: 8px;
-  background: var(--lo-bg);
+.apertura
+  #etapa-2:not([data-appearance='2'], [data-appearance='3'])
+  .longitud-caminos {
+  visibility: hidden;
 }
 
 .apertura .retratos-cronologia {
