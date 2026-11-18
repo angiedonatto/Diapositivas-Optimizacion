@@ -1,0 +1,90 @@
+.local-guide .section-deck { margin-inline: auto; }
+.local-guide .lo-slide [data-f] { visibility: hidden; }
+.local-guide .lo-slide [data-f].is-in { visibility: visible; }
+.local-guide .lo-c-name { margin: 0; }
+.local-body { gap: 19px; }
+.local-split { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.problem-split { grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr); }
+.local-stack { display: grid; gap: 17px; }
+.local-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.local-guide figure { margin: 0; }
+.local-guide canvas { display: block; width: 100%; height: auto; background: var(--lo-bg); border-radius: 14px; }
+.local-map { gap: 15px; }
+.local-map-key { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; font-size: 19px; color: var(--lo-ink-2); }
+.local-map-key > span { display: inline-flex; align-items: center; gap: 7px; }
+.local-map-key i { width: 22px; border-top: 3px solid var(--lo-m); }
+.local-map-key span:nth-child(2) i { border-top-style: dashed; }
+.local-map-key strong { margin-left: auto; }
+.local-count { background: var(--lo-m-soft); border-color: transparent; gap: 5px; }
+.local-formula { font: 750 56px/1.08 var(--lo-math); color: var(--lo-m); margin: 0; white-space: nowrap; }
+.local-formula sup { font-size: .59em; }
+.local-method { gap: 12px; }
+.candidate-track { display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.candidate-track i { flex: 0 0 15px; height: 15px; border: 2px solid var(--lo-m); border-radius: 50%; }
+.exact-track i:last-child { border-radius: 3px; background: var(--lo-m); transform: rotate(45deg); }
+.heuristic-track i { border-color: var(--lo-sage); border-style: dashed; }
+.heuristic-track i:nth-child(3) { border-style: solid; background: var(--lo-deep); border-color: var(--lo-deep); }
+.local-takeaway {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 0;
+  border-left: 5px solid var(--lo-m);
+  border-radius: 10px;
+  padding: 12px 22px;
+  background: var(--lo-m-soft);
+  color: var(--lo-m);
+  font-size: 26px;
+  font-weight: 720;
+}
+
+.local-definition { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding-block: 13px; }
+.local-definition > strong { font-size: 26px; }
+.local-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 19px; }
+.local-flow span { background: var(--lo-m-soft); padding: 6px 10px; border-radius: 8px; font-weight: 660; }
+.local-flow b { color: var(--lo-m); }
+.intuition-split { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+.local-routes, .local-mountain { gap: 9px; }
+.local-label { display: flex; align-items: center; justify-content: space-between; margin: 0; font-size: 20px; color: var(--lo-ink-2); }
+.local-label strong { padding: 4px 10px; border-radius: 8px; background: var(--lo-bg); color: var(--lo-ink); }
+.local-route, .local-trajectory { display: flex; align-items: center; list-style: none; padding: 0; margin: 0; gap: 24px; }
+.local-route li, .local-trajectory li { position: relative; display: grid; place-items: center; background: var(--lo-bg); border-radius: 9px; min-width: 49px; min-height: 44px; font: 700 22px var(--lo-mono); }
+.local-route li + li::before, .local-trajectory li + li::before { content: "→"; position: absolute; left: -20px; color: var(--lo-ink-2); }
+.local-routes:has(.local-route-result.is-in) .local-route li.swap { background: var(--lo-m-soft); color: var(--lo-m); }
+.local-route-result { display: grid; gap: 7px; }
+.local-route-result .local-label strong { background: var(--good-soft); color: var(--good); }
+.local-route-result .swap { box-shadow: inset 0 0 0 2px var(--lo-m); }
+.local-swap { display: flex; align-items: center; gap: 11px; font-size: 19px; margin: 2px 0; color: var(--lo-ink-2); }
+.local-swap strong { color: var(--lo-m); }
+.local-small { font-size: 19px; }
+.local-peak-key { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 10px; }
+.local-peak-key p { display: flex; gap: 8px; align-items: baseline; margin: 0; font-size: 18px; line-height: 1.25; }
+.local-peak-key i { flex: 0 0 11px; height: 11px; border-radius: 50%; background: var(--lo-m); }
+.local-peak-key p:nth-child(2) i { background: var(--good); }
+.local-peak-key strong { display: block; }
+
+.local-history { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .92fr) minmax(0, 1fr); gap: 18px; }
+.local-history-card { gap: 18px; }
+.local-history-card .local-flow { flex-wrap: nowrap; gap: 6px; font-size: 18px; }
+.local-history-card .local-flow span { padding-inline: 7px; }
+.local-timeline { display: grid; grid-template-columns: 1fr 1fr; list-style: none; margin: 0; padding: 5px 0 0; border-top: 3px solid var(--lo-m); }
+.local-timeline li { display: grid; position: relative; margin-top: 12px; font-size: 19px; }
+.local-timeline li::before { content: ""; position: absolute; top: -24px; width: 11px; height: 11px; border-radius: 50%; background: var(--lo-m); }
+.local-timeline time { color: var(--lo-m); font-size: 28px; font-weight: 770; }
+.local-timeline strong { color: var(--lo-ink); }
+.local-trajectory li:last-child { color: var(--lo-m); box-shadow: inset 0 0 0 2px var(--lo-m); background: var(--lo-m-soft); }
+.local-trajectory li { display: flex; justify-content: center; align-items: baseline; padding-block: 10px; }
+.local-trajectory sub { font-size: .7em; }
+.local-classification { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); }
+.local-compare .local-duo > div { background: var(--lo-m-soft); padding: 10px 14px; border-radius: 10px; font-size: 21px; }
+.local-compare .local-duo > div:nth-child(2) { background: var(--tabu-soft); }
+.local-compare p { margin: 3px 0 0; color: var(--lo-ink-2); line-height: 1.25; }
+.local-limit { background: var(--lo-sand); }
+.local-limit .lo-c-name { color: var(--lo-sand-ink); }
+.local-handoff span { font-size: 22px; }
+.local-position { min-width: 8ch; text-align: right; font-variant-numeric: tabular-nums; }
+.local-announcement { position: fixed; top: 0; left: 0; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; margin: 0; }
+.local-guide .notes:not([hidden]) { display: block; }
+.local-guide .notes p + p { margin-top: .65em; }
+.local-guide .notes li + li { margin-top: .35em; }

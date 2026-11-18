@@ -1,105 +1,218 @@
 <!doctype html>
 <html lang="es" data-theme="light">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Angie Donato · Búsqueda Local</title>
-<link rel="stylesheet" href="../estilos.css">
-<link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
-<link rel="stylesheet" href="../visuales.css">
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Angie Donato · Búsqueda Local</title>
+ <link rel="stylesheet" href="../estilos.css">
+ <link rel="stylesheet" href="../../shared/tokens.css">
+ <link rel="stylesheet" href="../../shared/slides.css">
+ <link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="guia.css">
 </head>
-<body>
+<body class="local-guide">
 <header class="topbar">
- <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
+ <div class="brand">Universidad Externado de Colombia · Optimización</div>
  <div class="actions">
-  <a href="../../carolina/busqueda-local/index.html">Análisis crítico · Carolina</a>
   <a href="../../angie-loango/busqueda-local/index.html">Componentes · Angie Loango</a>
-  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
+  <a href="../../carolina/busqueda-local/index.html">Análisis crítico · Carolina</a>
+  <button id="notesBtn" type="button" aria-expanded="false" aria-controls="notes">Notas para ensayar (N)</button>
   <button id="fullBtn" type="button">Pantalla completa (F)</button>
  </div>
 </header>
-<nav class="methods" aria-label="Escoger algoritmo">
- <button data-method="local" aria-selected="true"><b>A</b> Búsqueda Local</button>
- 
- 
- 
-</nav>
-<main class="stage-wrap">
+
+<main class="stage-wrap section-deck">
  <div class="slide-viewport" id="stage">
-  <div class="slide-canvas slide-theme" id="donatoCanvas">
-   <article class="lo-slide is-current" aria-live="polite">
+  <div class="slide-canvas slide-theme" data-algo="local" id="localCanvas">
+
+   <article class="lo-slide is-current" id="problema" aria-labelledby="title-problema">
     <header>
-     <p class="lo-s-kicker"><span class="lo-s-letter" id="letter"></span><span id="methodName"></span><span class="lo-s-chap">Fundamentos</span></p>
-     <h1 class="lo-s-title" id="title"></h1>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local <span class="lo-s-chap">Problema y necesidad</span></p>
+     <h1 class="lo-s-title" id="title-problema">¿Por qué necesitamos heurísticas?</h1>
     </header>
-    <div class="lo-s-body">
-     <p class="slide-lead" id="lead"></p>
-     <div class="slide-columns">
-      <section class="lo-c is-key"><h2 class="lo-c-name" id="mini"></h2><p class="slide-quote" id="quote"></p><div id="resource" class="donato-resource"></div><div class="slide-route" id="path"></div></section>
-      <div class="slide-stack" id="facts"></div>
+    <div class="lo-s-body local-body">
+     <div class="local-split problem-split">
+      <figure class="lo-c local-map" data-f="1" data-cue="Visitar cada ciudad y volver a A">
+       <figcaption class="lo-c-name">Visitar cada ciudad y volver al inicio</figcaption>
+       <canvas id="cityMap" width="960" height="500" role="img" aria-label="Mapa del agente viajero. Una ruta enlaza las ciudades A, B, C, D y E, y regresa a A."></canvas>
+       <div class="local-map-key"><span><i></i> Ruta posible</span><span><i></i> Regreso a A</span><strong>Menor distancia total</strong></div>
+      </figure>
+      <div class="local-stack">
+       <div class="lo-c local-count" data-f="2" data-cue="20 ciudades, aproximadamente seis por diez a la dieciséis rutas">
+        <h2 class="lo-c-name">20 ciudades</h2>
+        <p class="local-formula">19!/2 ≈ 6 × 10<sup>16</sup></p>
+        <p class="lo-c-line"><strong>Recorridos distintos.</strong> En el caso simétrico, recorrer la misma ruta al revés cuenta una sola vez.</p>
+       </div>
+       <div class="local-duo">
+        <div class="lo-c local-method" data-f="3" data-cue="Método exacto, garantía de optimalidad">
+         <div class="candidate-track exact-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+         <h2 class="lo-c-name">Método exacto</h2>
+         <p class="lo-c-line">Solución con garantía de optimalidad</p>
+        </div>
+        <div class="lo-c local-method" data-f="4" data-cue="Heurística, buena solución sin garantía global">
+         <div class="candidate-track heuristic-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+         <h2 class="lo-c-name">Heurística</h2>
+         <p class="lo-c-line">Buena solución, sin garantía de óptimo global</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <p class="local-takeaway" data-f="5" data-cue="Y aquí entra la Búsqueda Local">Y aquí entra la Búsqueda Local. <span aria-hidden="true">→</span></p>
+    </div>
+    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-now">Problema</li><li>Intuición</li><li>Origen</li></ol><span class="local-position"></span></footer>
+   </article>
+
+   <article class="lo-slide" id="intuicion" aria-labelledby="title-intuicion" aria-hidden="true">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local <span class="lo-s-chap">Concepto e intuición</span></p>
+     <h1 class="lo-s-title" id="title-intuicion">Cambiar un poco para mejorar</h1>
+    </header>
+    <div class="lo-s-body local-body">
+     <div class="lo-c local-definition" data-f="1" data-cue="Búsqueda Local es una heurística de mejora">
+      <strong>Búsqueda Local = heurística de mejora</strong>
+      <div class="local-flow"><span>Solución existente</span><b aria-hidden="true">→</b><span>Cambios pequeños</span><b aria-hidden="true">→</b><span>Mejora</span></div>
+     </div>
+     <div class="local-split intuition-split">
+      <div class="lo-c local-routes" data-f="2" data-cue="Ruta inicial, costo 37">
+       <h2 class="lo-c-name">Ruta de entregas</h2>
+       <p class="local-label">Ruta inicial <strong>Costo 37</strong></p>
+       <ol class="local-route" aria-label="A, B, C, D, E y regreso a A">
+        <li>A</li><li>B</li><li>C</li><li class="swap">D</li><li class="swap">E</li><li>A</li>
+       </ol>
+       <div class="local-route-result" data-f="3" data-cue="Intercambio D y E, el costo baja de 37 a 22">
+        <p class="local-swap"><strong>D ↔ E</strong> Intercambiar el orden</p>
+        <p class="local-label">Ruta mejorada <strong>Costo 22</strong></p>
+        <ol class="local-route" aria-label="A, B, C, E, D y regreso a A">
+         <li>A</li><li>B</li><li>C</li><li class="swap">E</li><li class="swap">D</li><li>A</li>
+        </ol>
+       </div>
+       <p class="lo-c-line local-small">En las rutas queremos <strong>minimizar la distancia</strong>.</p>
+      </div>
+      <figure class="lo-c local-mountain" data-f="4" data-cue="Un escalador en la niebla solo ve los pasos cercanos">
+       <figcaption class="lo-c-name">Un escalador en la niebla</figcaption>
+       <canvas id="mountainMap" width="960" height="350" role="img" aria-label="Un escalador sube por los pasos cercanos."></canvas>
+       <div class="local-peak-key">
+        <p data-f="5" data-cue="Óptimo local, mejor que sus vecinos"><i></i><span><strong>Óptimo local</strong> Mejor que sus vecinos</span></p>
+        <p data-f="6" data-cue="Óptimo global, mejor de todas las soluciones factibles"><i></i><span><strong>Óptimo global</strong> Mejor de todas las soluciones factibles</span></p>
+       </div>
+       <p class="lo-c-line local-small">En la analogía queremos <strong>maximizar la altura</strong>.</p>
+      </figure>
+     </div>
+     <p class="local-takeaway" data-f="7" data-cue="Ser el mejor entre mis vecinos no significa ser el mejor de todos">Ser el mejor entre mis vecinos no significa ser el mejor de todos.</p>
+    </div>
+    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-past">Problema</li><li class="is-now">Intuición</li><li>Origen</li></ol><span class="local-position"></span></footer>
+   </article>
+
+   <article class="lo-slide" id="origen" aria-labelledby="title-origen" aria-hidden="true">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local <span class="lo-s-chap">Origen, clasificación y limitación</span></p>
+     <h1 class="lo-s-title" id="title-origen">De dónde viene y hasta dónde llega</h1>
+    </header>
+    <div class="lo-s-body local-body">
+     <div class="local-history">
+      <div class="lo-c local-history-card" data-f="1" data-cue="Croes en 1958 y Lin–Kernighan en 1973">
+       <h2 class="lo-c-name">Antecedentes en el agente viajero</h2>
+       <ol class="local-timeline">
+        <li><time datetime="1958">1958</time><strong>Croes</strong><span>2-opt</span></li>
+        <li><time datetime="1973">1973</time><strong>Lin–Kernighan</strong><span>Mejora de rutas</span></li>
+       </ol>
+       <p class="lo-c-line">No tiene un único creador.</p>
+      </div>
+      <div class="lo-c local-history-card" data-f="2" data-cue="Heurística de mejora, solución, cambio, mejora">
+       <h2 class="lo-c-name">Heurística de mejora</h2>
+       <div class="local-flow"><span>Solución</span><b aria-hidden="true">→</b><span>Cambio</span><b aria-hidden="true">→</b><span>Mejora</span></div>
+      </div>
+      <div class="lo-c local-history-card" data-f="3" data-cue="Método de trayectoria, una solución actual a la vez">
+       <h2 class="lo-c-name">Método de trayectoria</h2>
+       <ol class="local-trajectory" aria-label="La solución actual pasa de x cero a x uno y luego a x dos">
+        <li>x<sub>0</sub></li><li>x<sub>1</sub></li><li>x<sub>2</sub></li>
+       </ol>
+       <p class="lo-c-line"><strong>Una solución actual a la vez</strong></p>
+      </div>
+     </div>
+     <div class="local-split local-classification">
+      <div class="lo-c local-compare" data-f="4" data-cue="Local mejora mediante vecinos, Tabú incorpora memoria">
+       <h2 class="lo-c-name">Heurística frente a metaheurística</h2>
+       <div class="local-duo">
+        <div><strong>Búsqueda Local</strong><p>Mejora mediante vecinos</p></div>
+        <div><strong>Búsqueda Tabú</strong><p>Incorpora memoria para ampliar la exploración</p></div>
+       </div>
+      </div>
+      <div class="lo-c local-limit" data-f="5" data-cue="Puede detenerse en un óptimo local">
+       <h2 class="lo-c-name">Límite de la mejora</h2>
+       <p class="lo-c-line">Puede detenerse en un óptimo local.</p>
+      </div>
+     </div>
+     <div class="local-takeaway local-handoff" data-f="6" data-cue="Componentes y funcionamiento, continúa Angie Loango">
+      <strong>Componentes y funcionamiento</strong><span>Continúa Angie Loango <b aria-hidden="true">→</b></span>
      </div>
     </div>
-    <footer class="lo-s-foot"><span>Angie Donato · Apertura</span><span id="handoff"></span><span id="progress"></span></footer>
+    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-past">Problema</li><li class="is-past">Intuición</li><li class="is-now">Origen</li></ol><span class="local-position"></span></footer>
    </article>
   </div>
  </div>
 </main>
+
 <div class="controlbar">
- <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
- <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
+ <p><kbd>←</kbd> <kbd>→</kbd> apariciones · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
+ <div class="pager">
+  <button id="prevBtn" type="button">← Anterior</button>
+  <strong id="count" aria-live="polite"></strong>
+  <button id="nextBtn" type="button">Siguiente →</button>
+ </div>
 </div>
-<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
-<script src="../visuales.js"></script>
-<script>
-(function () {
- 'use strict';
- var all={
- local:{name:'Búsqueda Local',accent:'#3d5a98',soft:'#e7ecf7',slides:[
- {title:'¿Por qué buscar buenas rutas sin probarlas todas?',lead:'El agente viajero busca el recorrido más corto que visite todas las ciudades y regrese al inicio.',mini:'El desafío de optimización',quote:'Una solución útil ahora puede valer más que esperar a comprobar todas las posibilidades.',path:['A','B','C','D','E','A'],facts:[['Método exacto','Busca una solución óptima con garantía, cuando se aplica al problema y termina.'],['Heurística','Busca una buena respuesta en un tiempo razonable, sin garantía de óptimo global.'],['20 ciudades','Con distancias simétricas hay 19!/2 ≈ 6 × 10¹⁶ recorridos distintos.']],notes:'Buenos días. Nos correspondió Búsqueda Local. Pensemos en el agente viajero: necesitamos visitar varias ciudades y volver al punto de partida usando la menor distancia posible. Si intentáramos comparar todas las rutas, el número crece rápidamente: con 20 ciudades, incluso fijando el inicio y considerando las rutas inversas equivalentes, hay aproximadamente seis por diez a la dieciséis opciones. Por eso diferenciamos un método exacto, que ofrece garantías de optimalidad, de una heurística, que intenta encontrar una buena solución sin revisar todas las posibilidades.'},
- {title:'Búsqueda Local: cambiar un poco para mejorar',lead:'Parte de una solución completa y explora pequeñas modificaciones cercanas.',mini:'Origen e intuición',quote:'Como subir una montaña en la niebla: solo vemos los próximos pasos.',path:['Ruta inicial','Vecino','Mejor ruta'],facts:[['Historia','No tiene un único autor; es una familia clásica de métodos de mejora.'],['Antecedente','Croes publicó 2-opt en 1958; Lin–Kernighan desarrolló otra técnica para rutas en 1973.'],['Movimiento','Se pueden intercambiar ciudades, insertarlas o modificar aristas de una ruta.']],notes:'Búsqueda Local es una heurística de mejora: no construye todo desde cero cada vez, sino que toma una solución completa y prueba cambios pequeños. No tiene un creador único. En el agente viajero, técnicas conocidas son 2-opt, de Croes en 1958, y Lin–Kernighan, de 1973. Para imaginársela, piensen en una persona que sube una montaña con niebla: observa solamente los pasos que tiene al lado y se mueve hacia uno mejor.'},
- {title:'Una solución, un vecindario y un límite',lead:'La Búsqueda Local mejora una trayectoria; puede detenerse antes de alcanzar el mejor recorrido posible.',mini:'Dónde encaja',quote:'Es una heurística de mejora, no una estrategia general de exploración.',path:['Una solución','Mejor vecino','Óptimo local'],facts:[['Una sola solución','En cada momento conserva una solución actual que intenta mejorar.'],['Óptimo local','Ningún movimiento del vecindario elegido mejora la solución actual.'],['Después','Una metaheurística como Tabú añade estrategias para seguir explorando.']],handoff:'Continúa Angie Loango: componentes y pseudocódigo',notes:'La gran diferencia con un algoritmo genético o con la colonia de hormigas es que la Búsqueda Local trabaja con una sola solución a la vez. Es una heurística de mejora, mientras que una metaheurística aporta reglas generales para guiar o ampliar la exploración. Su principal límite es el óptimo local: una solución mejor que todas sus vecinas, pero no necesariamente la mejor de todo el problema. Ahora Angie Loango explica la representación, la función objetivo, el vecindario y cómo funciona el algoritmo.'}
- ]}
- };
- var method='local',i=0;
- var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
- function render(){
-  var group=all[method],s=group.slides[i];
-  document.getElementById('donatoCanvas').dataset.algo=method;
-  document.getElementById('letter').textContent={local:'A',tabu:'B',ga:'C',aco:'D'}[method];
-  document.getElementById('methodName').textContent=group.name;document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
-  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
-  DonatoVisuals.render(document.getElementById('resource'), method, i);
-  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
-  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='lo-c slide-fact';var number=document.createElement('div');number.className='lo-c-num';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];h.className='lo-c-name';var p=document.createElement('p');p.className='lo-c-line';p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
-  nodes.handoff.textContent=s.handoff||'';nodes.progress.textContent=(i+1)+' / '+group.slides.length;
-  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
-  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
-  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
-  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
- }
- function choose(m){if(!all[m])return;method=m;i=0;render()}
- function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
- function prev(){if(i>0){i--;render()}}
- document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
- document.getElementById('nextBtn').addEventListener('click',next);
- document.getElementById('prevBtn').addEventListener('click',prev);
- document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
- document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
- document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
-  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
-  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
-  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
- });
- var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash&&all[hash[1]]){method=hash[1];i=Number(hash[2])-1}
- render();
-})();
-</script>
+<p class="local-announcement" id="cue" aria-live="polite"></p>
+
+<aside id="notes" class="notes" hidden aria-label="Notas para ensayar">
+ <h2>Guion para ensayar</h2>
+ <section data-notes>
+  <h3>1. Problema y necesidad · 55 segundos</h3>
+  <p>Buenos días. Nos correspondió Búsqueda Local. Antes de explicar el algoritmo, pensemos en un problema: una empresa tiene que visitar varias ciudades y regresar al punto de partida recorriendo la menor distancia posible.</p>
+  <p>Podríamos intentar probar todas las rutas, pero el número de combinaciones crece muchísimo. Por ejemplo, con 20 ciudades podemos tener aproximadamente seis por diez a la dieciséis recorridos distintos.</p>
+  <p>Aquí aparece una diferencia importante: un método exacto busca encontrar una solución con garantía de optimalidad, mientras que una heurística intenta conseguir una buena solución en menos tiempo, aunque no garantice que sea la mejor de todas. Y justamente ahí entra la Búsqueda Local.</p>
+  <ol>
+   <li><b>Ciudades.</b> Señala A y sigue el circuito. Avanza con «Podríamos intentar probar todas las rutas».</li>
+   <li><b>Combinaciones.</b> Señala 20 y el exponente. Avanza con «Aquí aparece una diferencia importante».</li>
+   <li><b>Garantía.</b> Señala el punto certificado. Avanza con «Mientras que una heurística…».</li>
+   <li><b>Buena solución.</b> Señala el punto encontrado. Avanza con «Y justamente ahí entra…».</li>
+   <li><b>Búsqueda Local.</b> Señala la banda inferior. Avanza con «¿Qué hace este método?».</li>
+  </ol>
+ </section>
+ <section data-notes hidden>
+  <h3>2. Concepto e intuición · 70 segundos</h3>
+  <p>La Búsqueda Local es una heurística de mejora. Esto significa que parte de una solución que ya existe y trata de mejorarla realizando pequeños cambios.</p>
+  <p>Por ejemplo, si ya tenemos una ruta de entregas, podemos intercambiar el orden de dos ciudades y comprobar si la nueva ruta es más corta. Si mejora, nos quedamos con ella.</p>
+  <p>Para entenderlo, imaginen a una persona subiendo una montaña en medio de la niebla. Esa persona solo puede observar los pasos que tiene cerca y siempre avanza hacia uno mejor.</p>
+  <p>Pero puede ocurrir algo: llega a una cima donde ya no encuentra ningún paso que le permita subir más, aunque exista una montaña más alta en otro lugar. Eso es un óptimo local: una solución que es mejor que sus vecinas, pero no necesariamente la mejor de todo el problema. Esta es una de las principales limitaciones de la Búsqueda Local.</p>
+  <ol>
+   <li><b>Mejora.</b> Señala la definición y el flujo. Avanza con «Por ejemplo, si ya tenemos una ruta de entregas…».</li>
+   <li><b>37.</b> Recorre la fila inicial. Avanza con «Probemos intercambiar dos ciudades».</li>
+   <li><b>D ↔ E, 22.</b> Señala los dos cambios y los costos. Avanza con «Imaginen a una persona subiendo una montaña».</li>
+   <li><b>Niebla.</b> Señala al escalador y sus pasos cercanos. Avanza con «Puede llegar a una cima».</li>
+   <li><b>Vecinos.</b> Señala la cima menor. Avanza con «Aunque exista una montaña más alta».</li>
+   <li><b>Todas.</b> Señala la cima mayor. Recuerda que la altura se maximiza y la distancia se minimiza. Avanza con «Así que ser el mejor entre mis vecinos…».</li>
+   <li><b>Límite.</b> Señala la frase inferior. Avanza con «En cuanto a su origen…».</li>
+  </ol>
+ </section>
+ <section data-notes hidden>
+  <h3>3. Origen, clasificación y limitación · 55 segundos</h3>
+  <p>En cuanto a su origen, la Búsqueda Local no tiene un único creador. Es una idea clásica de optimización, con antecedentes como el método 2-opt de Croes, publicado en 1958, y el trabajo de Lin–Kernighan, en 1973, aplicados al problema del agente viajero.</p>
+  <p>También es importante saber cómo se clasifica. Es una heurística de mejora: parte de una solución y la modifica para mejorarla. Se considera un método de trayectoria, porque trabaja con una sola solución actual a la vez y trata de mejorarla progresivamente.</p>
+  <p>Además, es una heurística y no una metaheurística. Las metaheurísticas son estrategias más generales que permiten orientar la exploración y tratar de superar problemas como el estancamiento en óptimos locales. Por ejemplo, Búsqueda Tabú incorpora memoria para continuar explorando.</p>
+  <p>Con esta idea general, mi compañera Angie Loango les va a explicar cuáles son los componentes de la Búsqueda Local y cómo funciona el algoritmo.</p>
+  <ol>
+   <li><b>1958, 1973.</b> Señala cada hito. Avanza con «También es importante saber cómo se clasifica».</li>
+   <li><b>Solución, cambio, mejora.</b> Recorre el esquema. Avanza con «¿Cuántas soluciones tiene a la vez?».</li>
+   <li><b>Trayectoria.</b> Recorre x₀ → x₁ → x₂. Avanza con «Además, es una heurística».</li>
+   <li><b>Vecinos, memoria.</b> Señala Local y luego Tabú. Avanza con «Volvamos a la cima menor».</li>
+   <li><b>Estancamiento.</b> Señala el recordatorio de óptimo local. Avanza con «Con esta idea general…».</li>
+   <li><b>Angie Loango.</b> Señala el relevo. Avanza para iniciar su bloque.</li>
+  </ol>
+ </section>
+</aside>
 <script src="../../shared/canvas.js"></script>
-<script>SlideCanvas.fit(document.getElementById('stage'), document.getElementById('donatoCanvas'));</script>
+<script src="diagramas.js"></script>
+<script src="guia.js"></script>
 <script src="../../visor-bridge.js"></script>
 </body>
 </html>
