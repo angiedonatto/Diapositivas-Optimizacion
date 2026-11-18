@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angie Donato · Búsqueda Tabú</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
+ <div class="actions">
+  <a href="../../carolina/busqueda-tabu/index.html">Análisis crítico · Carolina</a>
+  <a href="../../angie-loango/busqueda-tabu/index.html">Componentes · Angie Loango</a>
+  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
+  <button id="fullBtn" type="button">Pantalla completa (F)</button>
+ </div>
+</header>
+<nav class="methods" aria-label="Escoger algoritmo">
+ 
+ <button data-method="tabu" aria-selected="false"><b>B</b> Búsqueda Tabú</button>
+ 
+ 
+</nav>
+<main class="stage-wrap">
+ <section class="stage" id="stage" aria-live="polite">
+  <article class="slide">
+   <div class="slide-meta"><span class="pill" id="category"><span class="dot"></span> Apertura</span><span id="eyebrow">ANGIE DONATO · 3 MINUTOS</span></div>
+   <h1 class="title" id="title"></h1>
+   <p class="lead" id="lead"></p>
+   <div class="slide-body">
+    <div class="bigidea"><span class="mini" id="mini"></span><div class="quote" id="quote"></div><div class="path" id="path"></div></div>
+    <div class="detail" id="facts"></div>
+   </div>
+   <div class="bottom"><span>Optimización · Ciencia de Datos · Guion del equipo</span><span class="handoff" id="handoff"></span><span class="progress" id="progress"></span></div>
+  </article>
+ </section>
+</main>
+<div class="controlbar">
+ <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
+ <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
+</div>
+<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
+<script>
+(function () {
+ 'use strict';
+ var all={
+ tabu:{name:'Búsqueda Tabú',accent:'#a8620a',soft:'#fbf0df',slides:[
+ {title:'La Búsqueda Local tiene un problema: puede atascarse',lead:'Cuando ningún vecino es mejor, una búsqueda local estricta se detiene, aunque existan mejores soluciones lejos de allí.',mini:'El problema que queremos superar',quote:'Para encontrar un camino mejor, a veces hay que aceptar un paso peor.',path:['37','22','23','20'],facts:[['Método exacto','Intenta llegar al óptimo con garantía, si dispone del tiempo y los recursos.'],['Heurística','Prioriza encontrar buenas soluciones sin garantizar que sean las mejores.'],['Metaheurística','Añade estrategias para explorar más allá de una mejora inmediata.']],notes:'Buenos días. Nos correspondió Búsqueda Tabú. Recordemos el problema de la Búsqueda Local: solo acepta cambios mejores, por eso puede detenerse en un óptimo local. En el ejemplo compartido, encontrar un costo 22 no implica haber alcanzado el mejor recorrido. La idea de Tabú es justamente no detenerse ahí: a veces conviene aceptar un movimiento que empeora momentáneamente para poder llegar a otra región con mejores soluciones.'},
+ {title:'Fred Glover propuso usar memoria para explorar',lead:'La Búsqueda Tabú se introdujo en 1986 como una estrategia para superar el estancamiento.',mini:'Origen e inspiración',quote:'Como salir de un laberinto recordando los caminos por donde ya pasamos.',path:['Recordar','Evitar ciclos','Explorar'],facts:[['Origen','Fred Glover, 1986.'],['Inspiración','La memoria: recordar movimientos recientes para evitar deshacerlos inmediatamente.'],['Clasificación','Metaheurística de trayectoria: avanza con una sola solución actual.']],notes:'Fred Glover propuso la Búsqueda Tabú en 1986. A diferencia de los métodos inspirados en la biología, aquí la intuición es la memoria humana: si estamos en un laberinto, recordar dónde ya estuvimos ayuda a no recorrer las mismas vueltas una y otra vez. Es una metaheurística porque guía una búsqueda local con reglas adicionales, aunque conserva una sola solución actual y la va desplazando por el espacio de posibilidades.'},
+ {title:'No olvidar lo mejor, pero sí permitir empeorar',lead:'La solución actual puede empeorar; la mejor solución encontrada se guarda aparte.',mini:'La idea central',quote:'La lista tabú evita regresar inmediatamente por el mismo movimiento.',path:['Actual','Movimiento permitido','Mejor histórica'],facts:[['Lista tabú','Memoria corta de atributos o movimientos recientes.'],['Escape','Puede aceptar un vecino peor para abandonar el óptimo local.'],['Aspiración','Una prohibición puede levantarse si el movimiento mejora el mejor resultado histórico.']],handoff:'Continúa Angie Loango: memoria y pseudocódigo',notes:'La diferencia fundamental frente a la Búsqueda Local es que Tabú no exige mejorar en todos los pasos. Escoge un movimiento permitido aunque el costo suba temporalmente. Pero si aceptara empeorar y luego devolverse, quedaría atrapada en un ciclo. Por eso usa una lista tabú que recuerda movimientos recientes. También conserva la mejor solución histórica, ya que la actual puede ser peor. Angie Loango explicará la tenencia de esa memoria, la aspiración y el pseudocódigo.'}
+ ]}
+ };
+ var method='tabu',i=0;
+ var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
+ function render(){
+  var group=all[method],s=group.slides[i];document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
+  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
+  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
+  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='fact';var number=document.createElement('div');number.className='number';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];var p=document.createElement('p');p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
+  nodes.handoff.textContent=s.handoff||'';nodes.progress.replaceChildren();group.slides.forEach(function(_,n){var v=document.createElement('i');if(n<=i)v.className='on';nodes.progress.appendChild(v)});
+  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
+  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
+  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
+ }
+ function choose(m){if(!all[m])return;method=m;i=0;render()}
+ function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
+ function prev(){if(i>0){i--;render()}}
+ document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
+ document.getElementById('nextBtn').addEventListener('click',next);
+ document.getElementById('prevBtn').addEventListener('click',prev);
+ document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
+ document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
+ document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
+  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
+  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
+  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
+ });
+ var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash){method=hash[1];i=Number(hash[2])-1}
+ render();
+})();
+</script>
+<script src="../../visor-bridge.js"></script>
+</body>
+</html>

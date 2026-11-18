@@ -8,8 +8,8 @@
   var choices = ['local', 'tabu', 'ga', 'aco'];
   var tema = params.get('tema');
   if (choices.indexOf(tema) < 0) tema = 'local';
-  var folder = location.pathname.split('/').filter(Boolean).slice(-2,-1)[0];
-  var person = folder === 'angie-donato' ? 'donato' : folder === 'angie-loango' ? 'loango' : folder === 'carolina' ? 'carolina' : '';
+  var parts = location.pathname.split('/').filter(Boolean);
+  var person = parts.includes('angie-donato') ? 'donato' : parts.includes('angie-loango') ? 'loango' : parts.includes('carolina') ? 'carolina' : '';
   if (!person) return;
 
   var css = {

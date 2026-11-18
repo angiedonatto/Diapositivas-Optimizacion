@@ -1,0 +1,181 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carolina · Búsqueda Tabú · Análisis crítico</title><link rel="stylesheet" href="../estilos.css"></head>
+<body><header class="top"><div class="wrap"><div class="eyebrow">Universidad Externado de Colombia · Optimización</div>
+<h1>Carolina · Búsqueda Tabú</h1><p class="muted">Análisis crítico y cierre · 2,5 minutos</p>
+<button id="themeBtn" type="button" class="theme-btn" aria-label="Cambiar tema claro u oscuro">◐ Tema</button></div></header>
+<section class="block" id="carolina"><div class="wrap">
+<header><div class="eyebrow">Tema seleccionado</div><h2>Búsqueda Tabú</h2>
+<p class="muted">Ventajas, limitaciones, comparación y aplicación real.</p></header>
+<div class="tabs-bar"><div class="tablist" role="tablist" aria-label="Método">
+<button role="tab" id="tab-tabu" data-m="tabu" aria-controls="p-tabu" aria-selected="true">Búsqueda Tabú</button>
+</div><div class="timer" id="timer" aria-live="off"><span class="t" id="timerText">2:30</span>
+<button id="timerToggle" type="button">Iniciar</button><button id="timerReset" type="button" aria-label="Reiniciar cronómetro">↺</button></div></div>
+<div class="panel" id="p-tabu" data-m="tabu" role="tabpanel" aria-labelledby="tab-tabu">
+      <div class="hero">
+        <div class="eyebrow label">B · Búsqueda Tabú</div>
+        <h3>Empeora a propósito, con memoria, para salir del óptimo local.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>37 → 22 → 23 → 20</b><span>recorrido de la solución actual</span></div>
+          <div class="stat"><b>1</b><span>empeoramiento aceptado (22 → 23)</span></div>
+          <div class="stat"><b>Iteración 3</b><span>llega al óptimo global</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Usa memoria (la lista tabú) para evitar ciclos.</li>
+              <li>Acepta movimientos que empeoran temporalmente la solución.</li>
+              <li>Es determinista: con la misma entrada da el mismo resultado, lo que facilita depurarla.</li>
+              <li>En problemas combinatorios suele encontrar muy buenas soluciones con relativamente pocas evaluaciones.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Hay que calibrar la tenencia tabú, y el mejor valor depende del problema.</li>
+              <li>Evalúa todo el vecindario en cada iteración, lo que es costoso si el vecindario es grande.</li>
+              <li>Su rendimiento depende del tamaño del vecindario y del criterio de parada.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>La importancia de la tenencia tabú</h3>
+          <div class="grid-2" style="gap:10px">
+            <p style="margin:0"><b>Muy corta →</b> el método vuelve a ciclar. En el ejemplo, si C↔D no estuviera prohibido en la iteración 3, lo más atractivo sería devolverse a 22.</p>
+            <p style="margin:0"><b>Muy larga →</b> prohíbe demasiado y puede bloquear el camino al óptimo. Valores típicos: de 5 a 20, o alrededor de √n.</p>
+          </div>
+          <p style="margin:10px 0 0"><b>Criterio de aspiración:</b> un movimiento tabú se permite si lleva a una solución mejor que la mejor encontrada. En la iteración 3, C↔D daba 22, que no mejora el 22 ya conocido, así que siguió prohibido.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación</h3>
+            <ul>
+              <li><span class="chip c-local">Local</span> se habría detenido en 22 en la iteración 2, porque ningún vecino mejoraba. La Tabú siguió y llegó a 20.</li>
+              <li><span class="chip c-ga">Genético</span> y <span class="chip c-aco">ACO</span> trabajan con una población y usan azar. La Tabú sigue una sola trayectoria, es determinista y su memoria es <b>explícita</b>: una lista. En el Genético la memoria está en la población y en ACO en la feromona.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Horarios universitarios y turnos de enfermería.</b></p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> Las soluciones se modifican con movimientos naturales, como cambiar una clase de franja o intercambiar dos turnos, y la lista tabú evita deshacer y rehacer los mismos cambios.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>Una búsqueda local con memoria: acepta empeorar un paso para no quedarse quieta, y recuerda por dónde pasó para no volver.</p></div>
+      </div>
+    </div></div></section>
+<section class="block" id="preguntas"><div class="wrap"><header><div class="eyebrow">Repaso</div>
+<h2>Preguntas frecuentes · Búsqueda Tabú</h2><p class="muted">Preguntas generales y del algoritmo elegido.</p></header>
+<div class="faq" id="faq"><details data-t="gen">
+        <summary>¿Cuál de los cuatro métodos es mejor?</summary>
+        <div class="a"><p>No existe uno universalmente mejor: depende del problema, de su representación y de los recursos disponibles. Por ejemplo, ACO encaja con problemas de caminos en grafos; el Genético con codificaciones binarias o espacios sin derivadas; la Tabú con problemas donde hay movimientos naturales, como horarios. En nuestro ejemplo los tres metaheurísticos llegaron a 20, pero con 5 ciudades eso dice poco.</p></div>
+      </details>
+<details data-t="local tabu">
+        <summary>¿Cuál es la diferencia principal entre Búsqueda Local y Tabú?</summary>
+        <div class="a"><p>La memoria. La Tabú usa una lista para no deshacer movimientos recientes y, gracias a ella, puede aceptar soluciones temporalmente peores sin ciclar. En el ejemplo, la Local se detuvo en 22 y la Tabú pasó por 23 para llegar a 20.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Se pueden combinar estos métodos?</summary>
+        <div class="a"><p>Sí. Los algoritmos meméticos combinan un Genético con Búsqueda Local aplicada a cada hijo. También es común que ACO refine los tours de sus hormigas con 2-opt.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Cuáles trabajan con una sola solución y cuáles con una población? ¿Cuáles usan memoria?</summary>
+        <div class="a"><p><b>Una sola solución (trayectoria):</b> Búsqueda Local y Tabú. <b>Población:</b> Genético y ACO. <b>Memoria:</b> la Tabú usa la lista tabú (y frecuencias a largo plazo), el Genético usa la población y ACO la feromona. La Búsqueda Local no tiene memoria explícita.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Alguno garantiza encontrar el óptimo?</summary>
+        <div class="a"><p>No. Ninguno de los cuatro lo garantiza; eso solo lo hace un método exacto. En el ejemplo sabemos que 20 es óptimo porque probamos los 12 tours posibles, pero con 20 ciudades ya hay unos 6 × 10¹⁶ tours (19!/2), así que no se puede verificar así.</p></div>
+      </details>
+<details data-t="tabu">
+        <summary>¿Qué pasa si la tenencia tabú es muy corta o muy larga?</summary>
+        <div class="a"><p>Muy corta: el método vuelve a ciclar entre las mismas soluciones. Muy larga: prohíbe demasiados movimientos y puede bloquear el camino al óptimo. Valores típicos van de 5 a 20, o alrededor de √n.</p></div>
+      </details>
+<details data-t="tabu">
+        <summary>¿Qué es el criterio de aspiración y cuándo se aplica?</summary>
+        <div class="a"><p>Permite hacer un movimiento tabú si produce una solución mejor que la mejor encontrada hasta ahora. Existe porque la lista guarda atributos, no soluciones completas, y podría prohibir una solución nueva y buena.</p></div>
+      </details>
+<details data-t="ga tabu local aco">
+        <summary>Si el problema fuera la mochila, ¿qué cambia?</summary>
+        <div class="a"><p>La representación. En la mochila una solución es un vector binario (qué objetos van). Para Local y Tabú el movimiento natural es cambiar un bit; en el Genético el cromosoma es ese vector y la mutación voltea un bit. ACO, pensado originalmente para caminos en grafos, requiere adaptar qué significa la feromona (por ejemplo, sobre cada objeto).</p></div>
+      </details></div></div></section>
+<footer><div class="wrap">Optimización · Ciencia de Datos · Universidad Externado de Colombia · <a href="../index.html">Versión anterior completa</a></div></footer>
+<script>
+(function () {
+  // Theme toggle (remembered per browser, optional)
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = i === j;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+    try { localStorage.setItem('tab', i); } catch (e) {}
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { select((i + 1) % tabs.length, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft')  { select((i + tabs.length - 1) % tabs.length, true); e.preventDefault(); }
+    });
+  });
+  try { var st = parseInt(localStorage.getItem('tab'), 10); if (st >= 0 && st < tabs.length) select(st); } catch (e) {}
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+    var n = parseInt(e.key, 10);
+    if (n >= 1 && n <= tabs.length) { select(n - 1); document.getElementById('carolina').scrollIntoView(); }
+  });
+
+  // 2:30 timer
+  var TOTAL = 150, left = TOTAL, id = null;
+  var box = document.getElementById('timer'), txt = document.getElementById('timerText'), btn = document.getElementById('timerToggle');
+  function draw() {
+    var neg = left < 0, s = Math.abs(left);
+    txt.textContent = (neg ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    box.classList.toggle('warn', left <= 30 && left >= 0);
+    box.classList.toggle('over', left < 0);
+  }
+  btn.addEventListener('click', function () {
+    if (id) { clearInterval(id); id = null; btn.textContent = 'Seguir'; }
+    else { id = setInterval(function () { left--; draw(); }, 1000); btn.textContent = 'Pausa'; }
+  });
+  document.getElementById('timerReset').addEventListener('click', function () {
+    clearInterval(id); id = null; left = TOTAL; btn.textContent = 'Iniciar'; draw();
+  });
+
+  // FAQ filter
+  var fbtns = document.querySelectorAll('.faq-filter button');
+  var items = document.querySelectorAll('#faq details');
+  var chipName = { gen: null, local: ['c-local', 'Local'], tabu: ['c-tabu', 'Tabú'], ga: ['c-ga', 'Genético'], aco: ['c-aco', 'ACO'] };
+  items.forEach(function (d) {
+    var tags = d.getAttribute('data-t').split(' ');
+    var holder = document.createElement('span'); holder.className = 'tags';
+    tags.forEach(function (t) { if (chipName[t]) { var c = document.createElement('span'); c.className = 'chip ' + chipName[t][0]; c.textContent = chipName[t][1]; holder.appendChild(c); } });
+    if (holder.childNodes.length) d.querySelector('summary').appendChild(holder);
+  });
+  fbtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-f');
+      fbtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      items.forEach(function (d) { d.hidden = f !== 'all' && d.getAttribute('data-t').split(' ').indexOf(f) === -1; });
+    });
+  });
+})();
+</script><script src="../../visor-bridge.js"></script></body></html>

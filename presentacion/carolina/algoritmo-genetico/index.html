@@ -1,0 +1,176 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carolina · Algoritmo Genético · Análisis crítico</title><link rel="stylesheet" href="../estilos.css"></head>
+<body><header class="top"><div class="wrap"><div class="eyebrow">Universidad Externado de Colombia · Optimización</div>
+<h1>Carolina · Algoritmo Genético</h1><p class="muted">Análisis crítico y cierre · 2,5 minutos</p>
+<button id="themeBtn" type="button" class="theme-btn" aria-label="Cambiar tema claro u oscuro">◐ Tema</button></div></header>
+<section class="block" id="carolina"><div class="wrap">
+<header><div class="eyebrow">Tema seleccionado</div><h2>Algoritmo Genético</h2>
+<p class="muted">Ventajas, limitaciones, comparación y aplicación real.</p></header>
+<div class="tabs-bar"><div class="tablist" role="tablist" aria-label="Método">
+<button role="tab" id="tab-ga" data-m="ga" aria-controls="p-ga" aria-selected="true">Algoritmo Genético</button>
+</div><div class="timer" id="timer" aria-live="off"><span class="t" id="timerText">2:30</span>
+<button id="timerToggle" type="button">Iniciar</button><button id="timerReset" type="button" aria-label="Reiniciar cronómetro">↺</button></div></div>
+<div class="panel" id="p-ga" data-m="ga" role="tabpanel" aria-labelledby="tab-ga">
+      <div class="hero">
+        <div class="eyebrow label">C · Algoritmo Genético</div>
+        <h3>No mejora una solución: hace evolucionar una población.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>23 → 20</b><span>mejor costo en 1 generación</span></div>
+          <div class="stat"><b>29.25 → 22.0</b><span>costo promedio de la población</span></div>
+          <div class="stat"><b>Cruce OX</b><span>combinó el bloque B‑E de un padre con el orden del otro</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Explora varias regiones del espacio de búsqueda a la vez.</li>
+              <li>No necesita derivadas ni una estructura especial del problema.</li>
+              <li>Se adapta a casi cualquier codificación: binaria, permutaciones o números reales.</li>
+              <li>Se paraleliza fácil: cada individuo se evalúa por separado.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Tiene muchos parámetros: N, p<sub>c</sub>, p<sub>m</sub>, G y el tipo de selección.</li>
+              <li>Es estocástico: dos corridas dan resultados distintos.</li>
+              <li>Puede sufrir convergencia prematura.</li>
+              <li>Es costoso en evaluaciones: 100 individuos × 500 generaciones = 50 000.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>El riesgo de la convergencia prematura</h3>
+          <p>Si la población pierde diversidad muy pronto, todos los individuos se parecen, el cruce ya no produce nada nuevo y el algoritmo se estanca, a veces lejos del óptimo.</p>
+          <p style="margin:0"><b>En nuestro ejemplo ya se ve el inicio:</b> tras una sola generación, B D E C aparece dos veces en la población. Por eso importa la <b>mutación</b>, que reintroduce diversidad, junto con una población suficientemente grande y una presión de selección moderada.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación con Tabú y ACO</h3>
+            <ul>
+              <li><span class="chip c-local">Local</span> y <span class="chip c-tabu">Tabú</span> mueven una sola solución. El Genético mueve una población, y su “memoria” es la población misma.</li>
+              <li><span class="chip c-aco">ACO</span> también usa varias soluciones, pero cada hormiga construye la suya <b>desde cero</b> guiada por la feromona. El Genético <b>recombina</b> soluciones que ya existen.</li>
+              <li>En la práctica se combinan: un <b>algoritmo memético</b> es un Genético que aplica Búsqueda Local a cada hijo.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Diseño de redes y de ingeniería.</b> Ejemplo conocido: la antena ST5 de la NASA (2006), diseñada por un algoritmo evolutivo.</p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> El espacio de diseños es enorme, la función objetivo sale de una simulación sin fórmula y no hay derivadas.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>La fuerza del Genético es la diversidad de su población; si la pierde, pierde también su ventaja.</p></div>
+      </div>
+    </div></div></section>
+<section class="block" id="preguntas"><div class="wrap"><header><div class="eyebrow">Repaso</div>
+<h2>Preguntas frecuentes · Algoritmo Genético</h2><p class="muted">Preguntas generales y del algoritmo elegido.</p></header>
+<div class="faq" id="faq"><details data-t="gen">
+        <summary>¿Cuál de los cuatro métodos es mejor?</summary>
+        <div class="a"><p>No existe uno universalmente mejor: depende del problema, de su representación y de los recursos disponibles. Por ejemplo, ACO encaja con problemas de caminos en grafos; el Genético con codificaciones binarias o espacios sin derivadas; la Tabú con problemas donde hay movimientos naturales, como horarios. En nuestro ejemplo los tres metaheurísticos llegaron a 20, pero con 5 ciudades eso dice poco.</p></div>
+      </details>
+<details data-t="ga">
+        <summary>¿Por qué un algoritmo genético puede estancarse?</summary>
+        <div class="a"><p>Porque la población puede perder diversidad y concentrarse en soluciones muy parecidas: es la convergencia prematura. Si todos los padres son casi iguales, el cruce ya no genera nada nuevo. La mutación sirve para reintroducir diversidad.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Se pueden combinar estos métodos?</summary>
+        <div class="a"><p>Sí. Los algoritmos meméticos combinan un Genético con Búsqueda Local aplicada a cada hijo. También es común que ACO refine los tours de sus hormigas con 2-opt.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Cuáles trabajan con una sola solución y cuáles con una población? ¿Cuáles usan memoria?</summary>
+        <div class="a"><p><b>Una sola solución (trayectoria):</b> Búsqueda Local y Tabú. <b>Población:</b> Genético y ACO. <b>Memoria:</b> la Tabú usa la lista tabú (y frecuencias a largo plazo), el Genético usa la población y ACO la feromona. La Búsqueda Local no tiene memoria explícita.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Alguno garantiza encontrar el óptimo?</summary>
+        <div class="a"><p>No. Ninguno de los cuatro lo garantiza; eso solo lo hace un método exacto. En el ejemplo sabemos que 20 es óptimo porque probamos los 12 tours posibles, pero con 20 ciudades ya hay unos 6 × 10¹⁶ tours (19!/2), así que no se puede verificar así.</p></div>
+      </details>
+<details data-t="ga">
+        <summary>¿Por qué se usa el cruce OX en el agente viajero?</summary>
+        <div class="a"><p>Con un cruce de un punto se pueden repetir ciudades y el hijo no sería un tour válido. OX copia un segmento de un padre y completa con las ciudades que faltan en el orden del otro padre, así que el hijo siempre es una permutación válida.</p></div>
+      </details>
+<details data-t="ga tabu local aco">
+        <summary>Si el problema fuera la mochila, ¿qué cambia?</summary>
+        <div class="a"><p>La representación. En la mochila una solución es un vector binario (qué objetos van). Para Local y Tabú el movimiento natural es cambiar un bit; en el Genético el cromosoma es ese vector y la mutación voltea un bit. ACO, pensado originalmente para caminos en grafos, requiere adaptar qué significa la feromona (por ejemplo, sobre cada objeto).</p></div>
+      </details></div></div></section>
+<footer><div class="wrap">Optimización · Ciencia de Datos · Universidad Externado de Colombia · <a href="../index.html">Versión anterior completa</a></div></footer>
+<script>
+(function () {
+  // Theme toggle (remembered per browser, optional)
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = i === j;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+    try { localStorage.setItem('tab', i); } catch (e) {}
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { select((i + 1) % tabs.length, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft')  { select((i + tabs.length - 1) % tabs.length, true); e.preventDefault(); }
+    });
+  });
+  try { var st = parseInt(localStorage.getItem('tab'), 10); if (st >= 0 && st < tabs.length) select(st); } catch (e) {}
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+    var n = parseInt(e.key, 10);
+    if (n >= 1 && n <= tabs.length) { select(n - 1); document.getElementById('carolina').scrollIntoView(); }
+  });
+
+  // 2:30 timer
+  var TOTAL = 150, left = TOTAL, id = null;
+  var box = document.getElementById('timer'), txt = document.getElementById('timerText'), btn = document.getElementById('timerToggle');
+  function draw() {
+    var neg = left < 0, s = Math.abs(left);
+    txt.textContent = (neg ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    box.classList.toggle('warn', left <= 30 && left >= 0);
+    box.classList.toggle('over', left < 0);
+  }
+  btn.addEventListener('click', function () {
+    if (id) { clearInterval(id); id = null; btn.textContent = 'Seguir'; }
+    else { id = setInterval(function () { left--; draw(); }, 1000); btn.textContent = 'Pausa'; }
+  });
+  document.getElementById('timerReset').addEventListener('click', function () {
+    clearInterval(id); id = null; left = TOTAL; btn.textContent = 'Iniciar'; draw();
+  });
+
+  // FAQ filter
+  var fbtns = document.querySelectorAll('.faq-filter button');
+  var items = document.querySelectorAll('#faq details');
+  var chipName = { gen: null, local: ['c-local', 'Local'], tabu: ['c-tabu', 'Tabú'], ga: ['c-ga', 'Genético'], aco: ['c-aco', 'ACO'] };
+  items.forEach(function (d) {
+    var tags = d.getAttribute('data-t').split(' ');
+    var holder = document.createElement('span'); holder.className = 'tags';
+    tags.forEach(function (t) { if (chipName[t]) { var c = document.createElement('span'); c.className = 'chip ' + chipName[t][0]; c.textContent = chipName[t][1]; holder.appendChild(c); } });
+    if (holder.childNodes.length) d.querySelector('summary').appendChild(holder);
+  });
+  fbtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-f');
+      fbtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      items.forEach(function (d) { d.hidden = f !== 'all' && d.getAttribute('data-t').split(' ').indexOf(f) === -1; });
+    });
+  });
+})();
+</script><script src="../../visor-bridge.js"></script></body></html>

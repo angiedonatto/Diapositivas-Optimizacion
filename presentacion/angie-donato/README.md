@@ -1,14 +1,13 @@
-# Angie Donato · Aperturas (3 minutos)
+# angie-donato · carpetas independientes por algoritmo
 
-Esta carpeta es el espacio exclusivo de trabajo para las aperturas de Angie Donato.
+Edita la presentación en la carpeta del tema que te corresponde:
+- `busqueda-local/index.html`
+- `busqueda-tabu/index.html`
+- `algoritmo-genetico/index.html`
+- `colonia-hormigas/index.html`
 
-- `index.html`: tres diapositivas por cada uno de los cuatro métodos sorteables.
-- Botones A–D o teclas 1–4: elegir tema.
-- Flechas: avanzar o retroceder.
-- N: mostrar u ocultar notas para ensayar, fuera de la diapositiva.
-- F: modo de pantalla completa.
-- El cierre de cada apertura da paso a Angie Loango.
+Trabaja siempre en una rama y abre un Pull Request contra `diapo_1`. El `estilos.css` compartido, si existe, da formato a los cuatro temas de esta persona.
 
-Para consultar las otras secciones, vuelve al menú principal (`../../index.html`) o utiliza los enlaces de la presentación. Para modificar tus diapositivas, trabaja en una rama nueva y abre un Pull Request antes de fusionar.
+El `index.html` de esta carpeta (si existe) es el archivo original completo conservado por seguridad. **La exposición integrada usa los cuatro archivos nuevos por tema** y se abre desde el `index.html` de la raíz.
 
-El problema común es el agente viajero con cinco ciudades del guion del equipo. La parte numérica corresponde a Andrés.
+

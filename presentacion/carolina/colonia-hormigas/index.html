@@ -1,0 +1,182 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carolina · Colonia de Hormigas · Análisis crítico</title><link rel="stylesheet" href="../estilos.css"></head>
+<body><header class="top"><div class="wrap"><div class="eyebrow">Universidad Externado de Colombia · Optimización</div>
+<h1>Carolina · Colonia de Hormigas</h1><p class="muted">Análisis crítico y cierre · 2,5 minutos</p>
+<button id="themeBtn" type="button" class="theme-btn" aria-label="Cambiar tema claro u oscuro">◐ Tema</button></div></header>
+<section class="block" id="carolina"><div class="wrap">
+<header><div class="eyebrow">Tema seleccionado</div><h2>Colonia de Hormigas</h2>
+<p class="muted">Ventajas, limitaciones, comparación y aplicación real.</p></header>
+<div class="tabs-bar"><div class="tablist" role="tablist" aria-label="Método">
+<button role="tab" id="tab-aco" data-m="aco" aria-controls="p-aco" aria-selected="true">Colonia de Hormigas</button>
+</div><div class="timer" id="timer" aria-live="off"><span class="t" id="timerText">2:30</span>
+<button id="timerToggle" type="button">Iniciar</button><button id="timerReset" type="button" aria-label="Reiniciar cronómetro">↺</button></div></div>
+<div class="panel" id="p-aco" data-m="aco" role="tabpanel" aria-labelledby="tab-aco">
+      <div class="hero">
+        <div class="eyebrow label">D · Colonia de Hormigas (ACO)</div>
+        <h3>Ninguna hormiga sabe la respuesta: la colonia la aprende con la feromona.</h3>
+        <div class="stat-row">
+          <div class="stat"><b>20</b><span>la hormiga 2 halló el óptimo en la iteración 1</span></div>
+          <div class="stat"><b>0.71 → 0.79</b><span>P(A→D) en la siguiente iteración</span></div>
+          <div class="stat"><b>1.4</b><span>τ en las aristas que usaron ambas hormigas</span></div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="grid-2">
+          <div class="card pros">
+            <h3>Ventajas</h3>
+            <ul>
+              <li>Es especialmente adecuado para problemas de rutas y grafos: construye soluciones arista por arista.</li>
+              <li>Combina conocimiento del problema (η) con aprendizaje (τ).</li>
+              <li>Se adapta a cambios: si una calle se cierra, la feromona de esa arista se evapora y la colonia se reorganiza.</li>
+            </ul>
+          </div>
+          <div class="card cons">
+            <h3>Limitaciones</h3>
+            <ul>
+              <li>Tiene varios parámetros sensibles: α, β, ρ, Q y el número de hormigas.</li>
+              <li>Es estocástico y su convergencia puede ser lenta.</li>
+              <li>Si la feromona se concentra demasiado, todas las hormigas repiten el mismo tour. Por eso existe MAX‑MIN Ant System, que pone límites mínimo y máximo a τ.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card focus">
+          <h3>Influencia de α, β y ρ</h3>
+          <div class="grid-3" style="gap:10px">
+            <p style="margin:0"><b>α (feromona).</b> Si sube, las hormigas siguen lo que funcionó antes: más explotación. Demasiado alto, todas convergen rápido a un mismo tour.</p>
+            <p style="margin:0"><b>β (distancia).</b> Si sube, pesan más las ciudades cercanas y el método se vuelve casi un vecino más cercano voraz.</p>
+            <p style="margin:0"><b>ρ (evaporación).</b> Muy grande: la colonia olvida todo y la búsqueda es casi aleatoria. Muy pequeño: los primeros caminos dominan para siempre.</p>
+          </div>
+          <p style="margin:10px 0 0">El depósito es <b>Q/L<sub>k</sub></b>: un tour más corto deposita más feromona, así la calidad de la solución se vuelve señal para las siguientes hormigas.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Comparación con los otros métodos</h3>
+            <ul>
+              <li><span class="chip c-local">Local</span> y <span class="chip c-tabu">Tabú</span> mejoran una sola solución con movimientos. ACO <b>construye</b> muchas soluciones nuevas en cada iteración.</li>
+              <li><span class="chip c-ga">Genético</span> también es poblacional, pero recombina soluciones existentes. ACO guarda su memoria en la feromona de las aristas, no en los individuos.</li>
+              <li>La memoria es distinta en cada método: Tabú usa la lista de movimientos recientes, el Genético la población y ACO la feromona.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Aplicación real</h3>
+            <p><b>Ruteo de vehículos y enrutamiento en redes de telecomunicaciones</b> (AntNet).</p>
+            <p class="muted" style="margin:0"><b>¿Por qué encaja?</b> Son problemas de caminos en grafos que cambian con el tiempo, y la evaporación permite olvidar rutas que dejaron de ser buenas.</p>
+          </div>
+        </div>
+
+        <div class="closer"><span class="q">“</span><p>La evaporación hace que la colonia olvide lo que dejó de servir; el depósito, que recuerde lo que funcionó.</p></div>
+      </div>
+    </div></div></section>
+<section class="block" id="preguntas"><div class="wrap"><header><div class="eyebrow">Repaso</div>
+<h2>Preguntas frecuentes · Colonia de Hormigas</h2><p class="muted">Preguntas generales y del algoritmo elegido.</p></header>
+<div class="faq" id="faq"><details data-t="gen">
+        <summary>¿Cuál de los cuatro métodos es mejor?</summary>
+        <div class="a"><p>No existe uno universalmente mejor: depende del problema, de su representación y de los recursos disponibles. Por ejemplo, ACO encaja con problemas de caminos en grafos; el Genético con codificaciones binarias o espacios sin derivadas; la Tabú con problemas donde hay movimientos naturales, como horarios. En nuestro ejemplo los tres metaheurísticos llegaron a 20, pero con 5 ciudades eso dice poco.</p></div>
+      </details>
+<details data-t="aco">
+        <summary>¿Qué representa la feromona en ACO?</summary>
+        <div class="a"><p>Es la memoria colectiva de la colonia: indica qué tan buenas han resultado las aristas en tours anteriores. Se refuerza en los caminos que producen buenas soluciones y se evapora en los que nadie usa.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Se pueden combinar estos métodos?</summary>
+        <div class="a"><p>Sí. Los algoritmos meméticos combinan un Genético con Búsqueda Local aplicada a cada hijo. También es común que ACO refine los tours de sus hormigas con 2-opt.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Cuáles trabajan con una sola solución y cuáles con una población? ¿Cuáles usan memoria?</summary>
+        <div class="a"><p><b>Una sola solución (trayectoria):</b> Búsqueda Local y Tabú. <b>Población:</b> Genético y ACO. <b>Memoria:</b> la Tabú usa la lista tabú (y frecuencias a largo plazo), el Genético usa la población y ACO la feromona. La Búsqueda Local no tiene memoria explícita.</p></div>
+      </details>
+<details data-t="gen">
+        <summary>¿Alguno garantiza encontrar el óptimo?</summary>
+        <div class="a"><p>No. Ninguno de los cuatro lo garantiza; eso solo lo hace un método exacto. En el ejemplo sabemos que 20 es óptimo porque probamos los 12 tours posibles, pero con 20 ciudades ya hay unos 6 × 10¹⁶ tours (19!/2), así que no se puede verificar así.</p></div>
+      </details>
+<details data-t="aco">
+        <summary>¿Qué pasa si ρ es muy grande o muy pequeño?</summary>
+        <div class="a"><p>ρ grande: la feromona se evapora casi toda, la colonia no acumula memoria y la búsqueda es casi aleatoria. ρ pequeño: los primeros caminos dominan para siempre y hay convergencia prematura.</p></div>
+      </details>
+<details data-t="aco">
+        <summary>¿Por qué el depósito de feromona depende de la calidad de la solución?</summary>
+        <div class="a"><p>Cada hormiga deposita Q/L<sub>k</sub>: cuanto más corto su tour, más feromona deja. En el ejemplo, la hormiga 1 (tour 25) depositó 0.4 y la hormiga 2 (tour 20) depositó 0.5. Así las aristas de los buenos tours se vuelven más atractivas.</p></div>
+      </details>
+<details data-t="ga tabu local aco">
+        <summary>Si el problema fuera la mochila, ¿qué cambia?</summary>
+        <div class="a"><p>La representación. En la mochila una solución es un vector binario (qué objetos van). Para Local y Tabú el movimiento natural es cambiar un bit; en el Genético el cromosoma es ese vector y la mutación voltea un bit. ACO, pensado originalmente para caminos en grafos, requiere adaptar qué significa la feromona (por ejemplo, sobre cada objeto).</p></div>
+      </details></div></div></section>
+<footer><div class="wrap">Optimización · Ciencia de Datos · Universidad Externado de Colombia · <a href="../index.html">Versión anterior completa</a></div></footer>
+<script>
+(function () {
+  // Theme toggle (remembered per browser, optional)
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(i, focus) {
+    tabs.forEach(function (t, j) {
+      var on = i === j;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+    try { localStorage.setItem('tab', i); } catch (e) {}
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { select((i + 1) % tabs.length, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft')  { select((i + tabs.length - 1) % tabs.length, true); e.preventDefault(); }
+    });
+  });
+  try { var st = parseInt(localStorage.getItem('tab'), 10); if (st >= 0 && st < tabs.length) select(st); } catch (e) {}
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+    var n = parseInt(e.key, 10);
+    if (n >= 1 && n <= tabs.length) { select(n - 1); document.getElementById('carolina').scrollIntoView(); }
+  });
+
+  // 2:30 timer
+  var TOTAL = 150, left = TOTAL, id = null;
+  var box = document.getElementById('timer'), txt = document.getElementById('timerText'), btn = document.getElementById('timerToggle');
+  function draw() {
+    var neg = left < 0, s = Math.abs(left);
+    txt.textContent = (neg ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    box.classList.toggle('warn', left <= 30 && left >= 0);
+    box.classList.toggle('over', left < 0);
+  }
+  btn.addEventListener('click', function () {
+    if (id) { clearInterval(id); id = null; btn.textContent = 'Seguir'; }
+    else { id = setInterval(function () { left--; draw(); }, 1000); btn.textContent = 'Pausa'; }
+  });
+  document.getElementById('timerReset').addEventListener('click', function () {
+    clearInterval(id); id = null; left = TOTAL; btn.textContent = 'Iniciar'; draw();
+  });
+
+  // FAQ filter
+  var fbtns = document.querySelectorAll('.faq-filter button');
+  var items = document.querySelectorAll('#faq details');
+  var chipName = { gen: null, local: ['c-local', 'Local'], tabu: ['c-tabu', 'Tabú'], ga: ['c-ga', 'Genético'], aco: ['c-aco', 'ACO'] };
+  items.forEach(function (d) {
+    var tags = d.getAttribute('data-t').split(' ');
+    var holder = document.createElement('span'); holder.className = 'tags';
+    tags.forEach(function (t) { if (chipName[t]) { var c = document.createElement('span'); c.className = 'chip ' + chipName[t][0]; c.textContent = chipName[t][1]; holder.appendChild(c); } });
+    if (holder.childNodes.length) d.querySelector('summary').appendChild(holder);
+  });
+  fbtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-f');
+      fbtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      items.forEach(function (d) { d.hidden = f !== 'all' && d.getAttribute('data-t').split(' ').indexOf(f) === -1; });
+    });
+  });
+})();
+</script><script src="../../visor-bridge.js"></script></body></html>

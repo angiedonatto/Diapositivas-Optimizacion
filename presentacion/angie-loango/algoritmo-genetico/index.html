@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angie Loango · Algoritmo Genético</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+
+<section id="loango" aria-labelledby="lo-title" data-algo="ga">
+  <div class="lo-wrap">
+    <header class="lo-head">
+      <h2 id="lo-title">Componentes y código Python</h2>
+      <p>Angie Loango, 4 minutos por método</p>
+    </header>
+
+    <div class="lo-bar">
+      <div class="lo-tabs" aria-label="Método"></div>
+      <div class="lo-nav">
+        <button type="button" data-lo="prev" aria-label="Anterior">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="lo-count" data-lo="count" aria-hidden="true"></span>
+        <button type="button" data-lo="next" aria-label="Siguiente">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="lo-timer" aria-label="Cronómetro de 4 minutos">
+        <span class="lo-timer-t" data-lo="timer-text">4:00</span>
+        <button type="button" data-lo="timer-toggle">Iniciar</button>
+        <button type="button" data-lo="timer-reset" aria-label="Reiniciar cronómetro">↺</button>
+      </div>
+      <button type="button" class="lo-fullbtn" data-lo="full" aria-pressed="false">Pantalla completa</button>
+    </div>
+
+    <div class="lo-viewport">
+      <div class="lo-frame">
+        <div class="lo-deck"><noscript>Estas diapositivas necesitan JavaScript.</noscript></div>
+      </div>
+    </div>
+
+    <p class="lo-keys">
+      <span><kbd>→</kbd> <kbd>←</kbd> avanzar y retroceder</span>
+      <span><kbd>1</kbd>–<kbd>4</kbd> método</span>
+      <span><kbd>F</kbd> pantalla completa</span>
+      <span><kbd>T</kbd> cronómetro</span>
+    </p>
+    <p class="lo-sr" data-lo="live" aria-live="polite"></p>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   Sección de Angie Loango: componentes y pseudocódigo
+   Diapositivas 16:9 para proyectar. Cuatro pantallas por método:
+   Componentes, Cómo funciona, Pseudocódigo e Idea fundamental.
+   Las apariciones progresivas siguen el orden del guion.
+
+   Convivencia con el resto de la página:
+   - Todo vive dentro de #loango y usa clases lo-*.
+   - Esta sección funciona de manera autónoma, sin otras presentaciones.
+   ===================================================================== */
+(function () {
+  'use strict';
+  var root = document.getElementById('loango');
+  if (!root) return;
+
+  var W = 1600, H = 900;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var CHAPTERS = ['Componentes', 'Cómo funciona', 'Código Python', 'Idea fundamental'];
+
+  /* ---------------- Utilidades ---------------- */
+  function el(tag, attrs, kids) { var n = document.createElement(tag); set(n, attrs); add(n, kids); return n; }
+  function sv(tag, attrs, kids) { var n = document.createElementNS(SVGNS, tag); set(n, attrs); add(n, kids); return n; }
+  function set(n, a) {
+    if (!a) return;
+    Object.keys(a).forEach(function (k) {
+      var v = a[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === 'text') n.textContent = v;
+      else if (k === 'html') n.innerHTML = v;
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? '' : v);
+    });
+  }
+  function add(n, kids) {
+    if (kids === null || kids === undefined) return;
+    (Array.isArray(kids) ? kids : [kids]).forEach(function (k) {
+      if (k === null || k === undefined || k === false) return;
+      n.appendChild(typeof k === 'string' || typeof k === 'number' ? document.createTextNode(String(k)) : k);
+    });
+  }
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); return n; }
+  // Aparece en el paso f (apariciones progresivas)
+  function F(f, node) { node.setAttribute('data-f', f); return node; }
+  // Se resalta desde el paso f (sin ocultarse antes)
+  function ON(f, node) { node.setAttribute('data-on', f); return node; }
+
+  /* ---------------- Piezas visuales ---------------- */
+  function gene(c, cls) { return el('span', { class: 'lo-g ' + (cls || ''), text: c }); }
+  function genes(list, clsFn, extra) {
+    return el('span', { class: 'lo-genes ' + (extra || '') }, list.map(function (c, i) { return gene(c, clsFn ? clsFn(i, c) : ''); }));
+  }
+  function card(num, name, line, visual, extra) {
+    return el('div', { class: 'lo-c ' + (extra || '') }, [
+      visual ? el('div', { class: 'lo-c-vis' }, visual) : null,
+      el('div', { class: 'lo-c-name' }, [num ? el('span', { class: 'lo-c-num', text: num }) : null, name]),
+      el('p', { class: 'lo-c-line', html: line })
+    ]);
+  }
+  function pill(t, cls) { return el('span', { class: 'lo-pill ' + (cls || ''), html: t }); }
+  function lock() { return '<svg class="lo-lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>'; }
+
+  function svgBox(g, x, y, w, h, title, sub, cls) {
+    var b = sv('g', { class: 'lo-box ' + (cls || '') }, [sv('rect', { x: x, y: y, width: w, height: h, rx: 22 })]);
+    b.appendChild(sv('text', { class: 'tt', x: x + w / 2, y: y + (sub ? h / 2 - 14 : h / 2), text: title }));
+    if (sub) b.appendChild(sv('text', { class: 'ts', x: x + w / 2, y: y + h / 2 + 22, text: sub }));
+    g.appendChild(b);
+    return b;
+  }
+  function svgArrow(g, x1, y1, x2, y2, cls) {
+    var a = sv('line', { class: 'lo-arr ' + (cls || ''), x1: x1, y1: y1, x2: x2, y2: y2, 'marker-end': 'url(#lo-ah' + (cls && cls.indexOf('is-m') >= 0 ? 'm' : '') + ')' });
+    g.appendChild(a); return a;
+  }
+  function svgDefs(svg) {
+    svg.appendChild(sv('defs', null, [
+      sv('marker', { id: 'lo-ah', viewBox: '0 0 10 10', refX: 8.5, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' }, sv('path', { class: 'lo-ah', d: 'M0,0 L10,5 L0,10 z' })),
+      sv('marker', { id: 'lo-ahm', viewBox: '0 0 10 10', refX: 8.5, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' }, sv('path', { class: 'lo-ahm', d: 'M0,0 L10,5 L0,10 z' }))
+    ]));
+  }
+  // Las marcas de flecha se comparten por id: se definen una sola vez en la página.
+  var defsHost = sv('svg', { width: 0, height: 0, style: 'position:absolute', 'aria-hidden': 'true' });
+  svgDefs(defsHost);
+  root.appendChild(defsHost);
+
+  // Ciudades sin nombre: el esquema no adelanta el ejemplo de Andrés
+  var NODES = [[60, 150], [190, 40], [350, 70], [380, 230], [200, 290]];
+  function graph(opts) {
+    opts = opts || {};
+    var svg = sv('svg', { class: 'lo-graph', viewBox: '0 0 440 330', role: 'img', 'aria-label': opts.label || 'Esquema de ciudades y caminos' });
+    var w = opts.widths || {};
+    for (var i = 0; i < NODES.length; i++) for (var j = i + 1; j < NODES.length; j++) {
+      var k = i + '-' + j, a = NODES[i], b = NODES[j];
+      svg.appendChild(sv('line', { class: 'lo-ge ' + (opts.hot === k ? 'is-hot' : ''), x1: a[0], y1: a[1], x2: b[0], y2: b[1], style: 'stroke-width:' + (w[k] || opts.base || 2.5) }));
+    }
+    NODES.forEach(function (p, i) {
+      svg.appendChild(sv('circle', { class: 'lo-gn', cx: p[0], cy: p[1], r: 15 }));
+      if (opts.names && opts.names[i]) svg.appendChild(sv('text', { class: 'lo-gt', x: p[0], y: p[1] + 1, text: opts.names[i] }));
+    });
+    if (opts.extra) opts.extra(svg);
+    return svg;
+  }
+
+  /* ---------------- Código Python ---------------- */
+  var PY = /(#.*$)|('(?:[^'\\]|\\.)*')|\b(def|return|for|in|while|if|else|elif|not|or|and|is|None|True|False|break|lambda)\b|\b(\d+(?:\.\d+)?)\b/g;
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function highlight(line) {
+    var out = '', last = 0, m;
+    PY.lastIndex = 0;
+    while ((m = PY.exec(line))) {
+      out += esc(line.slice(last, m.index));
+      out += '<span class="' + (m[1] ? 'tk-com' : m[2] ? 'tk-str' : m[3] ? 'tk-kw' : 'tk-num') + '">' + esc(m[0]) + '</span>';
+      last = m.index + m[0].length;
+      if (!m[0].length) PY.lastIndex++;
+    }
+    return out + esc(line.slice(last));
+  }
+  // lines: código de algoritmos.py, tal cual. key: líneas importantes
+  // (siempre marcadas). marks: { línea: paso desde el que se resalta }
+  function code(lines, opts) {
+    var ol = el('ol', { class: 'lo-code', style: '--fs:' + opts.size + 'px' });
+    lines.forEach(function (src, i) {
+      var n = i + 1;
+      var li = el('li', { class: 'lo-cl' + (opts.key && opts.key.indexOf(n) >= 0 ? ' is-key' : '') }, [
+        el('span', { class: 'lo-cn', text: n }),
+        el('span', { class: 'lo-cx', html: highlight(src) || ' ' })
+      ]);
+      if (opts.marks && opts.marks[n] !== undefined) ON(opts.marks[n], li);
+      ol.appendChild(li);
+    });
+    return el('div', { class: 'lo-code-panel' + (opts.side ? ' is-side' : '') }, [
+      el('div', { class: 'lo-code-bar' }, [el('span', { class: 'lo-dots' }, [el('i'), el('i'), el('i')]), el('span', { text: opts.file }), el('span', { class: 'lo-code-uses', text: opts.uses })]),
+      ol
+    ]);
+  }
+  function notes(list) {
+    return el('div', { class: 'lo-notes' }, list.map(function (n) {
+      return F(n[0], el('div', { class: 'lo-note' }, [el('span', { class: 'lo-note-n', text: n[1] }), el('p', { html: n[2] })]));
+    }));
+  }
+  function handoff(text) { return el('p', { class: 'lo-handoff' }, [el('span', { class: 'lo-handoff-dot' }), text]); }
+
+  /* =====================================================================
+     A. BÚSQUEDA LOCAL
+     ===================================================================== */
+  function tourMini() {
+    var s = sv('svg', { viewBox: '0 0 200 120', class: 'lo-mini', 'aria-hidden': 'true' });
+    var p = [[20, 70], [70, 18], [160, 26], [182, 92], [96, 108]];
+    s.appendChild(sv('polygon', { class: 'lo-mini-tour', points: p.map(function (q) { return q.join(','); }).join(' ') }));
+    p.forEach(function (q) { s.appendChild(sv('circle', { class: 'lo-mini-n', cx: q[0], cy: q[1], r: 8 })); });
+    return s;
+  }
+  function starMini() {
+    var s = sv('svg', { viewBox: '0 0 200 120', class: 'lo-mini', 'aria-hidden': 'true' });
+    for (var i = 0; i < 6; i++) {
+      var a = -Math.PI / 2 + i * Math.PI / 3, x = 100 + 70 * Math.cos(a), y = 60 + 46 * Math.sin(a);
+      s.appendChild(sv('line', { class: 'lo-mini-l', x1: 100, y1: 60, x2: x, y2: y }));
+      s.appendChild(sv('circle', { class: 'lo-mini-n is-soft', cx: x, cy: y, r: 10 }));
+    }
+    s.appendChild(sv('circle', { class: 'lo-mini-c', cx: 100, cy: 60, r: 18 }));
+    s.appendChild(sv('text', { class: 'lo-mini-t', x: 100, y: 61, text: 'x' }));
+    return s;
+  }
+  function twoOptMini() {
+    var s = sv('svg', { viewBox: '0 0 220 110', class: 'lo-mini', 'aria-hidden': 'true' });
+    var a = [20, 25], b = [200, 25], c = [20, 85], d = [200, 85];
+    s.appendChild(sv('line', { class: 'lo-mini-gone', x1: a[0], y1: a[1], x2: d[0], y2: d[1] }));
+    s.appendChild(sv('line', { class: 'lo-mini-gone', x1: c[0], y1: c[1], x2: b[0], y2: b[1] }));
+    s.appendChild(sv('line', { class: 'lo-mini-new', x1: a[0], y1: a[1], x2: b[0], y2: b[1] }));
+    s.appendChild(sv('line', { class: 'lo-mini-new', x1: c[0], y1: c[1], x2: d[0], y2: d[1] }));
+    [a, b, c, d].forEach(function (q) { s.appendChild(sv('circle', { class: 'lo-mini-n', cx: q[0], cy: q[1], r: 8 })); });
+    return s;
+  }
+  function landscape(labels) {
+    var s = sv('svg', { viewBox: '0 0 420 200', class: 'lo-land', role: 'img', 'aria-label': 'Paisaje con un óptimo local y un óptimo global' });
+    s.appendChild(sv('path', { class: 'ground', d: 'M10,50 C60,50 70,130 115,130 C160,130 160,70 205,68 C255,66 265,175 315,175 C360,175 370,80 410,60 L410,198 L10,198 Z' }));
+    s.appendChild(sv('circle', { class: 'ball', cx: 115, cy: 116, r: 13 }));
+    s.appendChild(sv('path', { class: 'flag', d: 'M315,173 L315,132 L338,141 L315,150 Z' }));
+    if (labels !== false) {
+      s.appendChild(sv('text', { x: 115, y: 162, text: 'óptimo local' }));
+      s.appendChild(sv('text', { x: 315, y: 122, text: 'óptimo global' }));
+    }
+    return s;
+  }
+  function scanRow(upto, pick) {
+    return el('span', { class: 'lo-scan' }, [0, 1, 2, 3, 4, 5].map(function (i) {
+      return el('i', { class: (i <= upto ? 'is-seen' : '') + (i === pick ? ' is-pick' : '') });
+    }));
+  }
+
+  /* El algoritmo LOCAL vive en su carpeta temática. */
+
+  /* =====================================================================
+     B. BÚSQUEDA TABÚ
+     ===================================================================== */
+  function worseMini() {
+    var s = sv('svg', { viewBox: '0 0 220 110', class: 'lo-mini', 'aria-hidden': 'true' });
+    s.appendChild(sv('polyline', { class: 'lo-mini-line', points: '10,20 70,80 120,62 200,96' }));
+    s.appendChild(sv('line', { class: 'lo-mini-up', x1: 70, y1: 80, x2: 120, y2: 62 }));
+    [[10, 20], [70, 80], [120, 62], [200, 96]].forEach(function (q, i) { s.appendChild(sv('circle', { class: 'lo-mini-n' + (i === 2 ? ' is-m' : ''), cx: q[0], cy: q[1], r: 7 })); });
+    return s;
+  }
+  function tabuList() {
+    return el('div', { class: 'lo-tl' }, [
+      el('span', { class: 'lo-ts is-full', html: lock() + 'C↔D' }),
+      el('span', { class: 'lo-ts is-full', html: lock() + '···' }),
+      el('span', { class: 'lo-ts', text: 'libre' })
+    ]);
+  }
+  function tenureScale() {
+    return el('div', { class: 'lo-scale' }, [
+      el('div', { class: 'lo-scale-bar' }, [el('i', { class: 'is-bad' }), el('i', { class: 'is-good' }), el('i', { class: 'is-bad' })]),
+      el('div', { class: 'lo-scale-lab' }, [el('span', { text: 'cicla' }), el('b', { text: '5 a 20 o √n' }), el('span', { text: 'bloquea' })])
+    ]);
+  }
+  function clusterMini(mode) {
+    var s = sv('svg', { viewBox: '0 0 220 110', class: 'lo-mini', 'aria-hidden': 'true' });
+    if (mode === 'in') {
+      s.appendChild(sv('circle', { class: 'lo-mini-zone', cx: 110, cy: 55, r: 44 }));
+      [[96, 46], [118, 40], [128, 62], [104, 70], [86, 60], [112, 56]].forEach(function (q, i) { s.appendChild(sv('circle', { class: 'lo-mini-n' + (i === 5 ? ' is-m' : ''), cx: q[0], cy: q[1], r: 6 })); });
+    } else {
+      s.appendChild(sv('circle', { class: 'lo-mini-zone', cx: 50, cy: 55, r: 32 }));
+      [[44, 48], [58, 62], [40, 64]].forEach(function (q) { s.appendChild(sv('circle', { class: 'lo-mini-n', cx: q[0], cy: q[1], r: 6 })); });
+      s.appendChild(sv('path', { class: 'lo-mini-path', d: 'M86,50 C120,20 150,20 172,44' }));
+      s.appendChild(sv('circle', { class: 'lo-mini-zone is-new', cx: 180, cy: 62, r: 26 }));
+      s.appendChild(sv('circle', { class: 'lo-mini-n is-m', cx: 180, cy: 62, r: 7 }));
+    }
+    return s;
+  }
+  function memoryChart() {
+    var s = sv('svg', { viewBox: '0 0 520 260', class: 'lo-memchart', role: 'img', 'aria-label': 'La solución actual sube y baja; la mejor encontrada nunca empeora' });
+    s.appendChild(sv('line', { class: 'ax', x1: 30, y1: 230, x2: 510, y2: 230 }));
+    s.appendChild(sv('polyline', { class: 'best', points: '40,40 140,40 140,170 380,170 380,205 500,205' }));
+    s.appendChild(sv('polyline', { class: 'cur', points: '40,40 140,170 260,130 380,205 500,180' }));
+    [[40, 40], [140, 170], [260, 130], [380, 205], [500, 180]].forEach(function (q, i) { s.appendChild(sv('circle', { class: 'pt' + (i === 2 || i === 4 ? ' is-up' : ''), cx: q[0], cy: q[1], r: 9 })); });
+    s.appendChild(sv('text', { x: 268, y: 112, text: 'acepta empeorar' }));
+    return s;
+  }
+
+  /* El algoritmo TABU vive en su carpeta temática. */
+
+  /* =====================================================================
+     C. ALGORITMO GENÉTICO
+     ===================================================================== */
+  // Cruce OX ilustrativo (no es el ejemplo de Andrés): segmento de genes 2 y 3
+  function ox(a, b, c1, c2) {
+    var n = a.length, child = new Array(n).fill(null), from = new Array(n).fill('fill');
+    for (var i = c1; i <= c2; i++) { child[i] = a[i]; from[i] = 'seg'; }
+    var pos = (c2 + 1) % n;
+    for (var k = 1; k <= n; k++) {
+      var c = b[(c2 + k) % n];
+      if (child.indexOf(c) >= 0) continue;
+      while (child[pos] !== null) pos = (pos + 1) % n;
+      child[pos] = c;
+    }
+    return { child: child, from: from };
+  }
+  var P1 = ['B', 'C', 'D', 'E'], P2 = ['D', 'B', 'E', 'C'], OX = ox(P1, P2, 1, 2);
+  var MUT_BEFORE = OX.child, MUT_AFTER = [OX.child[0], OX.child[2], OX.child[1], OX.child[3]];
+
+  function oxDiagram() {
+    function row(name, list, cls) {
+      return el('div', { class: 'lo-oxr' }, [el('span', { class: 'lo-oxn', text: name }), genes(list, cls, 'is-sm')]);
+    }
+    return el('div', { class: 'lo-ox' }, [
+      row('Padre 1', P1, function (i) { return i === 1 || i === 2 ? 'is-seg' : 'is-dim'; }),
+      row('Padre 2', P2, function (i, c) { return P1.slice(1, 3).indexOf(c) >= 0 ? 'is-dim' : 'is-fill'; }),
+      row('Hijo', OX.child, function (i) { return OX.from[i] === 'seg' ? 'is-seg' : 'is-fill'; })
+    ]);
+  }
+  var POP = [['C', 'D', 'B', 'E'], ['E', 'B', 'D', 'C'], ['B', 'E', 'C', 'D'], ['D', 'C', 'E', 'B']];
+  var FIT = [0.55, 0.8, 0.4, 0.95]; // largo de las barras: solo ilustrativo
+
+  var GENETIC = {
+    key: 'ga', letter: 'C', name: 'Algoritmo Genético',
+    slides: [
+      { title: 'El vocabulario', build: function (b) {
+        var pop = el('div', { class: 'lo-pop' }, POP.map(function (p, i) {
+          return el('div', { class: 'lo-pop-row' + (i === 1 ? ' is-hl' : '') }, [
+            genes(p, function (j) { return i === 1 && j === 2 ? 'is-seg' : ''; }, 'is-sm'),
+            F(3, el('span', { class: 'lo-fit' }, el('i', { style: 'width:' + (FIT[i] * 100) + '%' })))
+          ]);
+        }));
+        var labels = el('div', { class: 'lo-vocab' }, [
+          el('div', { class: 'lo-vocab-item' }, [el('b', { text: 'Población' }), el('span', { text: 'varias soluciones a la vez' })]),
+          el('div', { class: 'lo-vocab-item is-m' }, [el('b', { text: 'Cromosoma' }), el('span', { text: 'una solución codificada' })]),
+          el('div', { class: 'lo-vocab-item is-m' }, [el('b', { text: 'Gen y alelo' }), el('span', { text: 'una posición y el valor que toma' })])
+        ]);
+        var left = F(1, el('div', { class: 'lo-vocab-wrap' }, [pop, labels]));
+        var right = el('div', { class: 'lo-col' }, [
+          F(2, el('div', { class: 'lo-c' }, [
+            el('div', { class: 'lo-c-name', text: 'Codificación' }),
+            el('div', { class: 'lo-code2' }, [el('span', { class: 'lo-tiny', text: 'Binaria (mochila)' }), genes(['1', '0', '1', '1', '0'], function (i, c) { return c === '1' ? 'is-fill' : ''; }, 'is-xs'), el('span', { class: 'lo-c-line', text: 'llevo los objetos 1, 3 y 4' })]),
+            el('div', { class: 'lo-code2' }, [el('span', { class: 'lo-tiny', text: 'Permutación (agente viajero)' }), genes(['B', 'C', 'D', 'E'], null, 'is-xs'), el('span', { class: 'lo-c-line', text: 'orden de visita' })])
+          ])),
+          F(3, card(null, 'Aptitud (fitness)', 'Qué tan bueno es un individuo. Para minimizar distancia: <b>1/costo</b>.', null, 'is-key'))
+        ]);
+        add(b, el('div', { class: 'lo-split' }, [left, right]));
+        return 3;
+      } },
+      { title: 'Los operadores, en el orden en que actúan', build: function (b) {
+        var cols = el('div', { class: 'lo-ops' }, [
+          F(1, el('div', { class: 'lo-op' }, [
+            el('div', { class: 'lo-op-head' }, [el('span', { class: 'lo-c-num', text: '1' }), 'Selección']),
+            el('ul', { class: 'lo-op-list' }, [
+              el('li', { html: '<b>Ruleta</b> tajada proporcional a la aptitud' }),
+              el('li', { html: '<b>Torneo</b> k al azar, gana el mejor' }),
+              el('li', { html: '<b>Elitismo</b> el mejor pasa intacto' })
+            ])
+          ])),
+          F(1, el('span', { class: 'lo-op-arrow', text: '→' })),
+          F(2, el('div', { class: 'lo-op is-key' }, [
+            el('div', { class: 'lo-op-head' }, [el('span', { class: 'lo-c-num', text: '2' }), 'Cruce']),
+            el('div', { class: 'lo-op-tags' }, [pill('un punto'), pill('dos puntos'), pill('OX', 'is-m')]),
+            oxDiagram(),
+            el('p', { class: 'lo-c-line', html: 'OX: segmento de un padre y <b>el orden del otro</b>. Siempre es un tour válido.' })
+          ])),
+          F(3, el('span', { class: 'lo-op-arrow', text: '→' })),
+          F(3, el('div', { class: 'lo-op' }, [
+            el('div', { class: 'lo-op-head' }, [el('span', { class: 'lo-c-num', text: '3' }), 'Mutación']),
+            el('div', { class: 'lo-mut' }, [genes(MUT_BEFORE, function (i) { return i === 1 || i === 2 ? 'is-mut' : ''; }, 'is-sm'), el('span', { class: 'lo-to is-down', text: '↓' }), genes(MUT_AFTER, function (i) { return i === 1 || i === 2 ? 'is-mut' : ''; }, 'is-sm')]),
+            el('p', { class: 'lo-c-line', html: 'Un cambio pequeño al azar. <b>Mantiene la diversidad.</b>' })
+          ]))
+        ]);
+        var params = F(4, el('div', { class: 'lo-params' }, [
+          el('div', { class: 'lo-param' }, [el('b', { text: 'N' }), el('span', { text: 'tamaño de la población' })]),
+          el('div', { class: 'lo-param' }, [el('b', { text: 'pc' }), el('span', { text: '0.6 a 0.9' })]),
+          el('div', { class: 'lo-param' }, [el('b', { text: 'pm' }), el('span', { text: '0.01 a 0.1' })]),
+          el('div', { class: 'lo-param' }, [el('b', { text: 'G' }), el('span', { text: 'generaciones' })]),
+          el('div', { class: 'lo-param is-warn' }, [el('b', { text: 'Convergencia prematura' }), el('span', { text: 'si todos se parecen, se estanca' })])
+        ]));
+        add(b, [cols, params]);
+        return 4;
+      } },
+      { title: 'Implementación en Python', build: function (b) {
+        add(b, [
+          code([
+            "def algoritmo_genetico(P, G=1, pc=0.9, pm=0.1):",
+            "    for _ in range(G):  # G generaciones",
+            "        Q = []",
+            "        while len(Q) < len(P):",
+            "            p1, p2 = ruleta(P), ruleta(P)  # selección",
+            "            if random.random() < pc:  # cruce OX",
+            "                a, b = sorted(random.sample(range(len(p1)), 2))",
+            "                h1 = cruce_ox(p1, p2, a, b)",
+            "                h2 = cruce_ox(p2, p1, a, b)",
+            "            else:",
+            "                h1, h2 = p1[:], p2[:]  # si no, copias",
+            "            Q += [mutar(h1, pm), mutar(h2, pm)]  # mutación",
+            "        peor = max(range(len(Q)), key=lambda i: costo(Q[i]))",
+            "        Q[peor] = min(P, key=costo)[:]  # elitismo",
+            "        P = Q",
+            "    return min(P, key=costo)"
+          ], { file: 'algoritmos.py', uses: 'usa ruleta(), cruce_ox(), mutar() y costo()', lang: 'py', size: 24, side: true, key: [5, 6, 8, 9, 12, 14], marks: { 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 12: 1, 13: 2, 14: 2 } }),
+          notes([[1, '5–12', '<b>Selección, cruce OX y mutación</b>, en ese orden.'], [2, '14', '<b>Elitismo:</b> el mejor padre reemplaza al peor hijo.']])
+        ]);
+        return 2;
+      } },
+      { title: 'Idea fundamental', build: function (b) {
+        var svg = sv('svg', { class: 'lo-ring', viewBox: '0 0 600 560', role: 'img', 'aria-label': 'Ciclo de una generación' });
+        var names = ['Población', 'Aptitud', 'Selección', 'Cruce', 'Mutación', 'Elitismo'];
+        var cx = 300, cy = 280, R = 210;
+        var pts = names.map(function (n, i) { var a = -Math.PI / 2 + i * 2 * Math.PI / names.length; return [cx + R * Math.cos(a), cy + R * Math.sin(a)]; });
+        svg.appendChild(sv('circle', { class: 'lo-ring-path', cx: cx, cy: cy, r: R }));
+        pts.forEach(function (p, i) {
+          var g = sv('g', { class: 'lo-ring-node' + (i === 3 ? ' is-key' : '') }, [sv('rect', { x: p[0] - 92, y: p[1] - 32, width: 184, height: 64, rx: 32 }), sv('text', { x: p[0], y: p[1] + 1, text: names[i] })]);
+          svg.appendChild(g);
+        });
+        svg.appendChild(sv('text', { class: 'lo-ring-c', x: cx, y: cy - 10, text: 'Nueva generación' }));
+        svg.appendChild(sv('text', { class: 'lo-ring-s', x: cx, y: cy + 26, text: 'se repite G veces' }));
+        add(b, el('div', { class: 'lo-idea' }, [
+          el('div', { class: 'lo-idea-main' }, [
+            el('p', { class: 'lo-idea-quote', text: 'Una población que evoluciona: los más aptos se reproducen y el mejor nunca se pierde.' })
+          ]),
+          el('div', { class: 'lo-idea-vis is-ring' }, svg)
+        ]));
+        add(b, F(1, handoff('Ahora, una generación completa con Andrés')));
+        return 1;
+      } }
+    ]
+  };
+
+  /* =====================================================================
+     D. COLONIA DE HORMIGAS
+     ===================================================================== */
+  function formulaP() {
+    return el('div', { class: 'lo-fx', html:
+      '<span>p<sub>ij</sub> =</span><span class="lo-frac"><span><span class="is-tau">τ<span class="lo-ss"><sup>α</sup><sub>ij</sub></span></span> · <span class="is-eta">η<span class="lo-ss"><sup>β</sup><sub>ij</sub></span></span></span>' +
+      '<span>∑<sub>l ∈ N<sub>i</sub></sub> τ<span class="lo-ss"><sup>α</sup><sub>il</sub></span> · η<span class="lo-ss"><sup>β</sup><sub>il</sub></span></span></span>' });
+  }
+  function formulaU() {
+    return el('div', { class: 'lo-fx', html:
+      '<span><span class="is-tau">τ<sub>ij</sub></span> ← (1 − ρ) τ<sub>ij</sub> + ∑<sub>k</sub> Δτ<span class="lo-ss"><sup>k</sup><sub>ij</sub></span></span>' });
+  }
+  function formulaQ() {
+    return el('div', { class: 'lo-fx is-sm', html: '<span>Δτ<span class="lo-ss"><sup>k</sup><sub>ij</sub></span> = </span><span class="lo-frac"><span>Q</span><span>L<sub>k</sub></span></span><span class="lo-fx-note">si la hormiga k usó (i, j)</span>' });
+  }
+  function edgeCallout(svg, withEta) {
+    var a = NODES[0], b = NODES[1];
+    svg.appendChild(sv('text', { class: 'lo-gl is-tau', x: (a[0] + b[0]) / 2 - 40, y: (a[1] + b[1]) / 2 - 8, text: 'τ' }));
+    if (withEta) svg.appendChild(sv('text', { class: 'lo-gl is-eta', x: (a[0] + b[0]) / 2 + 2, y: (a[1] + b[1]) / 2 + 30, text: 'η' }));
+  }
+
+  /* El algoritmo ACO vive en su carpeta temática. */
+
+  /* =====================================================================
+     Controlador
+     ===================================================================== */
+  var ALGOS = [GENETIC];
+  var st = { algo: 0, slide: 0, frag: 0 };
+  try { var saved = parseInt(localStorage.getItem('lo-algo'), 10); if (saved >= 0 && saved < ALGOS.length) st.algo = saved; } catch (e) {}
+
+  var $tabs = root.querySelector('.lo-tabs');
+  var $frame = root.querySelector('.lo-frame');
+  var $deck = root.querySelector('.lo-deck');
+  var $view = root.querySelector('.lo-viewport');
+  var $count = root.querySelector('[data-lo="count"]');
+  var $prev = root.querySelector('[data-lo="prev"]');
+  var $next = root.querySelector('[data-lo="next"]');
+  var $live = root.querySelector('[data-lo="live"]');
+  var $full = root.querySelector('[data-lo="full"]');
+  var slides = [], nfrag = [];
+
+  $tabs.setAttribute('role', 'tablist');
+  var tabBtns = ALGOS.map(function (a, i) {
+    var b = el('button', { type: 'button', class: 'lo-tab', 'data-algo': a.key, id: 'lo-tab-' + a.key }, [el('span', { class: 'lo-tab-letter', text: a.letter }), el('span', { class: 'lo-tab-name', text: a.name })]);
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-controls', 'lo-deck');
+    b.addEventListener('click', function () { selectAlgo(i); });
+    b.addEventListener('keydown', function (e) {
+      var k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!k) return;
+      e.preventDefault(); e.stopPropagation();
+      var n = (i + k + ALGOS.length) % ALGOS.length; selectAlgo(n); tabBtns[n].focus();
+    });
+    $tabs.appendChild(b);
+    return b;
+  });
+  $deck.setAttribute('role', 'tabpanel');
+  $deck.id = 'lo-deck';
+
+  function buildDeck() {
+    var algo = ALGOS[st.algo];
+    root.setAttribute('data-algo', algo.key);
+    clear($deck); slides = []; nfrag = [];
+    algo.slides.forEach(function (s, i) {
+      var body = el('div', { class: 'lo-s-body' });
+      var foot = el('footer', { class: 'lo-s-foot' }, [
+        el('span', { class: 'lo-s-owner', text: 'Angie Loango' }),
+        el('ol', { class: 'lo-s-prog' }, CHAPTERS.map(function (c, j) { return el('li', { class: j === i ? 'is-now' : j < i ? 'is-past' : '', text: c }); }))
+      ]);
+      var slide = el('section', { class: 'lo-slide', 'data-algo': algo.key, 'aria-roledescription': 'diapositiva', 'aria-label': algo.name + ': ' + CHAPTERS[i] }, [
+        el('header', { class: 'lo-s-head' }, [
+          el('p', { class: 'lo-s-kicker' }, [el('span', { class: 'lo-s-letter', text: algo.letter }), algo.name, el('span', { class: 'lo-s-chap', text: CHAPTERS[i] })]),
+          el('h3', { class: 'lo-s-title', text: s.title })
+        ]),
+        body, foot
+      ]);
+      nfrag.push(s.build(body));
+      slides.push(slide);
+      $deck.appendChild(slide);
+    });
+    tabBtns.forEach(function (b, i) { b.setAttribute('aria-selected', String(i === st.algo)); b.tabIndex = i === st.algo ? 0 : -1; });
+    $deck.setAttribute('aria-labelledby', 'lo-tab-' + algo.key);
+    render();
+  }
+
+  function render() {
+    slides.forEach(function (s, i) {
+      var on = i === st.slide;
+      s.classList.toggle('is-current', on);
+      s.setAttribute('aria-hidden', String(!on));
+      if (!on) return;
+      Array.prototype.forEach.call(s.querySelectorAll('[data-f]'), function (n) {
+        var f = +n.getAttribute('data-f');
+        n.classList.toggle('is-in', f <= st.frag);
+      });
+      Array.prototype.forEach.call(s.querySelectorAll('[data-on]'), function (n) {
+        n.classList.toggle('is-on', +n.getAttribute('data-on') <= st.frag);
+      });
+      s.classList.toggle('has-focus', st.frag > 0);
+    });
+    var total = nfrag[st.slide];
+    $count.innerHTML = '<b>' + (st.slide + 1) + '</b> / ' + slides.length + (total ? '<span class="lo-count-f">' + dots(total) + '</span>' : '');
+    $prev.disabled = st.slide === 0 && st.frag === 0;
+    $next.disabled = st.slide === slides.length - 1 && st.frag >= total;
+    $live.textContent = ALGOS[st.algo].name + '. ' + CHAPTERS[st.slide] + '.';
+  }
+  function dots(total) {
+    var s = '';
+    for (var i = 1; i <= total; i++) s += '<i class="' + (i <= st.frag ? 'is-on' : '') + '"></i>';
+    return s;
+  }
+  function go(d) {
+    if (d > 0) {
+      if (st.frag < nfrag[st.slide]) st.frag++;
+      else if (st.slide < slides.length - 1) { st.slide++; st.frag = 0; }
+    } else {
+      if (st.frag > 0) st.frag--;
+      else if (st.slide > 0) { st.slide--; st.frag = nfrag[st.slide]; }
+    }
+    render();
+  }
+  function selectAlgo(i) {
+    if (!ALGOS[i]) return;
+    st.algo = i; st.slide = 0; st.frag = 0;
+    try { localStorage.setItem('lo-algo', i); } catch (e) {}
+    buildDeck();
+  }
+  function restart() { st.slide = 0; st.frag = 0; render(); }
+
+  $prev.addEventListener('click', function () { go(-1); });
+  $next.addEventListener('click', function () { go(1); });
+
+  /* ---------------- Escala del lienzo 16:9 ---------------- */
+  function isFull() { return document.fullscreenElement === root; }
+  function fit() {
+    var bar = root.querySelector('.lo-bar'), head = root.querySelector('.lo-head');
+    var availW = $view.clientWidth;
+    var availH = isFull()
+      ? window.innerHeight - bar.offsetHeight - 36
+      : window.innerHeight - bar.offsetHeight - (head ? head.offsetHeight : 0) - 100;
+    var s = Math.max(0.2, Math.min(availW / W, availH / H));
+    $frame.style.width = (W * s) + 'px';
+    $frame.style.height = (H * s) + 'px';
+    $deck.style.transform = 'scale(' + s + ')';
+    if (head) head.hidden = isFull();
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------------- Cronómetro de 4 minutos ---------------- */
+  var TOTAL = 240, left = TOTAL, timerId = null;
+  var $timer = root.querySelector('.lo-timer'), $tt = root.querySelector('[data-lo="timer-text"]'), $tToggle = root.querySelector('[data-lo="timer-toggle"]'), $tReset = root.querySelector('[data-lo="timer-reset"]');
+  function drawTimer() {
+    var neg = left < 0, s = Math.abs(left);
+    $tt.textContent = (neg ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    $timer.classList.toggle('is-warn', left <= 30 && left >= 0);
+    $timer.classList.toggle('is-over', left < 0);
+  }
+  function toggleTimer() {
+    if (timerId) { clearInterval(timerId); timerId = null; $tToggle.textContent = 'Seguir'; }
+    else { timerId = setInterval(function () { left--; drawTimer(); }, 1000); $tToggle.textContent = 'Pausa'; }
+  }
+  function resetTimer() { clearInterval(timerId); timerId = null; left = TOTAL; $tToggle.textContent = 'Iniciar'; drawTimer(); }
+  $tToggle.addEventListener('click', toggleTimer);
+  $tReset.addEventListener('click', resetTimer);
+
+  /* ---------------- Pantalla completa ---------------- */
+  function toggleFull() {
+    if (isFull()) { if (document.exitFullscreen) document.exitFullscreen(); }
+    else if (root.requestFullscreen) root.requestFullscreen().catch(function () {});
+  }
+  if (!root.requestFullscreen) $full.hidden = true;
+  $full.addEventListener('click', toggleFull);
+  document.addEventListener('fullscreenchange', function () {
+    root.classList.toggle('is-present', isFull());
+    $full.setAttribute('aria-pressed', String(isFull()));
+    $full.textContent = isFull() ? 'Salir' : 'Pantalla completa';
+    fit();
+  });
+
+  /* ---------------- Teclado ---------------- */
+  // Solo cuando la sección está en pantalla o tiene el foco. Se escucha en
+  // gestionar atajos propios de esta presentación.
+  function active() {
+    if (isFull()) return true;
+    if (root.contains(document.activeElement) && document.activeElement !== document.body) return true;
+    var r = root.getBoundingClientRect(), mid = window.innerHeight / 2;
+    return r.top <= mid && r.bottom >= mid;
+  }
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || !active()) return;
+    var t = e.target;
+    if (t && t.matches && t.matches('input, textarea, select, [contenteditable]')) return;
+    var ok = true;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ': go(1); break;
+      case 'ArrowLeft': case 'PageUp': go(-1); break;
+      case '1': case '2': case '3': case '4': selectAlgo(+e.key - 1); break;
+      case 'Home': restart(); break;
+      case 't': case 'T': toggleTimer(); break;
+      case 'f': case 'F': toggleFull(); break;
+      default: ok = false;
+    }
+    if (ok) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  drawTimer();
+  buildDeck();
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+})();
+
+</script>
+<script src="../../visor-bridge.js"></script>
+</body>
+</html>

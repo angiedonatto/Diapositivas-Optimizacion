@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angie Donato · Algoritmo Genético</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
+ <div class="actions">
+  <a href="../../carolina/algoritmo-genetico/index.html">Análisis crítico · Carolina</a>
+  <a href="../../angie-loango/algoritmo-genetico/index.html">Componentes · Angie Loango</a>
+  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
+  <button id="fullBtn" type="button">Pantalla completa (F)</button>
+ </div>
+</header>
+<nav class="methods" aria-label="Escoger algoritmo">
+ 
+ 
+ <button data-method="ga" aria-selected="false"><b>C</b> Algoritmo Genético</button>
+ 
+</nav>
+<main class="stage-wrap">
+ <section class="stage" id="stage" aria-live="polite">
+  <article class="slide">
+   <div class="slide-meta"><span class="pill" id="category"><span class="dot"></span> Apertura</span><span id="eyebrow">ANGIE DONATO · 3 MINUTOS</span></div>
+   <h1 class="title" id="title"></h1>
+   <p class="lead" id="lead"></p>
+   <div class="slide-body">
+    <div class="bigidea"><span class="mini" id="mini"></span><div class="quote" id="quote"></div><div class="path" id="path"></div></div>
+    <div class="detail" id="facts"></div>
+   </div>
+   <div class="bottom"><span>Optimización · Ciencia de Datos · Guion del equipo</span><span class="handoff" id="handoff"></span><span class="progress" id="progress"></span></div>
+  </article>
+ </section>
+</main>
+<div class="controlbar">
+ <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
+ <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
+</div>
+<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
+<script>
+(function () {
+ 'use strict';
+ var all={
+ ga:{name:'Algoritmo Genético',accent:'#2c7a3f',soft:'#e4f2e7',slides:[
+ {title:'¿Y si buscamos con muchas soluciones a la vez?',lead:'Algunos problemas tienen tantas combinaciones que conviene explorar varias alternativas, no una sola trayectoria.',mini:'El problema de exploración',quote:'La idea no es mejorar un único recorrido, sino hacer evolucionar varias posibilidades.',path:['Población','Generación','Nueva población'],facts:[['Exacto','Un método exacto busca garantías de optimalidad, normalmente con un costo computacional mayor en problemas difíciles.'],['Heurística','Encuentra soluciones útiles sin prometer el óptimo global.'],['Metaheurística','Coordina estrategias generales para explorar soluciones y evitar el estancamiento.']],notes:'Buenos días. Nos tocó Algoritmo Genético. En problemas combinatorios como el agente viajero, probar todas las soluciones puede ser inviable. Una heurística busca respuestas útiles sin garantizar el óptimo. Un algoritmo genético va más allá de mejorar una única solución: mantiene varias al mismo tiempo y las va cambiando. Por eso es una metaheurística de tipo poblacional.'},
+ {title:'John Holland llevó la evolución a la computación',lead:'En la década de 1970 formalizó los algoritmos genéticos, inspirados en la evolución natural.',mini:'Origen e inspiración',quote:'Las soluciones mejor adaptadas tienden a dejar descendencia; aparecen combinaciones y mutaciones.',path:['Padres','Cruce','Hijos'],facts:[['Pionero','John Holland, trabajos de los años setenta y libro de 1975.'],['Inspiración','La evolución natural: selección, herencia y mutación.'],['Analogía','Cada solución es un individuo; su calidad determina su aptitud.']],notes:'El algoritmo genético fue desarrollado por John Holland en los años setenta, y su libro de 1975 ayudó a formalizarlo. Se inspira en la evolución: los individuos mejor adaptados tienen más posibilidades de reproducirse, los hijos heredan características de los padres y ocasionalmente aparecen mutaciones. En optimización, cada individuo representa una posible solución del problema y una función de aptitud mide qué tan buena es.'},
+ {title:'No sigue una ruta: hace evolucionar una población',lead:'En cada generación se seleccionan padres, se combinan y se introducen pequeños cambios para mantener diversidad.',mini:'Dónde encaja',quote:'La exploración ocurre en varias zonas del espacio de soluciones a la vez.',path:['Seleccionar','Cruzar y mutar','Evaluar'],facts:[['Población','Varias soluciones candidatas, en lugar de una sola.'],['Operadores','Selección, cruce y mutación crean nuevas soluciones.'],['Riesgo','La convergencia prematura ocurre si la población pierde diversidad muy pronto.']],handoff:'Continúa Angie Loango: genes y operadores',notes:'Aquí está la diferencia frente a Búsqueda Local y Tabú: aquellas tienen una solución actual; el Genético mantiene una población. Primero evalúa la aptitud de los individuos, luego selecciona candidatos a ser padres, los cruza para crear hijos y puede mutar algunos rasgos. Repite el proceso a lo largo de generaciones. La mutación ayuda a no quedarse con individuos demasiado parecidos. Angie Loango explicará qué son cromosomas, genes y alelos, además de los operadores de selección y cruce.'}
+ ]}
+ };
+ var method='ga',i=0;
+ var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
+ function render(){
+  var group=all[method],s=group.slides[i];document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
+  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
+  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
+  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='fact';var number=document.createElement('div');number.className='number';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];var p=document.createElement('p');p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
+  nodes.handoff.textContent=s.handoff||'';nodes.progress.replaceChildren();group.slides.forEach(function(_,n){var v=document.createElement('i');if(n<=i)v.className='on';nodes.progress.appendChild(v)});
+  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
+  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
+  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
+ }
+ function choose(m){if(!all[m])return;method=m;i=0;render()}
+ function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
+ function prev(){if(i>0){i--;render()}}
+ document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
+ document.getElementById('nextBtn').addEventListener('click',next);
+ document.getElementById('prevBtn').addEventListener('click',prev);
+ document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
+ document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
+ document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
+  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
+  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
+  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
+ });
+ var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash){method=hash[1];i=Number(hash[2])-1}
+ render();
+})();
+</script>
+<script src="../../visor-bridge.js"></script>
+</body>
+</html>
