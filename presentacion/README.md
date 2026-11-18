@@ -14,7 +14,7 @@ Cada integrante tiene una carpeta por tema bajo `presentacion/<integrante>/<tema
 
 - **Angie Donato** mantiene el guion y las notas de ensayo en los HTML de cada tema. Cada objeto de `slides` contiene el texto, la ruta y los datos de su diapositiva.
 - **Angie Loango** mantiene los cuatro capítulos, diagramas, apariciones, pseudocódigo y ejemplos en su sección. Los HTML de los temas usan sus controles en la vista individual y el visor coordina la navegación al proyectarlos.
-- **Andrés** tiene una diapositiva provisional por tema. Puede añadir más elementos `<article class="lo-slide">` dentro de `.slide-canvas`, con título, `.lo-s-body`, pie y `.section-progress`. Si habilita la vista individual con varias diapositivas, puede reutilizar los botones `data-section-prev` y `data-section-next` de Carolina. Las tarjetas `.lo-c`, las tablas HTML y `.formula` admiten matrices, operaciones y resultados.
+- **Andrés** resuelve en cada tema el agente viajero de cinco ciudades, un paso por diapositiva. Sus piezas propias (grafo, tablas de vecinos, lista tabú, ruleta, cruce OX y feromona) están en `andres/estilos.css` y `andres/ejemplo.js`.
 - **Carolina** usa el contenido del [material original](carolina/index.html#expo). El visor muestra primero la matriz y los resultados del ejemplo, luego el análisis del tema en su orden original, y por último la comparación general. La pantalla de cierre enlaza al material completo y a sus preguntas frecuentes. Edita `carolina/index.html` para actualizar la fuente original.
 
 Los HTML completos de respaldo de Angie Donato, Angie Loango y Carolina siguen en la raíz de sus carpetas personales.
@@ -34,6 +34,7 @@ Mantén los elementos académicos dentro de `.lo-s-body` y reserva el pie para l
 
 ```bash
 python3 -B presentacion/angie-loango/pruebas_algoritmos.py
+python3 -B presentacion/andres/pruebas_ejemplo.py
 ```
 
 El sitio se puede servir directamente desde un alojamiento estático como Vercel.

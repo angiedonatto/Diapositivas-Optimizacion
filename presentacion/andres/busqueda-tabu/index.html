@@ -5,29 +5,231 @@
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <title>Andrés · Búsqueda Tabú</title>
  <link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../../shared/slides.css">
+ <link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../estilos.css">
 </head>
 <body>
 <main class="section-deck">
  <div class="slide-viewport">
   <div class="slide-canvas slide-theme" data-algo="tabu">
+
+   <!-- B1 · Problema y punto de partida -->
    <article class="lo-slide is-current">
     <header>
      <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú<span class="lo-s-chap">Ejemplo en vivo</span></p>
-     <h1 class="lo-s-title">El agente viajero</h1>
+     <h1 class="lo-s-title">Mismo problema, ahora con memoria</h1>
     </header>
     <div class="lo-s-body">
-     <section class="lo-c is-key">
-      <h2 class="lo-c-name">Problema de cinco ciudades</h2>
-      <p class="lo-c-line">Ejemplo numérico pendiente de incorporar.</p>
-     </section>
+     <p class="slide-lead">Swap · tenencia 2 · se elige el mejor vecino permitido, aunque empeore.</p>
+     <div class="an-state" data-check="estado" data-iter="0">
+      <div class="an-box"><span class="an-box-name">Lista tabú</span><span class="an-tabu"><span class="is-empty"></span><span class="is-empty"></span></span></div>
+      <div class="an-box"><span class="an-box-name">Actual</span><span class="an-box-val" data-role="actual">37</span></div>
+      <div class="an-box is-best"><span class="an-box-name">Mejor x*</span><span class="an-box-val" data-role="best">37</span></div>
+     </div>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCDE"></svg><figcaption data-tour="ABCDE" data-cost="37">Inicial: A-B-C-D-E-A · <b>37</b></figcaption></figure>
+      <div class="an-col">
+       <table class="an-matrix" data-check="matriz" aria-label="Matriz de distancias">
+        <thead><tr><th>d(i,j)</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+        <tbody>
+         <tr><th>A</th><td class="is-diag">–</td><td>6</td><td>4</td><td>2</td><td>10</td></tr>
+         <tr><th>B</th><td>6</td><td class="is-diag">–</td><td>7</td><td>6</td><td>6</td></tr>
+         <tr><th>C</th><td>4</td><td>7</td><td class="is-diag">–</td><td>9</td><td>2</td></tr>
+         <tr><th>D</th><td>2</td><td>6</td><td>9</td><td class="is-diag">–</td><td>5</td></tr>
+         <tr><th>E</th><td>10</td><td>6</td><td>2</td><td>5</td><td class="is-diag">–</td></tr>
+        </tbody>
+       </table>
+       <div class="an-row">
+        <span class="lo-pill is-m">Tabú: el par intercambiado</span>
+        <span class="lo-pill">Aspiración: si mejora x*</span>
+       </div>
+      </div>
+     </div>
     </div>
     <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
    </article>
+
+   <!-- B2 · Iteración 1 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Iteración 1: desde 37</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">La lista está vacía: todos los vecinos están permitidos y gana D↔E con 22.</p>
+     <div class="an-state" data-check="estado" data-iter="1">
+      <div class="an-box"><span class="an-box-name">Lista tabú</span><span class="an-tabu"><span class="is-new">D↔E</span><span class="is-empty"></span></span></div>
+      <div class="an-box"><span class="an-box-name">Actual</span><span class="an-box-val" data-role="actual">22</span></div>
+      <div class="an-box is-best"><span class="an-box-name">Mejor x*</span><span class="an-box-val" data-role="best">22</span></div>
+     </div>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCED"></svg><figcaption data-tour="ABCED" data-cost="22">Nueva actual: A-B-C-E-D-A · <b>22</b></figcaption></figure>
+      <table class="an-table an-seq" data-check="tabu" data-from="ABCDE" data-tabu="" data-best="37">
+       <thead><tr><th>Swap</th><th>Vecino</th><th class="is-num">Costo</th><th>Estado</th></tr></thead>
+       <tbody>
+        <tr><td>B↔C</td><td>A-C-B-D-E-A</td><td class="is-num">32</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>B↔D</td><td>A-D-C-B-E-A</td><td class="is-num">34</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>B↔E</td><td>A-E-C-D-B-A</td><td class="is-num">33</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>C↔D</td><td>A-B-D-C-E-A</td><td class="is-num">33</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>C↔E</td><td>A-B-E-D-C-A</td><td class="is-num">30</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr class="is-pick"><td>D↔E</td><td>A-B-C-E-D-A</td><td class="is-num">22</td><td><span class="an-tag is-pick">elegido</span></td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- B3 · Iteración 2 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Iteración 2: aceptar un paso peor</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Una búsqueda local simple se detendría aquí; Tabú toma C↔D con 23, peor que 22.</p>
+     <div class="an-state" data-check="estado" data-iter="2">
+      <div class="an-box"><span class="an-box-name">Lista tabú</span><span class="an-tabu"><span>D↔E</span><span class="is-new">C↔D</span></span></div>
+      <div class="an-box"><span class="an-box-name">Actual</span><span class="an-box-val" data-role="actual">23</span></div>
+      <div class="an-box is-best"><span class="an-box-name">Mejor x*</span><span class="an-box-val" data-role="best">22</span></div>
+     </div>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABDEC"></svg><figcaption data-tour="ABDEC" data-cost="23">Nueva actual: A-B-D-E-C-A · <b>23</b></figcaption></figure>
+      <table class="an-table an-seq" data-check="tabu" data-from="ABCED" data-tabu="DE" data-best="22">
+       <thead><tr><th>Swap</th><th>Vecino</th><th class="is-num">Costo</th><th>Estado</th></tr></thead>
+       <tbody>
+        <tr><td>B↔C</td><td>A-C-B-E-D-A</td><td class="is-num">24</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>B↔E</td><td>A-E-C-B-D-A</td><td class="is-num">27</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>B↔D</td><td>A-D-C-E-B-A</td><td class="is-num">25</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>C↔E</td><td>A-B-E-C-D-A</td><td class="is-num">25</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr class="is-pick"><td>C↔D</td><td>A-B-D-E-C-A</td><td class="is-num">23</td><td><span class="an-tag is-pick">elegido (empeora)</span></td></tr>
+        <tr class="is-tabu"><td>D↔E</td><td>A-B-C-D-E-A</td><td class="is-num">37</td><td><span class="an-tag is-tabu">TABÚ</span></td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- B4 · Iteración 3 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Iteración 3: llega a 20</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">C↔D y D↔E están prohibidos; B↔D da 20 y D↔E sale de la lista.</p>
+     <div class="an-state" data-check="estado" data-iter="3">
+      <div class="an-box"><span class="an-box-name">Lista tabú</span><span class="an-tabu"><span class="is-out">D↔E</span><span>C↔D</span><span class="is-new">B↔D</span></span></div>
+      <div class="an-box"><span class="an-box-name">Actual</span><span class="an-box-val" data-role="actual">20</span></div>
+      <div class="an-box is-best"><span class="an-box-name">Mejor x*</span><span class="an-box-val" data-role="best">20</span></div>
+     </div>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ADBEC"></svg><figcaption class="an-formula" data-tour="ADBEC">2 + 6 + 6 + 2 + 4 = <b>20</b></figcaption></figure>
+      <table class="an-table an-seq" data-check="tabu" data-from="ABDEC" data-tabu="DE,CD" data-best="22">
+       <thead><tr><th>Swap</th><th>Vecino</th><th class="is-num">Costo</th><th>Estado</th></tr></thead>
+       <tbody>
+        <tr class="is-pick"><td>B↔D</td><td>A-D-B-E-C-A</td><td class="is-num">20</td><td><span class="an-tag is-pick">elegido → nuevo x*</span></td></tr>
+        <tr><td>B↔E</td><td>A-E-D-B-C-A</td><td class="is-num">32</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>B↔C</td><td>A-C-D-E-B-A</td><td class="is-num">30</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr class="is-tabu"><td>D↔E</td><td>A-B-E-D-C-A</td><td class="is-num">30</td><td><span class="an-tag is-tabu">TABÚ</span></td></tr>
+        <tr class="is-tabu"><td>C↔D</td><td>A-B-C-E-D-A</td><td class="is-num">22</td><td><span class="an-tag is-tabu">TABÚ</span></td></tr>
+        <tr><td>C↔E</td><td>A-B-D-C-E-A</td><td class="is-num">33</td><td><span class="an-tag">permitido</span></td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- B5 · Aspiración -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Aspiración: cuándo se levanta un tabú</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">En la iteración 3, C↔D devolvería a 22, que no es menor que x* = 22.</p>
+     <div class="an-state">
+      <div class="an-box"><span class="an-box-name">Lista tabú</span><span class="an-tabu"><span>D↔E</span><span>C↔D</span></span></div>
+      <div class="an-box"><span class="an-box-name">Actual</span><span class="an-box-val">23</span></div>
+      <div class="an-box is-best"><span class="an-box-name">Mejor x*</span><span class="an-box-val">22</span></div>
+     </div>
+     <div class="slide-columns">
+      <section class="lo-c is-key">
+       <h2 class="lo-c-name">La regla</h2>
+       <p class="formula">costo(vecino) &lt; x*</p>
+       <p class="lo-c-line">Si se cumple, el movimiento tabú se permite.</p>
+      </section>
+      <table class="an-table an-seq" data-check="aspiracion" data-from="ABDEC" data-tabu="DE,CD" data-best="22">
+       <thead><tr><th>Swap tabú</th><th class="is-num">Costo</th><th>¿Costo &lt; 22?</th><th>Resultado</th></tr></thead>
+       <tbody>
+        <tr><td>D↔E</td><td class="is-num">30</td><td>no</td><td><span class="an-tag is-tabu">sigue TABÚ</span></td></tr>
+        <tr class="is-best"><td>C↔D</td><td class="is-num">22</td><td>no</td><td><span class="an-tag is-tabu">sigue TABÚ</span></td></tr>
+       </tbody>
+      </table>
+     </div>
+     <p class="an-msg an-in" style="--d:2.2">Sin la lista, la búsqueda volvería a 22 y daría vueltas.</p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- B6 · Resumen -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Resumen: 37 → 22 → 23 → 20</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Empeoró una vez y llegó a 20, el óptimo verificado con los 12 tours.</p>
+     <div class="an-split is-even">
+      <figure class="an-fig"><svg class="an-chart" data-check="historial" data-actual="37,22,23,20" data-best="37,22,22,20" role="img" aria-label="Costo actual 37, 22, 23 y 20; mejor encontrada 37, 22, 22 y 20"></svg></figure>
+      <div class="an-col">
+       <div class="slide-route"><span>37</span><span>22</span><span>23</span><span>20</span></div>
+       <p class="an-msg is-good an-in" style="--d:2.5">La actual puede empeorar; x* nunca empeora.</p>
+       <figure class="an-fig an-in" style="--d:3"><figcaption data-tour="ADBEC" data-cost="20">Mejor encontrada: A-D-B-E-C-A · <b>20</b></figcaption></figure>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- B7 · Iteración 4 (opcional) -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Iteración 4: sigue después del óptimo</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">La actual sube a 24, pero x* conserva el 20.</p>
+     <div class="an-state" data-check="estado" data-iter="4">
+      <div class="an-box"><span class="an-box-name">Lista tabú</span><span class="an-tabu"><span class="is-out">C↔D</span><span>B↔D</span><span class="is-new">B↔E</span></span></div>
+      <div class="an-box"><span class="an-box-name">Actual</span><span class="an-box-val" data-role="actual">24</span></div>
+      <div class="an-box is-best"><span class="an-box-name">Mejor x*</span><span class="an-box-val" data-role="best">20</span></div>
+     </div>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ADEBC"></svg><figcaption data-tour="ADEBC" data-cost="24">Nueva actual: A-D-E-B-C-A · <b>24</b></figcaption></figure>
+      <table class="an-table an-seq" data-check="tabu" data-from="ADBEC" data-tabu="CD,BD" data-best="20">
+       <thead><tr><th>Swap</th><th>Vecino</th><th class="is-num">Costo</th><th>Estado</th></tr></thead>
+       <tbody>
+        <tr class="is-tabu"><td>B↔D</td><td>A-B-D-E-C-A</td><td class="is-num">23</td><td><span class="an-tag is-tabu">TABÚ</span></td></tr>
+        <tr><td>D↔E</td><td>A-E-B-D-C-A</td><td class="is-num">35</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr class="is-tabu"><td>C↔D</td><td>A-C-B-E-D-A</td><td class="is-num">24</td><td><span class="an-tag is-tabu">TABÚ</span></td></tr>
+        <tr class="is-pick"><td>B↔E</td><td>A-D-E-B-C-A</td><td class="is-num">24</td><td><span class="an-tag is-pick">elegido</span></td></tr>
+        <tr><td>B↔C</td><td>A-D-C-E-B-A</td><td class="is-num">25</td><td><span class="an-tag">permitido</span></td></tr>
+        <tr><td>C↔E</td><td>A-D-B-C-E-A</td><td class="is-num">27</td><td><span class="an-tag">permitido</span></td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span>Continúa Carolina: análisis crítico</span><span class="section-progress"></span></footer>
+   </article>
+
   </div>
  </div>
 </main>
+<script src="../ejemplo.js"></script>
 <script src="../../shared/canvas.js"></script>
 <script src="../../shared/section.js"></script>
 <script src="../../visor-bridge.js"></script>

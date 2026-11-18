@@ -5,29 +5,257 @@
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <title>Andrés · Búsqueda Local</title>
  <link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../../shared/slides.css">
+ <link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../estilos.css">
 </head>
 <body>
 <main class="section-deck">
  <div class="slide-viewport">
   <div class="slide-canvas slide-theme" data-algo="local">
+
+   <!-- A1 · El problema -->
    <article class="lo-slide is-current">
     <header>
      <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
-     <h1 class="lo-s-title">El agente viajero</h1>
+     <h1 class="lo-s-title">El agente viajero con cinco ciudades</h1>
     </header>
     <div class="lo-s-body">
-     <section class="lo-c is-key">
-      <h2 class="lo-c-name">Problema de cinco ciudades</h2>
-      <p class="lo-c-line">Ejemplo numérico pendiente de incorporar.</p>
-     </section>
+     <p class="slide-lead">Salimos de A, visitamos cada ciudad una vez y volvemos a A.</p>
+     <div class="an-split">
+      <figure class="an-fig"><svg class="an-graph"></svg></figure>
+      <div class="an-col">
+       <table class="an-matrix" data-check="matriz" aria-label="Matriz de distancias">
+        <thead><tr><th>d(i,j)</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+        <tbody>
+         <tr><th>A</th><td class="is-diag">–</td><td>6</td><td>4</td><td>2</td><td>10</td></tr>
+         <tr><th>B</th><td>6</td><td class="is-diag">–</td><td>7</td><td>6</td><td>6</td></tr>
+         <tr><th>C</th><td>4</td><td>7</td><td class="is-diag">–</td><td>9</td><td>2</td></tr>
+         <tr><th>D</th><td>2</td><td>6</td><td>9</td><td class="is-diag">–</td><td>5</td></tr>
+         <tr><th>E</th><td>10</td><td>6</td><td>2</td><td>5</td><td class="is-diag">–</td></tr>
+        </tbody>
+       </table>
+       <div class="an-row">
+        <span class="lo-pill is-m">Distancias simétricas</span>
+        <span class="lo-pill">12 tours distintos</span>
+        <span class="lo-pill">Minimizar la distancia total</span>
+       </div>
+      </div>
+     </div>
     </div>
     <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
    </article>
+
+   <!-- A2 · Solución inicial -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Solución inicial: A-B-C-D-E-A</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">El costo es la suma de las distancias de cada tramo.</p>
+     <div class="an-split">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCDE"></svg></figure>
+      <div class="an-col">
+       <table class="an-table an-seq" data-check="tramos" data-tour="ABCDE">
+        <thead><tr><th>Tramo</th><th class="is-num">Distancia</th></tr></thead>
+        <tbody>
+         <tr><td>A → B</td><td class="is-num">6</td></tr>
+         <tr><td>B → C</td><td class="is-num">7</td></tr>
+         <tr><td>C → D</td><td class="is-num">9</td></tr>
+         <tr><td>D → E</td><td class="is-num">5</td></tr>
+         <tr><td>E → A</td><td class="is-num">10</td></tr>
+        </tbody>
+       </table>
+       <p class="an-formula an-in" style="--d:3" data-tour="ABCDE">6 + 7 + 9 + 5 + 10 = <b>37</b></p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- A3 · El movimiento swap -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Vecindario: intercambiar dos ciudades</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Hay 6 formas de intercambiar dos de las cuatro ciudades: 6 vecinos.</p>
+     <div class="slide-columns">
+      <section class="lo-c is-key">
+       <h2 class="lo-c-name">Un swap</h2>
+       <div class="an-swap" aria-label="B y D intercambian su lugar">
+        <span class="an-g g-A">A</span><span class="an-g is-plain is-l">B</span><span class="an-g is-plain">C</span><span class="an-g is-plain is-r">D</span><span class="an-g is-plain">E</span><span class="an-g g-A">A</span>
+       </div>
+       <p class="lo-c-line an-in" style="--d:3"><b>B ↔ D:</b> A-B-C-D-E-A pasa a A-D-C-B-E-A</p>
+       <p class="lo-c-line">A queda fija al inicio y al final.</p>
+      </section>
+      <section class="lo-c">
+       <h2 class="lo-c-name">Los 6 intercambios</h2>
+       <div class="an-row">
+        <span class="lo-pill is-m an-in" style="--d:1">B ↔ C</span>
+        <span class="lo-pill is-m an-in" style="--d:1.3">B ↔ D</span>
+        <span class="lo-pill is-m an-in" style="--d:1.6">B ↔ E</span>
+        <span class="lo-pill is-m an-in" style="--d:1.9">C ↔ D</span>
+        <span class="lo-pill is-m an-in" style="--d:2.2">C ↔ E</span>
+        <span class="lo-pill is-m an-in" style="--d:2.5">D ↔ E</span>
+       </div>
+       <p class="lo-c-line an-in" style="--d:3.2">Cuatro ciudades, parejas sin orden: <b>4 · 3 / 2 = 6</b>.</p>
+      </section>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- A4 · Iteración 1 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Iteración 1: los 6 vecinos de 37</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Mejor mejora: evaluamos los 6 y tomamos el de menor costo.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCDE"></svg><figcaption data-tour="ABCDE" data-cost="37">Actual: A-B-C-D-E-A · <b>37</b></figcaption></figure>
+      <div class="an-col">
+       <table class="an-table an-seq" data-check="vecinos" data-from="ABCDE">
+        <thead><tr><th>Swap</th><th>Vecino</th><th class="is-num">Costo</th><th>¿Mejora?</th></tr></thead>
+        <tbody>
+         <tr><td>B↔C</td><td>A-C-B-D-E-A</td><td class="is-num">32</td><td>sí</td></tr>
+         <tr><td>B↔D</td><td>A-D-C-B-E-A</td><td class="is-num">34</td><td>sí</td></tr>
+         <tr><td>B↔E</td><td>A-E-C-D-B-A</td><td class="is-num">33</td><td>sí</td></tr>
+         <tr><td>C↔D</td><td>A-B-D-C-E-A</td><td class="is-num">33</td><td>sí</td></tr>
+         <tr><td>C↔E</td><td>A-B-E-D-C-A</td><td class="is-num">30</td><td>sí</td></tr>
+         <tr class="is-pick"><td>D↔E</td><td>A-B-C-E-D-A</td><td class="is-num">22</td><td>sí <span class="an-tag is-pick">el mejor</span></td></tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- A5 · Movimiento aceptado -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">22 &lt; 37: nos movemos</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">El swap D↔E deja el recorrido A-B-C-E-D-A.</p>
+     <div class="an-split">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCED"></svg></figure>
+      <div class="an-col">
+       <div class="an-row">
+        <div class="an-box"><span class="an-box-name">Antes</span><span class="an-box-val">37</span></div>
+        <span class="an-box-val" aria-hidden="true">→</span>
+        <div class="an-box is-best an-in" style="--d:1"><span class="an-box-name">Ahora</span><span class="an-box-val">22</span></div>
+       </div>
+       <p class="an-formula an-in" style="--d:2" data-tour="ABCED">6 + 7 + 2 + 5 + 2 = <b>22</b></p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- A6 · Iteración 2 -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Iteración 2: los 6 vecinos de 22</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">El mejor vecino cuesta 23, más que la solución actual.</p>
+     <div class="an-split is-narrow">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCED"></svg><figcaption data-tour="ABCED" data-cost="22">Actual: A-B-C-E-D-A · <b>22</b></figcaption></figure>
+      <div class="an-col">
+       <table class="an-table an-seq" data-check="vecinos" data-from="ABCED">
+        <thead><tr><th>Swap</th><th>Vecino</th><th class="is-num">Costo</th><th>¿Mejora?</th></tr></thead>
+        <tbody>
+         <tr><td>B↔C</td><td>A-C-B-E-D-A</td><td class="is-num">24</td><td>no</td></tr>
+         <tr><td>B↔E</td><td>A-E-C-B-D-A</td><td class="is-num">27</td><td>no</td></tr>
+         <tr><td>B↔D</td><td>A-D-C-E-B-A</td><td class="is-num">25</td><td>no</td></tr>
+         <tr><td>C↔E</td><td>A-B-E-C-D-A</td><td class="is-num">25</td><td>no</td></tr>
+         <tr class="is-best"><td>C↔D</td><td>A-B-D-E-C-A</td><td class="is-num">23</td><td>no <span class="an-tag">el mejor, 23 &gt; 22</span></td></tr>
+         <tr><td>D↔E</td><td>A-B-C-D-E-A</td><td class="is-num">37</td><td>no</td></tr>
+        </tbody>
+       </table>
+       <p class="an-msg is-stop an-in" style="--d:4.2">Ningún vecino mejora → óptimo local</p>
+      </div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- A7 · Local frente a global -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Óptimo local frente a óptimo global</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Desde 22 no se ve el 20: todo camino hacia él pasa primero por soluciones peores.</p>
+     <div class="an-split is-even">
+      <figure class="an-fig"><svg class="an-graph" data-tour="ABCED" style="max-width:420px"></svg><figcaption data-tour="ABCED" data-cost="22">Óptimo local: A-B-C-E-D-A · <b>22</b></figcaption></figure>
+      <figure class="an-fig an-in" style="--d:1.5"><svg class="an-graph" data-tour="ADBEC" style="max-width:420px"></svg><figcaption data-tour="ADBEC" data-cost="20">Óptimo global: A-D-B-E-C-A · <b>20</b></figcaption></figure>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- A8 · Variante primera mejora -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">Variante: primera mejora</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">Toma el primer vecino que mejora, en el orden de las posiciones: 37 → 32 → 27 → 22.</p>
+     <table class="an-table an-seq is-compact" data-check="primera" data-from="ABCDE">
+      <thead><tr><th>Iteración</th><th>Tour actual</th><th class="is-num">Costo</th><th>Primer swap que mejora</th><th>Nuevo tour</th><th class="is-num">Nuevo costo</th><th class="is-num">Evaluados</th></tr></thead>
+      <tbody>
+       <tr><td>1</td><td>A-B-C-D-E-A</td><td class="is-num">37</td><td>(2,3) B↔C</td><td>A-C-B-D-E-A</td><td class="is-num">32</td><td class="is-num">1</td></tr>
+       <tr><td>2</td><td>A-C-B-D-E-A</td><td class="is-num">32</td><td>(2,4) C↔D</td><td>A-D-B-C-E-A</td><td class="is-num">27</td><td class="is-num">2</td></tr>
+       <tr><td>3</td><td>A-D-B-C-E-A</td><td class="is-num">27</td><td>(3,5) B↔E</td><td>A-D-E-C-B-A</td><td class="is-num">22</td><td class="is-num">5</td></tr>
+       <tr><td>4</td><td>A-D-E-C-B-A</td><td class="is-num">22</td><td>ninguno</td><td>—</td><td class="is-num">—</td><td class="is-num">6 (parada)</td></tr>
+      </tbody>
+     </table>
+     <div class="an-row an-in" style="--d:2.4">
+      <div class="an-box"><span class="an-box-name">Mejor mejora</span><span class="an-box-val" data-check="evaluaciones-mejor">12</span><span>evaluaciones · 1 movimiento</span></div>
+      <div class="an-box is-best"><span class="an-box-name">Primera mejora</span><span class="an-box-val" data-check="evaluaciones-primera">14</span><span>evaluaciones · 3 movimientos</span></div>
+     </div>
+     <p class="an-msg an-in" style="--d:3.2">Las dos terminan en 22: A-D-E-C-B-A es A-B-C-E-D-A recorrido al revés.</p>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span class="section-progress"></span></footer>
+   </article>
+
+   <!-- A9 · Cierre -->
+   <article class="lo-slide">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local<span class="lo-s-chap">Ejemplo en vivo</span></p>
+     <h1 class="lo-s-title">¿Cómo escapar del óptimo local?</h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead">La búsqueda se detuvo en 22 y el óptimo es 20.</p>
+     <div class="slide-columns">
+      <section class="lo-c is-key an-in" style="--d:0.5">
+       <h2 class="lo-c-name"><span class="lo-c-num">1</span>Multi-start</h2>
+       <p class="lo-c-line">Repetir la búsqueda desde varias soluciones iniciales y quedarse con la mejor.</p>
+      </section>
+      <section class="lo-c is-key an-in" style="--d:1.3">
+       <h2 class="lo-c-name"><span class="lo-c-num">2</span>Una metaheurística</h2>
+       <p class="lo-c-line">Aceptar pasos peores con reglas que guían la búsqueda: <b>Tabú, Genético, Hormigas</b>.</p>
+      </section>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Andrés · Ejemplo en vivo</span><span>Continúa Carolina: análisis crítico</span><span class="section-progress"></span></footer>
+   </article>
+
   </div>
  </div>
 </main>
+<script src="../ejemplo.js"></script>
 <script src="../../shared/canvas.js"></script>
 <script src="../../shared/section.js"></script>
 <script src="../../visor-bridge.js"></script>
