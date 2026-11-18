@@ -411,41 +411,33 @@
   background: var(--lo-bg);
 }
 
-.apertura .reparto-ejemplo {
-  border-color: var(--lo-m);
+.apertura .retratos-cronologia {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px;
+  border-radius: 10px;
+  background: #f0ede5;
 }
-.apertura .reparto-demostracion {
-  display: grid;
-  grid-template-columns: 170px minmax(0, 1fr);
-  align-items: center;
-  gap: 14px;
-}
-.apertura .reparto-demostracion img {
+.apertura .retratos-cronologia span {
   display: block;
-  width: 100%;
-  height: auto;
+  width: 123px;
+  height: 123px;
+  border-radius: 7px;
+  background: #f0ede5 url('busqueda-local/retratos-cronologia.webp') no-repeat;
+  background-size: 300% auto;
 }
-.apertura .reparto-ruta {
+.apertura .retratos-cronologia .retrato-croes {
+  background-position: left center;
+}
+.apertura .retratos-cronologia .retrato-lin {
+  background-position: center center;
+}
+.apertura .retratos-cronologia .retrato-kernighan {
+  background-position: right center;
+}
+.apertura .nota-retratos {
   margin: 0;
-  font-size: 18px;
-  line-height: 1.25;
-}
-.apertura .reparto-ruta + .reparto-ruta {
-  margin-top: 6px;
-}
-.apertura .reparto-ruta span {
-  display: block;
-  font: 700 21px var(--lo-mono);
   color: var(--lo-ink-2);
-}
-.apertura .reparto-ruta mark {
-  padding: 1px 4px;
-  border-radius: 5px;
-  background: var(--lo-m-soft);
-  color: var(--lo-m);
-}
-.apertura .reparto-pregunta {
-  margin: 0;
-  font-size: 20px;
-  color: var(--lo-m);
+  font-size: 17px;
 }
