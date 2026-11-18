@@ -7,7 +7,7 @@ Abre el HTML de Búsqueda Local directamente y pulsa **N** para ver el guion y l
 | Diapositiva | Aparición | Frase que digo | Elemento visual |
 |---|---:|---|---|
 | 1 · Contexto · 60 s | 1 | «Una empresa debe entregar paquetes a distintos destinos y volver a la bodega.» | Señala la bodega, las casas y el carrito. |
-| 1 · Contexto · 60 s | 2 | «Entre esos mismos destinos hay muchas rutas. ¿Cómo visito todos los lugares y regreso recorriendo la menor distancia posible?» | Señala los recorridos alternativos y luego el globo. |
+| 1 · Contexto · 60 s | 2 | «El problema es que hay muchísimas rutas que podríamos escoger.» | Señala los recorridos alternativos y luego el globo. |
 | 1 · Contexto · 60 s | 3 | «Al aumentar los destinos, las alternativas crecen muy rápido. Con 20 ciudades y distancias simétricas hay aproximadamente seis por diez a la dieciséis recorridos. Es un problema NP-difícil en general.» | Sigue la secuencia 5, 10, 20 ciudades. |
 | 1 · Contexto · 60 s | 4 | «Un método exacto busca el óptimo con garantía. Una heurística busca una buena solución, sin garantía de que sea la mejor.» | Señala garantía y buena solución. |
 | 1 · Contexto · 60 s | 5 | «Búsqueda Local entra aquí: mejora una solución que ya tenemos.» | Pasa a su origen después de leer la banda. |
