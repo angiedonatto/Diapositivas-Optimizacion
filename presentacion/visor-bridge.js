@@ -9,7 +9,7 @@
   var tema = params.get('tema');
   if (choices.indexOf(tema) < 0) tema = 'local';
   var parts = location.pathname.split('/').filter(Boolean);
-  var person = parts.includes('angie-donato') ? 'donato' : parts.includes('angie-loango') ? 'loango' : parts.includes('carolina') ? 'carolina' : '';
+  var person = parts.includes('angie-donato') ? 'donato' : parts.includes('angie-loango') ? 'loango' : parts.includes('carolina') ? 'carolina' : parts.includes('andres') ? 'andres' : '';
   if (!person) return;
 
   var css = {
@@ -59,7 +59,7 @@
     if (person==='loango') window.dispatchEvent(new Event('resize'));
   }
   function status() {
-    if (person==='carolina') return {current:1,total:1,atStart:true,atEnd:true};
+    if (person==='carolina' || person==='andres') return {current:1,total:1,atStart:true,atEnd:true};
     var text = person==='donato' ?
       (document.getElementById('count')||{}).textContent :
       ((document.querySelector('.lo-count')||{}).textContent||'');
