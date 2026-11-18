@@ -198,56 +198,86 @@
             </header>
             <div class="lo-s-body">
               <div class="columnas equilibradas">
-                <figure
-                  class="lo-c escena"
-                  data-f="1"
-                  data-cue="Origen clásico"
-                >
-                  <figcaption class="lo-c-name">
-                    Antecedentes en el agente viajero
-                  </figcaption>
-                  <p class="lo-c-line">No tiene un único creador.</p>
-                  <div class="cronologia" data-f="2" data-cue="1958 y 1973">
-                    <div>
-                      <svg
-                        viewBox="0 0 108 80"
-                        role="img"
-                        aria-label="Ejemplo de rutas históricas sobre un mapa"
-                      >
-                        <path
-                          class="trazo"
-                          d="M10 15 99 64 95 16 12 64 10 15"
-                          stroke="#3d5a98"
-                          style="stroke-width: 3px"
-                        />
-                        <circle cx="10" cy="15" r="5" fill="#3d5a98" />
-                        <circle cx="95" cy="16" r="5" fill="#3d5a98" />
-                        <circle cx="99" cy="64" r="5" fill="#3d5a98" />
-                        <circle cx="12" cy="64" r="5" fill="#3d5a98" /></svg
-                      ><time datetime="1958">1958</time><b>G. A. Croes</b>
-                      <p class="lo-c-line pista">2-opt</p>
+                <div class="pistas">
+                  <figure
+                    class="lo-c escena"
+                    data-f="1"
+                    data-cue="Origen clásico"
+                  >
+                    <figcaption class="lo-c-name">
+                      Antecedentes en el agente viajero
+                    </figcaption>
+                    <p class="lo-c-line">No tiene un único creador.</p>
+                    <div class="cronologia" data-f="2" data-cue="1958 y 1973">
+                      <div>
+                        <svg
+                          viewBox="0 0 108 80"
+                          role="img"
+                          aria-label="Ejemplo de rutas históricas sobre un mapa"
+                        >
+                          <path
+                            class="trazo"
+                            d="M10 15 99 64 95 16 12 64 10 15"
+                            stroke="#3d5a98"
+                            style="stroke-width: 3px"
+                          />
+                          <circle cx="10" cy="15" r="5" fill="#3d5a98" />
+                          <circle cx="95" cy="16" r="5" fill="#3d5a98" />
+                          <circle cx="99" cy="64" r="5" fill="#3d5a98" />
+                          <circle cx="12" cy="64" r="5" fill="#3d5a98" /></svg
+                        ><time datetime="1958">1958</time><b>G. A. Croes</b>
+                        <p class="lo-c-line pista">2-opt</p>
+                      </div>
+                      <div>
+                        <svg
+                          viewBox="0 0 108 80"
+                          role="img"
+                          aria-label="Ejemplo de rutas históricas sobre un mapa"
+                        >
+                          <path
+                            class="trazo"
+                            d="M10 15 95 16 99 64 12 64 10 15"
+                            stroke="#3d5a98"
+                            style="stroke-width: 3px"
+                          />
+                          <circle cx="10" cy="15" r="5" fill="#3d5a98" />
+                          <circle cx="95" cy="16" r="5" fill="#3d5a98" />
+                          <circle cx="99" cy="64" r="5" fill="#3d5a98" />
+                          <circle cx="12" cy="64" r="5" fill="#3d5a98" /></svg
+                        ><time datetime="1973">1973</time><b>Lin y Kernighan</b>
+                        <p class="lo-c-line pista">Mejora de rutas</p>
+                      </div>
                     </div>
-                    <div>
-                      <svg
-                        viewBox="0 0 108 80"
-                        role="img"
-                        aria-label="Ejemplo de rutas históricas sobre un mapa"
-                      >
-                        <path
-                          class="trazo"
-                          d="M10 15 95 16 99 64 12 64 10 15"
-                          stroke="#3d5a98"
-                          style="stroke-width: 3px"
-                        />
-                        <circle cx="10" cy="15" r="5" fill="#3d5a98" />
-                        <circle cx="95" cy="16" r="5" fill="#3d5a98" />
-                        <circle cx="99" cy="64" r="5" fill="#3d5a98" />
-                        <circle cx="12" cy="64" r="5" fill="#3d5a98" /></svg
-                      ><time datetime="1973">1973</time><b>Lin y Kernighan</b>
-                      <p class="lo-c-line pista">Mejora de rutas</p>
+                  </figure>
+                  <section class="lo-c reparto-ejemplo" data-f="4">
+                    <h2 class="lo-c-name">Del escalador a las entregas</h2>
+                    <p class="lo-c-line">
+                      <strong>Una ruta que ya tengo</strong> → pruebo un cambio
+                      pequeño.
+                    </p>
+                    <div class="reparto-demostracion">
+                      <img
+                        src="retratos-ruta.svg"
+                        width="220"
+                        height="132"
+                        alt="Dos retratos ilustrados de integrantes ficticios del equipo de reparto."
+                      />
+                      <div>
+                        <p class="reparto-ruta">
+                          <strong>Ruta actual</strong>
+                          <span>A → B → C → <mark>D → E</mark> → A</span>
+                        </p>
+                        <p class="reparto-ruta" data-f="5">
+                          <strong>Mismas paradas · D ↔ E</strong>
+                          <span>A → B → C → <mark>E → D</mark> → A</span>
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </figure>
+                    <p class="reparto-pregunta" data-f="5">
+                      ¿Quedó más corta? <strong>Si mejora, la conservo.</strong>
+                    </p>
+                  </section>
+                </div>
                 <div class="pistas">
                   <figure class="lo-c escena" data-f="3" data-cue="Escalador">
                     <figcaption class="lo-c-name">
@@ -721,16 +751,21 @@
             <em>Señala al escalador y el camino. Avanza con «Alrededores».</em>
           </li>
           <li>
-            <strong>Alrededores.</strong> Solo puede ver los pasos que tiene
-            cerca, porque la niebla le limita la vista.
-            <em>Señala el círculo de visión. Avanza con «Mejora cercana».</em>
+            <strong>Alrededores.</strong> La niebla limita lo que ve. Eso mismo
+            inspira la Búsqueda Local: explora pequeños cambios alrededor de una
+            solución que ya tiene.
+            <em
+              >Señala el círculo de visión, los retratos y la ruta actual.
+              Avanza con «¿Y si cambio el orden?».</em
+            >
           </li>
           <li>
-            <strong>Mejora cercana.</strong> Entre lo que ve, avanza hacia una
-            posición mejor. Esa es la intuición del método.
+            <strong>Mejora cercana.</strong> El escalador avanza a una posición
+            mejor. En un reparto, cambio el orden de dos paradas de mi ruta y
+            compruebo si queda más corta. Si mejora, la conservo.
             <em
-              >Sigue el escalador y pasa a la definición. Pulsa la flecha para
-              pasar a la siguiente sección.</em
+              >Señala el ascenso y el intercambio D ↔ E. Pulsa la flecha para
+              pasar a la definición.</em
             >
           </li>
         </ol>
