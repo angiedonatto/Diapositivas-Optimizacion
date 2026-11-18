@@ -410,3 +410,42 @@
   border-radius: 8px;
   background: var(--lo-bg);
 }
+
+.apertura .reparto-ejemplo {
+  border-color: var(--lo-m);
+}
+.apertura .reparto-demostracion {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+.apertura .reparto-demostracion img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.apertura .reparto-ruta {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.25;
+}
+.apertura .reparto-ruta + .reparto-ruta {
+  margin-top: 6px;
+}
+.apertura .reparto-ruta span {
+  display: block;
+  font: 700 21px var(--lo-mono);
+  color: var(--lo-ink-2);
+}
+.apertura .reparto-ruta mark {
+  padding: 1px 4px;
+  border-radius: 5px;
+  background: var(--lo-m-soft);
+  color: var(--lo-m);
+}
+.apertura .reparto-pregunta {
+  margin: 0;
+  font-size: 20px;
+  color: var(--lo-m);
+}
