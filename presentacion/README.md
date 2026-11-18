@@ -43,6 +43,6 @@ presentacion/
 Los antiguos HTML completos de Angie Donato, Angie Loango y Carolina **se conservaron byte a byte**; se añadieron las versiones independientes. El código y las pruebas Python de Angie Loango también permanecen intactos.
 
 ## Selector y Andrés
-El visor abre `presentacion/<persona>/<tema>/index.html` y envía `?integrada=1&tema=...`. Para Andrés, el visor sigue marcando el bloque como pendiente (sus cuatro carpetas tienen solo páginas provisionales). Cuando Andrés cree sus diapositivas, el equipo podrá conectar esa parte al visor sin tocar las de otras personas.
+El visor abre `presentacion/<persona>/<tema>/index.html` y envía `?integrada=1&tema=...`. Para Andrés, el visor sigue marcando el bloque como pendiente (sus cuatro carpetas tienen solo páginas provisionales). Cuando Andrés sustituya el HTML de un tema, el visor cargará automáticamente ese archivo de su carpeta, sin modificar la portada ni las diapositivas de las demás personas. Conviene conservar la línea `<script src="../../visor-bridge.js"></script>` al final del HTML para que los botones generales sigan funcionando.
 
 Esta organización reduce riesgos, pero GitHub no impone permisos por carpetas: conviene usar ramas y Pull Requests.
