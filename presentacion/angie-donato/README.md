@@ -10,4 +10,4 @@ Trabaja siempre en una rama y abre un Pull Request contra `diapo_1`. El `estilos
 
 El `index.html` de esta carpeta (si existe) es el archivo original completo conservado por seguridad. **La exposición integrada usa los cuatro archivos nuevos por tema** y se abre desde el `index.html` de la raíz.
 
-
+Los diagramas de fundamentos se dibujan en `visuales.js` y toman los colores del tema. Los tres retratos de `recursos/retratos.webp` son ilustraciones generadas. La diapositiva histórica de Búsqueda Local usa una línea de tiempo de 2-opt y Lin–Kernighan.

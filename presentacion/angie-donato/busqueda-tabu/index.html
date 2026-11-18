@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../../shared/tokens.css">
 <link rel="stylesheet" href="../../shared/slides.css">
 <link rel="stylesheet" href="../../shared/projection.css">
+<link rel="stylesheet" href="../visuales.css">
 </head>
 <body>
 <header class="topbar">
@@ -36,7 +37,7 @@
     <div class="lo-s-body">
      <p class="slide-lead" id="lead"></p>
      <div class="slide-columns">
-      <section class="lo-c is-key"><h2 class="lo-c-name" id="mini"></h2><p class="slide-quote" id="quote"></p><div class="slide-route" id="path"></div></section>
+      <section class="lo-c is-key"><h2 class="lo-c-name" id="mini"></h2><p class="slide-quote" id="quote"></p><div id="resource" class="donato-resource"></div><div class="slide-route" id="path"></div></section>
       <div class="slide-stack" id="facts"></div>
      </div>
     </div>
@@ -50,6 +51,7 @@
  <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
 </div>
 <aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
+<script src="../visuales.js"></script>
 <script>
 (function () {
  'use strict';
@@ -68,6 +70,7 @@
   document.getElementById('letter').textContent={local:'A',tabu:'B',ga:'C',aco:'D'}[method];
   document.getElementById('methodName').textContent=group.name;document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
   nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
+  DonatoVisuals.render(document.getElementById('resource'), method, i);
   nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
   nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='lo-c slide-fact';var number=document.createElement('div');number.className='lo-c-num';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];h.className='lo-c-name';var p=document.createElement('p');p.className='lo-c-line';p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
   nodes.handoff.textContent=s.handoff||'';nodes.progress.textContent=(i+1)+' / '+group.slides.length;
