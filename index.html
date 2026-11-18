@@ -156,7 +156,7 @@ h1{font-size:clamp(34px,5.2vw,66px);letter-spacing:-.043em;line-height:1.06;font
  var people=[
   {id:'donato',title:'Apertura · Angie Donato',url:'presentacion/angie-donato/'},
   {id:'loango',title:'Componentes y pseudocódigo · Angie Loango',url:'presentacion/angie-loango/'},
-  {id:'andres',title:'Ejemplo en vivo · Andrés',url:null},
+  {id:'andres',title:'Ejemplo en vivo · Andrés',url:'presentacion/andres/'},
   {id:'carolina',title:'Análisis crítico · Carolina',url:'presentacion/carolina/'}
  ];
  var topic=null,step=0,frameReady=false,currentStatus=null;
@@ -183,7 +183,7 @@ h1{font-size:clamp(34px,5.2vw,66px);letter-spacing:-.043em;line-height:1.06;font
    document.documentElement.style.setProperty('--accent-soft',methods[topic].soft);
    document.getElementById('selectedTitle').textContent=methods[topic].title;
    document.getElementById('personTitle').textContent=people[step].title;
-   document.getElementById('slideCount').textContent=step===2?'Bloque pendiente': 'Cargando diapositivas…';
+   document.getElementById('slideCount').textContent='Cargando diapositivas…';
    document.querySelectorAll('[data-step]').forEach(function(b){
       var active=Number(b.dataset.step)===step;b.classList.toggle('active',active);b.setAttribute('aria-current',active?'step':'false');
    });
@@ -202,7 +202,7 @@ h1{font-size:clamp(34px,5.2vw,66px);letter-spacing:-.043em;line-height:1.06;font
    window.scrollTo(0,0);
  }
  function action(direction){
-    if(step===2){setStep(step+(direction==='next'?1:-1),direction==='prev');return}
+    
     if(direction==='prev' && step===0 && currentStatus&&currentStatus.atStart){showLanding();return}
     if(!frameReady){
       // Si el visor todavía está cargando, no perder la petición.
