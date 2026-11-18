@@ -10,9 +10,6 @@ window.sectionReady = (async () => {
 
   if (panel) {
     const [letter, topic] = panel.querySelector('.label').textContent.trim().split(' · ');
-    const hero = panel.querySelector('.hero');
-    const stack = panel.querySelector('.stack');
-    const focus = stack.querySelector('.card.focus');
     const canvas = deck.querySelector('.slide-canvas');
     canvas.dataset.algo = panel.dataset.m;
 
@@ -36,22 +33,36 @@ window.sectionReady = (async () => {
       canvas.append(slide);
     }
 
-    addSlide(hero.querySelector('h3').textContent, [hero.querySelector('.stat-row')]);
-    addSlide('Ventajas y limitaciones', stack.querySelectorAll('.pros, .cons'), 'slide-columns');
-    addSlide('Comparación y aplicación', stack.querySelectorAll(':scope > .grid-2 > .card:not(.pros, .cons)'), 'slide-columns');
-    addSlide(focus.querySelector('h3').textContent, [focus], 'section-focus');
-    addSlide('Conclusión', [stack.querySelector('.closer')]);
+    function addAnalysis(sourcePanel) {
+      const hero = sourcePanel.querySelector('.hero');
+      const stack = sourcePanel.querySelector('.stack');
+      const focus = stack.querySelector('.card.focus');
+      addSlide(hero.querySelector('h3').textContent, [hero.querySelector('.stat-row')]);
+      addSlide('Ventajas y limitaciones', stack.querySelectorAll('.pros, .cons'), 'slide-columns');
+      addSlide(focus.querySelector('h3').textContent, [focus], 'section-focus');
+      addSlide('Comparación y aplicación', stack.querySelectorAll(':scope > .grid-2 > .card:not(.pros, .cons)'), 'slide-columns');
+      addSlide('Conclusión', [stack.querySelector('.closer')]);
+    }
 
-    const originalUrl = new URL('../index.html#comparacion', location.href);
+    const originalUrl = new URL('../index.html', location.href);
     try {
-      // La tabla del respaldo es la fuente de verdad para los cuatro temas.
+      // Los cuatro temas reutilizan el texto y las tablas del original.
       const response = await fetch(originalUrl, { signal: AbortSignal.timeout(6000) });
       if (!response.ok) throw new Error('No se pudo cargar la comparación');
       const original = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const context = original.querySelectorAll('#expo .grid-2 > .card');
+      const sourcePanel = original.getElementById(panel.id);
       const comparison = original.querySelector('#comparacion');
       const table = comparison.querySelector('table');
       const rows = [...table.tBodies[0].rows];
-      if (!rows.length) throw new Error('La comparación no contiene filas');
+      if (!sourcePanel || context.length !== 2 || !rows.length) {
+        throw new Error('El material original está incompleto');
+      }
+
+      for (const card of context) {
+        addSlide(card.querySelector('h3').textContent, [card], 'section-context');
+      }
+      addAnalysis(sourcePanel);
 
       addSlide('Los cuatro métodos en una frase', comparison.querySelectorAll('.idea'), 'slide-columns');
       const rowsPerSlide = 4;
@@ -62,12 +73,14 @@ window.sectionReady = (async () => {
         addSlide('Comparación general · ' + (i + 1) + ' de ' + pages, [part], 'section-comparison');
       }
     } catch {
+      canvas.replaceChildren();
+      addAnalysis(panel);
       const link = document.createElement('a');
-      link.href = originalUrl;
+      link.href = originalUrl + '#expo';
       link.target = '_blank';
       link.rel = 'noopener';
-      link.textContent = 'Abrir la tabla de comparación en el anexo';
-      addSlide('Comparación general', [link]);
+      link.textContent = 'Abrir las tablas y la comparación en el material de Carolina';
+      addSlide('Material de Carolina', [link]);
     }
     deck.hidden = false;
   }

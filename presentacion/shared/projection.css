@@ -106,3 +106,10 @@ html.projected, .projected body { margin: 0; overflow: hidden; }
   font-size: 32px;
   font-weight: 650;
 }
+
+.section-context .section-card > p,
+.section-context .section-card td .muted { font-size: 22px !important; }
+.section-context table { font-size: 23px; line-height: 1.35; }
+.section-context table thead th { font-size: 20px; }
+.section-context .section-card .table-scroll { overflow: visible; border-color: var(--lo-line); }
+.section-context .matrix td.on { background: var(--good-soft); color: var(--good); }
