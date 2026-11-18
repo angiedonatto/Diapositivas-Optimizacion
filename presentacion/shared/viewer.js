@@ -65,7 +65,6 @@
       viewer.hidden = true;
       finished.hidden = false;
       get('finishedTopic').textContent = themeButtons.find(button => button.dataset.topic === topic).querySelector('strong').textContent;
-      get('appendix').href = blockPath(people.length - 1) + '?estudio#preguntas';
       get('finishTitle').focus();
       writeHash();
       return;
