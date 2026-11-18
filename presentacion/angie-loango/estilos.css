@@ -1,13 +1,8 @@
+@import url("../shared/tokens.css");
+@import url("../shared/slides.css");
+
 
   /* Colores de la presentación del equipo que usa esta sección */
-  :root {
-    --local: #3d5a98; --local-soft: #e7ecf7;
-    --tabu: #a8620a;  --tabu-soft: #fbf0df;
-    --ga: #2c7a3f;    --ga-soft: #e4f2e7;
-    --aco: #a33a5b;   --aco-soft: #f8e6ec;
-    --good: #1f7a4d;  --good-soft: #e4f3ea;
-    --bad: #a3392c;   --bad-soft: #f8e7e3;
-  }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body {
@@ -28,26 +23,6 @@
    ===================================================================== */
 
 #loango {
-  --lo-bg: #f1f0ea;
-  --lo-paper: #fbfaf6;
-  --lo-surface: #ffffff;
-  --lo-surface-2: #efeee7;
-  --lo-ink: #16221c;
-  --lo-ink-2: #46544c;
-  --lo-ink-3: #7d8981;
-  --lo-line: #dcddd3;
-  --lo-line-2: #e9e9e1;
-  --lo-deep: #1e4636;
-  --lo-sage: #8ca595;
-  --lo-sage-soft: #e3eae2;
-  --lo-sand: #f2e9d8;
-  --lo-sand-ink: #8a6a2f;
-  --lo-m: var(--local);
-  --lo-m-soft: var(--local-soft);
-  --lo-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
-  --lo-math: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
-  --lo-ease: cubic-bezier(.2, .7, .2, 1);
-
   background: var(--lo-bg);
   color: var(--lo-ink);
   border-top: 1px solid var(--lo-line);
@@ -55,10 +30,6 @@
   margin-top: 40px;
   padding: 34px 0 30px;
 }
-#loango[data-algo="tabu"], #loango .lo-slide[data-algo="tabu"] { --lo-m: var(--tabu); --lo-m-soft: var(--tabu-soft); }
-#loango[data-algo="ga"], #loango .lo-slide[data-algo="ga"] { --lo-m: var(--ga); --lo-m-soft: var(--ga-soft); }
-#loango[data-algo="aco"], #loango .lo-slide[data-algo="aco"] { --lo-m: var(--aco); --lo-m-soft: var(--aco-soft); }
-
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) #loango {
     --lo-bg: #131916; --lo-paper: #1a221e; --lo-surface: #212b26; --lo-surface-2: #29342f; --lo-ink: #e7ece9; --lo-ink-2: #b4c0b9;
@@ -115,45 +86,6 @@
 .lo-viewport { margin-top: 14px; width: 100%; }
 .lo-frame { position: relative; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 2px rgba(20, 30, 25, .05), 0 18px 50px -22px rgba(20, 30, 25, .28); }
 .lo-deck { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; }
-
-/* ---------- Diapositiva (medidas en px del lienzo 1600 × 900) ---------- */
-.lo-slide { position: absolute; inset: 0; background: var(--lo-paper); padding: 48px 96px 34px; display: flex; flex-direction: column;
-  opacity: 0; visibility: hidden; transition: opacity .45s var(--lo-ease), visibility 0s .45s; }
-.lo-slide.is-current { opacity: 1; visibility: visible; transition: opacity .45s var(--lo-ease); }
-.lo-s-kicker { display: flex; align-items: center; gap: 14px; margin: 0; font-size: 24px; font-weight: 650; color: var(--lo-ink-2); }
-.lo-s-letter { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--lo-m); color: #fff; font-size: 21px; }
-.lo-s-chap { margin-left: 6px; padding-left: 20px; border-left: 2px solid var(--lo-line); color: var(--lo-m); }
-.lo-s-title { margin: 10px 0 0; font-size: 56px; font-weight: 750; letter-spacing: -.03em; line-height: 1.05; }
-.lo-s-body { flex: 1; min-height: 0; margin-top: 30px; position: relative; display: flex; flex-direction: column; gap: 28px; }
-#loango .lo-s-foot { padding: 0; }
-.lo-s-foot { display: flex; justify-content: space-between; align-items: center; font-size: 17px; color: var(--lo-ink-3); margin-top: 12px; }
-.lo-s-prog { list-style: none; margin: 0; padding: 0; display: flex; gap: 22px; }
-.lo-s-prog li { margin: 0; position: relative; padding-top: 10px; }
-.lo-s-prog li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 3px; background: var(--lo-line); }
-.lo-s-prog li.is-past::before { background: color-mix(in srgb, var(--lo-m) 45%, var(--lo-line)); }
-.lo-s-prog li.is-now { color: var(--lo-ink); font-weight: 650; }
-.lo-s-prog li.is-now::before { background: var(--lo-m); }
-
-/* Apariciones progresivas */
-.lo-slide [data-f] { opacity: 0; transform: translateY(16px); transition: opacity .5s var(--lo-ease), transform .5s var(--lo-ease); }
-.lo-slide [data-f].is-in { opacity: 1; transform: none; }
-
-/* ---------- Tarjetas ---------- */
-.lo-row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
-.lo-row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
-.lo-c { background: var(--lo-surface); border: 1.5px solid var(--lo-line); border-radius: 24px; padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
-.lo-c.is-key { border-color: var(--lo-m); box-shadow: 0 0 0 5px var(--lo-m-soft); }
-.lo-c-vis { min-height: 104px; display: grid; place-items: center; background: var(--lo-bg); border-radius: 18px; padding: 12px; margin-bottom: 4px; }
-.lo-c-name { font-size: 29px; font-weight: 720; letter-spacing: -.02em; display: flex; align-items: center; gap: 12px; line-height: 1.15; }
-.lo-c-num { flex: none; width: 36px; height: 36px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 18px; font-weight: 700; color: var(--lo-m); background: var(--lo-m-soft); }
-.lo-c-line { margin: 0; font-size: 22px; line-height: 1.4; color: var(--lo-ink-2); }
-.lo-c-line b { color: var(--lo-ink); font-weight: 650; }
-.lo-stack { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.lo-tiny { font-size: 17px; color: var(--lo-ink-3); font-weight: 600; }
-.lo-pill { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 16px; font-size: 21px; font-weight: 650; background: var(--lo-surface-2); color: var(--lo-ink-2); white-space: nowrap; }
-.lo-pill.is-m { background: var(--lo-m-soft); color: var(--lo-m); }
-.lo-formula-sm { font: 600 22px var(--lo-mono); color: var(--lo-ink-2); }
-.lo-formula-sm.is-big { font-size: 24px; color: var(--lo-m); white-space: nowrap; }
 
 /* Genes */
 .lo-genes { display: inline-flex; gap: 7px; }

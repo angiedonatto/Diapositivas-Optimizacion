@@ -1,0 +1,76 @@
+html.projected, .projected body { margin: 0; overflow: hidden; }
+.projected body { background: #16221c; }
+.slide-viewport { position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 16 / 9; }
+.slide-canvas {
+  width: 1600px;
+  height: 900px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(var(--slide-scale, 1));
+  font: 24px/1.45 system-ui, sans-serif;
+  color: var(--lo-ink);
+}
+.slide-viewport:fullscreen, .projected .slide-viewport {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+}
+.projected .stage-wrap { max-width: none; margin: 0; padding: 0; }
+.projected :is(.topbar, .methods, .controlbar, .notes, .lo-head, .lo-bar, .lo-keys, .section-controls, .study-page) { display: none !important; }
+.projected #loango { margin: 0; padding: 0; border: 0; }
+.projected #loango .lo-wrap { max-width: none; padding: 0; }
+.projected #loango .lo-sr { position: fixed; top: 0; left: 0; margin: 0; }
+.projected .lo-viewport { display: grid; place-items: center; margin: 0; width: 100vw; height: 100vh; }
+.projected .lo-frame {
+  width: var(--slide-width) !important;
+  height: var(--slide-height) !important;
+  box-shadow: none;
+  border-radius: 0;
+}
+.projected .lo-deck { transform: scale(var(--slide-scale, 1)) !important; }
+
+.slide-lead { margin: 0; font-size: 30px; color: var(--lo-ink-2); max-width: 43em; }
+.slide-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+.slide-stack { display: grid; gap: 16px; }
+.slide-fact { display: grid; grid-template-columns: auto 1fr; gap: 15px; padding: 16px 22px; }
+.slide-fact :is(h3, p), .slide-columns h2 { margin: 0; }
+.slide-quote { font-size: 34px; line-height: 1.25; letter-spacing: -.02em; margin: 4px 0 14px; }
+.slide-route { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.slide-route span { border-radius: 12px; background: var(--lo-m-soft); color: var(--lo-m); padding: 6px 14px; font-weight: 650; }
+.slide-route span + span::before { content: '→'; margin-right: 12px; }
+.section-deck { margin: auto; max-width: 1400px; }
+.section-controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px; padding: 16px; }
+.section-controls :is(button, a) { font: inherit; color: inherit; padding: 6px 12px; }
+.projected .section-deck { max-width: none; }
+.section-card > :first-child { margin-top: 0; }
+.section-card > :last-child { margin-bottom: 0; }
+.section-card :is(h3, p, ul) { margin: 0; }
+.section-card h3 { font-size: 30px; }
+.section-card li + li { margin-top: 10px; }
+.section-card .chip { background: var(--lo-m-soft); color: var(--lo-m); border-radius: 8px; padding: 2px 8px; }
+.section-card .grid-2, .section-card .grid-3 { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; }
+.section-card .stat-row { display: flex; gap: 24px; }
+.section-card .stat { padding: 14px 22px; background: var(--lo-m-soft); border-radius: 14px; }
+.section-card .q { display: none; }
+.section-card .muted { color: var(--lo-ink-2); }
+.slide-canvas .lo-s-foot { color: var(--lo-ink-2); }
+.slide-canvas table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+.slide-canvas :is(th, td) { padding: 10px 16px; border-bottom: 1px solid var(--lo-line); text-align: left; }
+.slide-canvas th { background: var(--lo-m-soft); color: var(--lo-m); }
+.slide-canvas :is(code, pre) { font-family: var(--lo-mono); }
+.slide-canvas .formula { font: 32px var(--lo-math); }
+@media (prefers-reduced-motion: reduce) {
+  .lo-slide, .lo-slide [data-f] { transition: none; }
+}
+[hidden] { display: none !important; }
+.slide-canvas *, .slide-canvas *::before, .slide-canvas *::after { box-sizing: border-box; }
+.section-deck footer { padding: 0; background: none; border: 0; }
+.section-deck .stat b, .section-deck .stat span { display: block; }
+.section-deck .stat b { color: var(--lo-m); font-size: 36px; line-height: 1.2; }
+.section-deck .stat span { font-size: 22px; }
+.section-deck .section-card .stat { flex: 1; }
+.section-deck .section-card .closer { border: 0; background: none; padding: 0; margin: 0; color: inherit; font-size: 38px; }
+:where(body):has(> .section-deck) { margin: 0; background: #f1f0ea; font-family: system-ui, sans-serif; }
+.slide-canvas .lo-s-kicker { font-size: 24px; }
+.slide-canvas .lo-s-title { font-size: 56px; }

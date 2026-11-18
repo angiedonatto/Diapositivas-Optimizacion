@@ -1,0 +1,44 @@
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--lo-ink); color: var(--lo-ink); font: 16px/1.45 system-ui, sans-serif; }
+button, a { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: default; }
+:focus-visible { outline: 3px solid #3d5a98; outline-offset: 4px; }
+.screen { min-height: 100dvh; background: var(--lo-paper); display: grid; place-items: center; }
+.cover-inner { width: min(88vw, 1360px); margin: 0 auto; padding: 5vh 0; }
+.institution { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-bottom: 17px; border-bottom: 1px solid var(--lo-line); color: var(--lo-deep); font-size: clamp(.95rem, 1.4vw, 1.35rem); font-weight: 650; }
+.cover-heading { margin: clamp(24px, 5.6vh, 72px) 0 clamp(26px, 5.6vh, 72px); }
+.cover h1 { margin: 0; color: var(--lo-ink); font-size: clamp(2.8rem, min(7.6vw, 11.2vh), 8rem); letter-spacing: -.056em; line-height: .96; font-weight: 750; }
+.cover-heading p { margin: .8em 0 0; color: var(--lo-ink-2); font-size: clamp(1rem, 2.1vw, 2.1rem); }
+.themes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.5vw, 24px); }
+.themes button { text-align: left; display: grid; gap: 7px; align-content: start; padding: clamp(13px, 1.65vw, 26px); min-width: 0; border: 1.5px solid var(--lo-line); border-radius: 20px; background: var(--lo-surface); color: var(--lo-ink-2); transition: background .16s, border-color .16s; }
+.themes strong { color: var(--lo-ink); line-height: 1.2; font-size: clamp(1rem, 1.65vw, 1.62rem); letter-spacing: -.02em; }
+.theme-letter { display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 4px; border-radius: 10px; color: var(--lo-m); background: var(--lo-m-soft); font-weight: 700; }
+.themes button:hover, .themes button[aria-pressed="true"] { border-color: var(--lo-m); background: var(--lo-m-soft); }
+.themes button[aria-pressed="true"] .theme-letter { color: white; background: var(--lo-m); }
+.primary { display: inline-flex; align-items: center; gap: 12px; margin-top: clamp(18px, 3vh, 34px); padding: 12px 22px; border: 1px solid transparent; border-radius: 12px; background: var(--lo-deep); color: white; font-weight: 700; }
+.primary:disabled { background: var(--lo-sage-soft); color: var(--lo-ink-2); }
+.closing h1 { margin-top: 5vh; }
+.study-link { display: block; width: fit-content; margin-top: 24px; color: var(--lo-deep); }
+#presentation:fullscreen { overflow: auto; background: var(--lo-ink); }
+#viewer { width: 100%; height: 100dvh; position: fixed; inset: 0; display: grid; place-items: center; background: var(--lo-ink); }
+#slideFrame { display: block; border: 0; width: min(100vw, calc(100dvh * 16 / 9)); height: min(100dvh, calc(100vw * 9 / 16)); background: var(--lo-paper); }
+.controls-zone { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); max-width: 100%; padding: 0 6px 2px; }
+.controls { display: flex; justify-content: center; align-items: center; gap: 6px; padding: 1px 4px; border-radius: 10px; background: #16221c; color: #fbfaf6; white-space: nowrap; font-size: 12px; opacity: 0; pointer-events: none; transition: opacity .18s; }
+.controls-zone.is-visible .controls, .controls:has(:focus-visible), .controls-zone:hover .controls { opacity: 1; pointer-events: auto; }
+.controls button { min-height: 24px; border: 0; border-radius: 6px; padding: 0 8px; background: transparent; color: inherit; }
+.controls button:hover, .controls button:focus-visible { background: #355347; }
+.controls button:focus-visible { outline-color: #b9d3c2; outline-offset: 0; }
+.controls button:disabled { opacity: .45; }
+#count { color: #d0ded4; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 640px) {
+ .themes { grid-template-columns: 1fr 1fr; }
+ .themes button { border-radius: 13px; }
+ .cover-inner { padding: 4vh 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+ .themes button, .controls { transition: none; }
+}

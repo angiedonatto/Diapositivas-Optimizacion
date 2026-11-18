@@ -1,251 +1,65 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Exposición · Optimización · Selección de tema</title>
-<style>
-:root{--green:#07533d;--green-dark:#073c2e;--background:#f1f2ee;--paper:#fff;--ink:#172820;--muted:#5a6b61;--border:#dce4dd;--accent:#3d5a98;--accent-soft:#e7ecf7;--shadow:0 20px 70px rgba(19,49,33,.09)}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:var(--background);color:var(--ink);font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-button{cursor:pointer;font:inherit}button:focus-visible,a:focus-visible{outline:3px solid #69ac8c;outline-offset:3px}
-button:disabled{opacity:.4;cursor:not-allowed}
-[hidden]{display:none!important}
-.shell{max-width:1390px;margin:0 auto;padding:0 24px}
-.sitehead{background:#fff;border-bottom:1px solid var(--border)}
-.sitehead .shell{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:74px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
-.wordmark{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:800}
-.logo{width:40px;height:40px;display:grid;place-items:center;background:var(--green);color:#fff;border-radius:12px}
-.wordmark small{display:block;font-weight:500;color:var(--muted);font-size:12px}
-.headlink{color:var(--green);font-size:13px;text-decoration:none;font-weight:680}
-.landing{padding-top:68px;padding-bottom:75px}
-.eyebrow{font-size:13px;letter-spacing:.11em;text-transform:uppercase;font-weight:780;color:var(--green)}
-h1,h2,h3,p{margin:0}
-.hero{max-width:950px}
-h1{font-size:clamp(34px,5.2vw,66px);letter-spacing:-.043em;line-height:1.06;font-weight:850;margin:17px 0}
-.hero p{font-size:clamp(16px,1.7vw,21px);color:var(--muted);max-width:760px}
-.question{margin:47px 0 16px;font-size:clamp(21px,2.5vw,29px);letter-spacing:-.025em}
-.methods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.method{padding:25px 21px 23px;text-align:left;border:2px solid var(--border);border-radius:19px;background:var(--paper);min-height:205px;display:flex;flex-direction:column;align-items:flex-start;position:relative;gap:12px;transition:transform .15s,border .15s,box-shadow .15s}
-.method:hover{transform:translateY(-3px);box-shadow:0 10px 27px rgba(20,49,33,.08)}
-.method[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.method .letter{background:var(--accent-soft);color:var(--accent);font-weight:850;font-size:18px;border-radius:11px;width:40px;height:40px;display:grid;place-items:center}
-.method strong{font-size:clamp(17px,1.7vw,21px);line-height:1.25}
-.method small{font-size:14px;color:var(--muted);line-height:1.45}
-.method .check{position:absolute;top:20px;right:20px;color:var(--accent);font-size:22px;font-weight:850;opacity:0}
-.method[aria-pressed=true] .check{opacity:1}
-.launch{display:flex;gap:16px;align-items:center;margin-top:24px;flex-wrap:wrap}
-.primary{background:var(--green);color:#fff;border:0;border-radius:13px;padding:14px 24px;font-size:16px;font-weight:760;transition:background .15s}
-.primary:hover{background:#087556}
-.primary:disabled{opacity:.45}
-.muted{color:var(--muted)}.small{font-size:13px}
-.timeline{margin-top:52px;border:1px solid var(--border);border-radius:19px;background:white;padding:25px 27px}
-.timeline h3{font-size:16px;margin-bottom:14px}
-.timelineitems{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
-.timelineitems span{font-size:14px;color:#43584c;background:#f3f6f2;border-radius:100px;padding:8px 12px}
-.timelineitems i{font-style:normal;color:#899b8d;font-weight:800}
-.viewer{padding-top:23px;padding-bottom:25px}
-.viewer-top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:15px}
-.viewer-title small{font-size:12px;letter-spacing:.08em;font-weight:780;text-transform:uppercase;color:var(--muted)}
-.viewer-title h2{font-size:clamp(23px,2.8vw,35px);letter-spacing:-.025em;line-height:1.2;margin-top:2px}
-.toolbtn{border:1px solid var(--border);background:#fff;color:var(--ink);border-radius:10px;font-size:13px;font-weight:680;padding:9px 13px}
-.toolbtn:hover{background:#e8f0e9}
-.toolrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:13px}
-.step{display:flex;gap:11px;align-items:center;border:1px solid var(--border);border-radius:12px;background:#fff;padding:11px 14px;text-align:left;min-width:0}
-.step .num{background:#edf2ed;color:#547460;width:28px;height:28px;min-width:28px;display:grid;place-items:center;border-radius:9px;font-size:13px;font-weight:850}
-.step .info{display:block;min-width:0}
-.step b{display:block;font-size:13px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
-.step small{display:block;color:var(--muted);font-size:11px}
-.step.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
-.step.active .num{background:var(--accent);color:white}
-.frame-shell{background:#fff;border:1px solid var(--border);border-radius:17px;overflow:hidden;box-shadow:var(--shadow)}
-.frame{height:min(73vh,810px);min-height:530px;width:100%;border:0;display:block;background:#fbfaf6}
-.pending{height:min(73vh,810px);min-height:530px;padding:50px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:#f7f9f5}
-.pending .pendingicon{width:70px;height:70px;border-radius:21px;background:#e4ede4;color:#276c4a;display:grid;place-items:center;font-size:31px;font-weight:750}
-.pending h3{font-size:clamp(24px,3vw,33px);margin:24px 0 12px;letter-spacing:-.02em}
-.pending p{color:var(--muted);font-size:17px;max-width:650px;margin-bottom:18px}
-.pending code{background:#e7efe7;border-radius:6px;padding:3px 7px}
-.navrow{background:#fff;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--border);flex-wrap:wrap}
-.navrow .navinfo{display:flex;flex-direction:column;gap:2px}
-.navrow .navinfo strong{font-size:14px}
-.navrow .navinfo small{font-size:12px;color:var(--muted)}
-.navbuttons{display:flex;gap:8px}
-.navbuttons button{border-radius:10px;border:1px solid var(--border);font-weight:730;padding:10px 17px;font-size:14px;background:#f5f7f4}
-.navbuttons .next{background:var(--green);color:#fff;border-color:var(--green)}
-.navbuttons .next:hover{background:#087556}
-.notice{color:var(--muted);font-size:12px;max-width:790px;margin:13px auto 0;text-align:center}
-.end{background:#fff;border:1px solid var(--border);border-radius:18px;padding:80px 30px;text-align:center;margin-top:24px}
-.end h2{font-size:36px;margin-bottom:14px}
-.end p{color:var(--muted);font-size:18px;margin-bottom:25px}
-@media(max-width:1000px){.methods{grid-template-columns:repeat(2,minmax(0,1fr))}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.frame{min-height:470px}.pending{min-height:470px}}
-@media(max-width:600px){.shell{padding:0 14px}.landing{padding-top:34px}.methods{grid-template-columns:1fr}.method{min-height:130px}.timeline{padding:17px}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.step{padding:8px}.step b{font-size:12px}.step small{font-size:10px}.frame{height:64vh;min-height:370px}.pending{height:64vh;min-height:370px;padding:16px}.navrow{padding:12px}.navbuttons{width:100%}.navbuttons button{flex:1}}
-#presenter:fullscreen{width:100%;height:100%;background:var(--background);padding:12px;overflow:auto}
-#presenter:fullscreen .frame{height:calc(100vh - 205px);max-height:none;min-height:350px}
-#presenter:fullscreen .pending{height:calc(100vh - 205px);max-height:none;min-height:350px}
-</style>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Heurísticas y Metaheurísticas · Optimización</title>
+ <link rel="stylesheet" href="presentacion/shared/tokens.css">
+ <link rel="stylesheet" href="presentacion/shared/viewer.css">
+ <script defer src="presentacion/shared/viewer.js"></script>
 </head>
-<body>
-<header class="sitehead"><div class="shell">
-  <div class="wordmark"><span class="logo">UE</span><span>Universidad Externado de Colombia<small>Optimización · Ciencia de Datos</small></span></div>
-  <a class="headlink" href="presentacion/README.md">Estructura y guía del equipo</a>
-</div></header>
-<main>
-<section class="landing shell" id="landing" aria-labelledby="mainTitle">
- <div class="hero">
-  <div class="eyebrow">Exposición del equipo · 12–15 minutos</div>
-  <h1 id="mainTitle">¿Qué algoritmo les tocó exponer?</h1>
-  <p>Selecciona el tema sorteado por el profesor. La presentación mostrará únicamente ese algoritmo y recorrerá las intervenciones de las cuatro personas, en el orden del guion.</p>
- </div>
- <h2 class="question">Elige el tema</h2>
- <div class="methods" role="group" aria-label="Tema sorteado">
-  <button class="method" type="button" data-topic="local" aria-pressed="false" style="--accent:#3d5a98;--accent-soft:#e7ecf7"><span class="letter">A</span><span class="check">✓</span><strong>Búsqueda Local</strong><small>Mejorar una solución explorando sus vecinos.</small></button>
-  <button class="method" type="button" data-topic="tabu" aria-pressed="false" style="--accent:#a8620a;--accent-soft:#fbf0df"><span class="letter">B</span><span class="check">✓</span><strong>Búsqueda Tabú</strong><small>Salir de óptimos locales usando memoria.</small></button>
-  <button class="method" type="button" data-topic="ga" aria-pressed="false" style="--accent:#2c7a3f;--accent-soft:#e4f2e7"><span class="letter">C</span><span class="check">✓</span><strong>Algoritmo Genético</strong><small>Hacer evolucionar una población de soluciones.</small></button>
-  <button class="method" type="button" data-topic="aco" aria-pressed="false" style="--accent:#a33a5b;--accent-soft:#f8e6ec"><span class="letter">D</span><span class="check">✓</span><strong>Colonia de Hormigas</strong><small>Construir rutas guiadas por feromona.</small></button>
- </div>
- <div class="launch"><button class="primary" id="start" type="button" disabled>Iniciar presentación →</button><span class="small muted">Un tema por vez · 4 intervenciones · navegación unificada</span></div>
- <section class="timeline" aria-label="Orden de la exposición">
-  <h3>El orden será siempre el mismo</h3>
-  <div class="timelineitems"><span>1. Angie Donato · 3 min</span><i>→</i><span>2. Angie Loango · 4 min</span><i>→</i><span>3. Andrés · 4,5 min</span><i>→</i><span>4. Carolina · 2,5 min</span></div>
+<body class="slide-theme">
+<main id="presentation">
+ <section class="cover screen" id="cover" aria-labelledby="coverTitle">
+  <div class="cover-inner">
+   <header class="institution">
+    <span>Universidad Externado de Colombia</span>
+    <span>Ciencia de Datos · Optimización</span>
+   </header>
+   <div class="cover-heading">
+    <h1 id="coverTitle">Heurísticas y<br>Metaheurísticas</h1>
+    <p>Estrategias de búsqueda para problemas de optimización</p>
+   </div>
+   <div class="themes" role="group" aria-label="Algoritmos">
+    <button type="button" data-topic="local" data-algo="local" class="slide-theme" aria-pressed="false">
+     <span class="theme-letter">A</span><strong>Búsqueda Local</strong><span>Mejora por vecindarios</span>
+    </button>
+    <button type="button" data-topic="tabu" data-algo="tabu" class="slide-theme" aria-pressed="false">
+     <span class="theme-letter">B</span><strong>Búsqueda Tabú</strong><span>Exploración con memoria</span>
+    </button>
+    <button type="button" data-topic="ga" data-algo="ga" class="slide-theme" aria-pressed="false">
+     <span class="theme-letter">C</span><strong>Algoritmos Genéticos</strong><span>Evolución de soluciones</span>
+    </button>
+    <button type="button" data-topic="aco" data-algo="aco" class="slide-theme" aria-pressed="false">
+     <span class="theme-letter">D</span><strong>Colonia de Hormigas</strong><span>Rutas guiadas por feromonas</span>
+    </button>
+   </div>
+   <button id="start" class="primary" type="button" disabled>Iniciar presentación <span aria-hidden="true">→</span></button>
+  </div>
  </section>
-</section>
-<section class="viewer shell" id="presenter" hidden aria-label="Presentación del tema seleccionado">
- <div class="viewer-top">
-  <div class="viewer-title"><small>Tema seleccionado · sin mezclar otros algoritmos</small><h2 id="selectedTitle"></h2></div>
-  <div class="toolrow"><button type="button" class="toolbtn" id="chooseAgain">← Cambiar tema</button><button type="button" class="toolbtn" id="fullscreen">⛶ Pantalla completa</button></div>
- </div>
- <nav class="steps" aria-label="Intervenciones del equipo">
-  <button class="step" data-step="0"><span class="num">01</span><span class="info"><b>Angie Donato</b><small>Apertura · 3 min</small></span></button>
-  <button class="step" data-step="1"><span class="num">02</span><span class="info"><b>Angie Loango</b><small>Componentes · 4 min</small></span></button>
-  <button class="step" data-step="2"><span class="num">03</span><span class="info"><b>Andrés</b><small>Ejemplo · 4,5 min</small></span></button>
-  <button class="step" data-step="3"><span class="num">04</span><span class="info"><b>Carolina</b><small>Análisis crítico · 2,5 min</small></span></button>
- </nav>
- <div class="frame-shell" id="frameShell">
-  <iframe id="slideFrame" class="frame" title="Diapositivas del integrante" allow="fullscreen" hidden></iframe>
-  <div class="pending" id="andresPending" hidden>
-    <div class="pendingicon">03</div>
-    <h3>Ejemplo numérico · Andrés</h3>
-    <p>El espacio de Andrés está preparado, pero todavía no hay diapositivas en su carpeta. Su bloque corresponde a resolver el agente viajero de cinco ciudades para el tema seleccionado.</p>
-    <p><code>presentacion/andres/</code></p>
-    <a class="headlink" href="presentacion/andres/README.md" target="_blank" rel="noopener">Ver instrucciones para incorporar el ejemplo</a>
+
+ <section id="viewer" aria-label="Modo presentación" hidden>
+  <iframe id="slideFrame" title="Diapositivas" tabindex="-1"></iframe>
+  <div class="controls-zone" id="controlsZone">
+   <nav class="controls" id="controls" aria-label="Controles de presentación">
+    <button type="button" id="previous" aria-label="Anterior" title="Anterior (←)">←</button>
+    <span><strong id="person"></strong> <span id="count" aria-live="polite"></span></span>
+    <button type="button" id="next" aria-label="Siguiente" title="Siguiente (→)">→</button>
+    <button type="button" id="fullscreen" aria-label="Pantalla completa" title="Pantalla completa (F)" aria-pressed="false">⛶</button>
+    <button type="button" id="return">Portada</button>
+   </nav>
   </div>
-  <div class="navrow">
-   <div class="navinfo"><strong id="personTitle">Apertura · Angie Donato</strong><small id="slideCount">Diapositiva 1 de 3</small></div>
-   <div class="navbuttons"><button type="button" id="previous">← Anterior</button><button type="button" class="next" id="next">Siguiente →</button></div>
+ </section>
+
+ <section class="cover screen" id="finished" aria-labelledby="finishTitle" hidden>
+  <div class="cover-inner closing">
+   <p class="institution" id="finishedTopic"></p>
+   <h1 id="finishTitle" tabindex="-1">Preguntas</h1>
+   <a class="study-link" id="appendix" target="_blank" rel="noopener">Anexo de Carolina</a>
+   <button class="primary" id="restart" type="button">Volver a la portada</button>
   </div>
- </div>
- <p class="notice">Usa «Siguiente» para avanzar por las diapositivas y cambiar de integrante automáticamente al terminar un bloque. También puedes elegir un integrante arriba.</p>
-</section>
-<section id="finished" class="end shell" hidden>
- <div class="eyebrow">Exposición completada</div><h2>Fin de la presentación</h2>
- <p id="finishText">Ya recorrieron las cuatro intervenciones.</p>
- <button type="button" class="primary" id="restart">Volver a seleccionar un tema</button>
-</section>
+ </section>
+ <span class="sr-only" id="fullscreenStatus" role="status"></span>
 </main>
-<script>
-(function () {
- 'use strict';
- var methods={
-   local:{title:'A · Búsqueda Local',color:'#3d5a98',soft:'#e7ecf7'},
-   tabu:{title:'B · Búsqueda Tabú',color:'#a8620a',soft:'#fbf0df'},
-   ga:{title:'C · Algoritmo Genético',color:'#2c7a3f',soft:'#e4f2e7'},
-   aco:{title:'D · Colonia de Hormigas',color:'#a33a5b',soft:'#f8e6ec'}
- };
- var slugs={"local":"busqueda-local","tabu":"busqueda-tabu","ga":"algoritmo-genetico","aco":"colonia-hormigas"};
- var people=[
-  {id:'donato',title:'Apertura · Angie Donato',url:'presentacion/angie-donato/'},
-  {id:'loango',title:'Componentes y pseudocódigo · Angie Loango',url:'presentacion/angie-loango/'},
-  {id:'andres',title:'Ejemplo en vivo · Andrés',url:'presentacion/andres/'},
-  {id:'carolina',title:'Análisis crítico · Carolina',url:'presentacion/carolina/'}
- ];
- var topic=null,step=0,frameReady=false,currentStatus=null;
- var landing=document.getElementById('landing'),viewer=document.getElementById('presenter'),end=document.getElementById('finished');
- var frame=document.getElementById('slideFrame'),pending=document.getElementById('andresPending');
- var btnNext=document.getElementById('next'),btnPrev=document.getElementById('previous');
- function choose(value){
-   if(!methods[value])return;
-   topic=value;
-   document.querySelectorAll('[data-topic]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.topic===topic))});
-   document.getElementById('start').disabled=false;
- }
- function showLanding(){
-   viewer.hidden=true;end.hidden=true;landing.hidden=false;frame.removeAttribute('src');frame.hidden=true;frameReady=false;currentStatus=null;
-   try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
-   window.scrollTo(0,0);
- }
- function setStep(value,toEnd){
-   if(value<0){showLanding();return}
-   if(value>3){viewer.hidden=true;landing.hidden=true;end.hidden=false;document.getElementById('finishText').textContent='Terminaron la exposición de '+methods[topic].title.slice(4)+'.';window.scrollTo(0,0);return}
-   step=value;frameReady=false;currentStatus=null;
-   landing.hidden=true;end.hidden=true;viewer.hidden=false;
-   document.documentElement.style.setProperty('--accent',methods[topic].color);
-   document.documentElement.style.setProperty('--accent-soft',methods[topic].soft);
-   document.getElementById('selectedTitle').textContent=methods[topic].title;
-   document.getElementById('personTitle').textContent=people[step].title;
-   document.getElementById('slideCount').textContent='Cargando diapositivas…';
-   document.querySelectorAll('[data-step]').forEach(function(b){
-      var active=Number(b.dataset.step)===step;b.classList.toggle('active',active);b.setAttribute('aria-current',active?'step':'false');
-   });
-   btnPrev.disabled=step===0; btnNext.disabled=false;btnNext.textContent=step===3?'Finalizar →':'Siguiente →';
-   if(!people[step].url){
-     frame.hidden=true;frame.removeAttribute('src');pending.hidden=false;
-   } else {
-     pending.hidden=true;frame.hidden=false;
-     frame.onload=function(){
-       frameReady=true;
-       frame.contentWindow.postMessage({scope:'expo-parent',cmd:'init',tema:topic,atEnd:!!toEnd},'*');
-     };
-     frame.src=people[step].url+slugs[topic]+'/index.html?integrada=1&tema='+encodeURIComponent(topic);
-   }
-   try{history.replaceState(null,'','#'+topic+'-'+(step+1))}catch(e){}
-   window.scrollTo(0,0);
- }
- function action(direction){
-    
-    if(direction==='prev' && step===0 && currentStatus&&currentStatus.atStart){showLanding();return}
-    if(!frameReady){
-      // Si el visor todavía está cargando, no perder la petición.
-      return;
-    }
-    frame.contentWindow.postMessage({scope:'expo-parent',cmd:'move',direction:direction},'*');
- }
- function start(){if(topic)setStep(0,false)}
- document.querySelectorAll('[data-topic]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.topic)})});
- document.getElementById('start').addEventListener('click',start);
- document.getElementById('chooseAgain').addEventListener('click',showLanding);
- document.getElementById('restart').addEventListener('click',showLanding);
- document.querySelectorAll('[data-step]').forEach(function(b){b.addEventListener('click',function(){setStep(Number(b.dataset.step),false)})});
- btnNext.addEventListener('click',function(){action('next')});
- btnPrev.addEventListener('click',function(){action('prev')});
- document.getElementById('fullscreen').addEventListener('click',function(){
-   if(document.fullscreenElement){document.exitFullscreen()}
-   else if(viewer.requestFullscreen)viewer.requestFullscreen();
- });
- window.addEventListener('message',function(event){
-   if(event.source!==frame.contentWindow)return;
-   var data=event.data;
-   if(!data||data.scope!=='expo-child'||data.tema!==topic||data.person!==people[step].id)return;
-   if(data.type==='ready'||data.type==='status'){
-     frameReady=true;currentStatus=data;
-     document.getElementById('slideCount').textContent='Diapositiva '+data.current+' de '+data.total;
-     btnPrev.disabled=(step===0&&data.atStart);
-     btnNext.textContent=step===3&&data.atEnd?'Finalizar →':data.atEnd?'Siguiente persona →':'Siguiente →';
-   }
-   if(data.type==='boundary'){
-      if(data.direction==='next')setStep(step+1,false);
-      else setStep(step-1,true);
-   }
- });
- // Atajos cuando el foco no está dentro de una presentación embebida.
- document.addEventListener('keydown',function(e){
-   if(viewer.hidden||e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
-   if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();action('next')}
-   if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();action('prev')}
- });
- var hash=location.hash.match(/^#(local|tabu|ga|aco)-([1-4])$/);
- if(hash){choose(hash[1]);setStep(Number(hash[2])-1,false)}
-})();
-</script>
 </body>
 </html>
