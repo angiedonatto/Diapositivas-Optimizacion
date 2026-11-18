@@ -11,6 +11,8 @@
     { id: 'andres', folder: 'andres', name: 'Andrés' },
     { id: 'carolina', folder: 'carolina', name: 'Carolina' }
   ];
+  const opening = { id: 'titulo', folder: 'titulo', name: 'Título' };
+  const personAt = index => index === -1 ? opening : people[index];
   const get = id => document.getElementById(id);
   const presentation = get('presentation');
   const frame = get('slideFrame');
@@ -50,6 +52,7 @@
   }
 
   function blockPath(index) {
+    if (index === -1) return 'presentacion/titulo/index.html';
     return 'presentacion/' + people[index].folder + '/' + topics[topic] + '/index.html';
   }
 
@@ -71,11 +74,11 @@
     step = index;
     viewer.hidden = false;
     finished.hidden = true;
-    get('person').textContent = people[step].name;
+    get('person').textContent = personAt(step).name;
     get('count').textContent = 'Cargando…';
     previous.disabled = true;
     next.disabled = true;
-    frame.title = 'Diapositivas de ' + people[step].name;
+    frame.title = 'Diapositivas de ' + personAt(step).name;
     const source = new URL(blockPath(step) + '?integrada=1&tema=' + topic, location.href);
     frame.onload = () => {
       const loaded = frame.contentWindow.location;
@@ -139,13 +142,13 @@
   window.addEventListener('message', event => {
     const data = event.data;
     if (viewer.hidden || event.source !== frame.contentWindow || event.origin !== location.origin ||
-        data?.scope !== 'expo-child' || data.person !== people[step].id || data.theme !== topic) return;
+        data?.scope !== 'expo-child' || data.person !== personAt(step).id || data.theme !== topic) return;
     switch (data.type) {
       case 'ready':
       case 'status':
         ready = true;
         navigating = false;
-        previous.disabled = step === 0 && data.atStart;
+        previous.disabled = step === -1 && data.atStart;
         next.disabled = false;
         get('count').textContent = data.current + ' / ' + data.total;
         break;
@@ -181,7 +184,7 @@
   viewer.addEventListener('pointerdown', revealControls);
   themeButtons.forEach(button => button.addEventListener('click', () => choose(button.dataset.topic)));
   get('start').addEventListener('click', () => {
-    if (topic) showStep(0);
+    if (topic) showStep(-1);
   });
   previous.addEventListener('click', () => move('prev'));
   next.addEventListener('click', () => move('next'));
@@ -189,7 +192,7 @@
   get('return').addEventListener('click', showCover);
   get('restart').addEventListener('click', showCover);
 
-  const hash = location.hash.match(/^#(local|tabu|ga|aco)-([1-4])$/);
+  const hash = location.hash.match(/^#(local|tabu|ga|aco)-([0-4])$/);
   if (hash) {
     choose(hash[1]);
     showStep(Number(hash[2]) - 1);
