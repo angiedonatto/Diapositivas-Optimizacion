@@ -1,267 +1,787 @@
 <!doctype html>
 <html lang="es" data-theme="light">
-<head>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <title>Angie Donato · Búsqueda Local</title>
- <link rel="stylesheet" href="../estilos.css">
- <link rel="stylesheet" href="../../shared/tokens.css">
- <link rel="stylesheet" href="../../shared/slides.css">
- <link rel="stylesheet" href="../../shared/projection.css">
- <link rel="stylesheet" href="guia.css">
-</head>
-<body class="local-guide">
-<header class="topbar">
- <div class="brand">Universidad Externado de Colombia · Optimización</div>
- <div class="actions">
-  <a href="../../angie-loango/busqueda-local/index.html">Componentes · Angie Loango</a>
-  <a href="../../carolina/busqueda-local/index.html">Análisis crítico · Carolina</a>
-  <button id="notesBtn" type="button" aria-expanded="false" aria-controls="notes">Notas para ensayar (N)</button>
-  <button id="fullBtn" type="button">Pantalla completa (F)</button>
- </div>
-</header>
-
-<main class="stage-wrap section-deck">
- <div class="slide-viewport" id="stage">
-  <div class="slide-canvas slide-theme" data-algo="local" id="localCanvas">
-
-   <article class="lo-slide is-current" id="problema" aria-labelledby="title-problema">
-    <header>
-     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local <span class="lo-s-chap">Problema y necesidad</span></p>
-     <h1 class="lo-s-title" id="title-problema">¿Por qué necesitamos heurísticas?</h1>
-    </header>
-    <div class="lo-s-body local-body">
-     <div class="local-split problem-split">
-      <figure class="lo-c local-city" data-f="1" data-cue="Un turno de entregas: depósito, viviendas, mercado, hospital, oficinas y biblioteca">
-       <figcaption class="lo-c-name">Un turno de entregas por la ciudad</figcaption>
-       <div class="local-city-scene">
-        <img src="ciudad.svg" width="920" height="500" alt="Un depósito, viviendas, un hospital, un mercado, oficinas y una biblioteca, conectados por distintas calles.">
-        <svg class="local-city-cart" viewBox="0 0 920 500" data-f="2" data-cue="El carrito sale del depósito y toma una de las calles" role="img" aria-label="Un carrito azul con paquetes sale del depósito y avanza por una calle de la ciudad.">
-         <path d="M155 205v23q0 22 24 22h263" fill="none" stroke="#3d5a98" stroke-width="5" stroke-dasharray="9 8" stroke-linecap="round"/>
-         <path d="m307 244 11 6-11 6Z" fill="#3d5a98"/>
-         <g class="local-cart-motion">
-          <g transform="translate(432 222)">
-           <ellipse cx="38" cy="48" rx="46" ry="9" fill="#2d473d" opacity=".16"/>
-           <path d="M2 10h49v34H2Z" fill="#3d5a98"/>
-           <path d="m2 10 10-7h42l-3 7Z" fill="#728bb8"/>
-           <path d="M50 16h19l15 16v12H50Z" fill="#5c78aa"/>
-           <path d="M56 21h11l9 10H56Z" fill="#dbe8ee"/>
-           <path d="M9 17h34v20H9Z" fill="#e7ecf7"/>
-           <path d="M16 20h12v14H16Zm15 4h10v10H31Z" fill="#d2ad7c"/>
-           <path d="M22 20v14m14-10v10" stroke="#f8f2df" stroke-width="2"/>
-           <path d="M79 35h5v5h-5Z" fill="#f6dd99"/>
-           <path d="M3 43h81" stroke="#243c35" stroke-width="4"/>
-           <circle cx="17" cy="44" r="8" fill="#243c35"/><circle cx="17" cy="44" r="3" fill="#d9e1da"/>
-           <circle cx="66" cy="44" r="8" fill="#243c35"/><circle cx="66" cy="44" r="3" fill="#d9e1da"/>
-          </g>
-         </g>
-        </svg>
-       </div>
-      </figure>
-      <div class="local-stack">
-       <figure class="local-thought" data-f="3" data-cue="¿Cómo visito todos estos lugares y regreso al inicio recorriendo la menor distancia posible?">
-        <img src="repartidora.svg" width="150" height="156" alt="Una repartidora que se lleva la mano a la barbilla mientras piensa.">
-        <blockquote>¿Cómo visito todos estos lugares y regreso al inicio recorriendo la menor distancia posible?</blockquote>
-       </figure>
-       <div class="lo-c local-count" data-f="4" data-cue="20 ciudades, aproximadamente seis por diez a la dieciséis rutas">
-        <h2 class="lo-c-name">20 ciudades</h2>
-        <p class="local-formula">19!/2 ≈ 6 × 10<sup>16</sup></p>
-        <p class="lo-c-line"><strong>Recorridos distintos.</strong> En el caso simétrico, recorrer la misma ruta al revés cuenta una sola vez.</p>
-       </div>
-       <div class="local-duo">
-        <div class="lo-c local-method" data-f="5" data-cue="Método exacto, garantía de optimalidad">
-         <div class="candidate-track exact-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-         <h2 class="lo-c-name">Método exacto</h2>
-         <p class="lo-c-line">Solución con garantía de optimalidad</p>
-        </div>
-        <div class="lo-c local-method" data-f="6" data-cue="Heurística, buena solución sin garantía global">
-         <div class="candidate-track heuristic-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-         <h2 class="lo-c-name">Heurística</h2>
-         <p class="lo-c-line">Buena solución, sin garantía de óptimo global</p>
-        </div>
-       </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Angie Donato · Búsqueda Local</title>
+    <link rel="stylesheet" href="../estilos.css" />
+    <link rel="stylesheet" href="../../shared/tokens.css" />
+    <link rel="stylesheet" href="../../shared/slides.css" />
+    <link rel="stylesheet" href="../../shared/projection.css" />
+    <link rel="stylesheet" href="../visuales.css" />
+    <link rel="stylesheet" href="../aperturas.css" />
+  </head>
+  <body class="apertura">
+    <header class="topbar">
+      <div class="brand">Universidad Externado de Colombia · Optimización</div>
+      <div class="actions">
+        <a href="../../angie-loango/busqueda-local/index.html"
+          >Componentes · Angie Loango</a
+        >
+        <a href="../../carolina/busqueda-local/index.html"
+          >Análisis crítico · Carolina</a
+        >
+        <button
+          id="notesBtn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="notes"
+        >
+          Notas para ensayar (N)
+        </button>
+        <button id="fullBtn" type="button">Pantalla completa (F)</button>
       </div>
-     </div>
-     <p class="local-takeaway" data-f="7" data-cue="Y aquí entra la Búsqueda Local">Y aquí entra la Búsqueda Local. <span aria-hidden="true">→</span></p>
-    </div>
-    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-now">Problema</li><li>Intuición</li><li>Origen</li></ol><span class="local-position"></span></footer>
-   </article>
-
-   <article class="lo-slide" id="intuicion" aria-labelledby="title-intuicion" aria-hidden="true">
-    <header>
-     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local <span class="lo-s-chap">Concepto e intuición</span></p>
-     <h1 class="lo-s-title" id="title-intuicion">Cambiar un poco para mejorar</h1>
     </header>
-    <div class="lo-s-body local-body">
-     <div class="lo-c local-definition" data-f="1" data-cue="Búsqueda Local es una heurística de mejora">
-      <strong>Búsqueda Local = heurística de mejora</strong>
-      <div class="local-flow"><span>Solución existente</span><b aria-hidden="true">→</b><span>Cambios pequeños</span><b aria-hidden="true">→</b><span>Mejora</span></div>
-     </div>
-     <div class="local-split intuition-split">
-      <div class="lo-c local-routes" data-f="2" data-cue="Ruta inicial, costo 37">
-       <h2 class="lo-c-name">Ruta de entregas</h2>
-       <p class="local-label">Ruta inicial <strong>Costo 37</strong></p>
-       <ol class="local-route" aria-label="A, B, C, D, E y regreso a A">
-        <li>A</li><li>B</li><li>C</li><li class="swap">D</li><li class="swap">E</li><li>A</li>
-       </ol>
-       <div class="local-route-result" data-f="3" data-cue="Intercambio D y E, el costo baja de 37 a 22">
-        <p class="local-swap"><strong>D ↔ E</strong> Intercambiar el orden</p>
-        <p class="local-label">Ruta mejorada <strong>Costo 22</strong></p>
-        <ol class="local-route" aria-label="A, B, C, E, D y regreso a A">
-         <li>A</li><li>B</li><li>C</li><li class="swap">E</li><li class="swap">D</li><li>A</li>
+    <main
+      class="stage-wrap section-deck"
+      data-topic="local"
+      data-next="../../angie-loango/busqueda-local/index.html"
+    >
+      <div class="slide-viewport" id="stage">
+        <div class="slide-canvas slide-theme" data-algo="local" id="apCanvas">
+          <article
+            class="lo-slide is-current"
+            id="etapa-1"
+            aria-labelledby="titulo-1"
+            aria-hidden="false"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">A</span>Búsqueda Local
+                <span class="lo-s-chap">Contexto</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-1">
+                ¿Por qué necesitamos heurísticas?
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas">
+                <figure
+                  class="lo-c escena"
+                  data-f="1"
+                  data-cue="Empresa y destinos"
+                >
+                  <figcaption class="lo-c-name">
+                    Un turno de entregas por la ciudad
+                  </figcaption>
+                  <div class="ciudad">
+                    <img
+                      src="../busqueda-local/ciudad.svg"
+                      width="920"
+                      height="500"
+                      alt="Bodega, viviendas, tiendas, hospital, oficinas, fábrica y biblioteca conectados por calles."
+                    />
+                    <svg
+                      viewBox="0 0 920 500"
+                      role="img"
+                      aria-label="Carrito que sale de la bodega y recorridos alternativos"
+                    >
+                      <path
+                        class="trazo"
+                        d="M154 204v25q0 22 24 22h241"
+                        stroke="#3d5a98"
+                        style="stroke-width: 5px"
+                        stroke-dasharray="8 9"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#camion"
+                        x="403"
+                        y="219"
+                        width="96"
+                        height="58"
+                        style="color: #3d5a98"
+                      />
+                      <g class="" data-f="2" data-cue="¿Qué ruta es más corta?">
+                        <path
+                          class="trazo"
+                          d="M154 205v45h410V10H889v240H154"
+                          stroke="#2c7a3f"
+                          style="stroke-width: 4px"
+                          stroke-dasharray="10 8"
+                        />
+                        <path
+                          class="trazo"
+                          d="M154 205v45H33v234h856V250H154"
+                          stroke="#a8620a"
+                          style="stroke-width: 4px"
+                          stroke-dasharray="9 9"
+                        />
+                      </g>
+                    </svg>
+                  </div>
+                  <p class="lo-c-line pista">
+                    Visitar <b>todos los destinos</b> y regresar al inicio.
+                  </p>
+                </figure>
+                <div class="pistas">
+                  <figure class="globo" data-f="2">
+                    <img
+                      src="../busqueda-local/repartidora.svg"
+                      width="150"
+                      height="156"
+                      alt="Repartidora pensando"
+                    />
+                    <blockquote>
+                      ¿Cómo visito todos los lugares y regreso al inicio
+                      recorriendo la menor distancia posible?
+                    </blockquote>
+                  </figure>
+                  <div class="lo-c acento" data-f="3" data-cue="20 ciudades">
+                    <h2 class="lo-c-name">20 ciudades</h2>
+                    <div class="cifras cuentas" data-f="3">
+                      <span>5 ciudades → 12</span><span>10 → 181.440</span
+                      ><span>20 → ≈ 6 × 10¹⁶</span>
+                    </div>
+                    <p class="formula">
+                      19!/2 ≈ 6 × 10<sup>16</sup> recorridos
+                    </p>
+                    <p class="lo-c-line pista">
+                      Caso simétrico: una ruta y su inversa cuentan una vez.
+                      <b>El agente viajero es NP-difícil</b>.
+                    </p>
+                  </div>
+                  <div
+                    class="comparacion-metodos"
+                    data-f="4"
+                    data-cue="Exacto y heurística"
+                  >
+                    <div class="comparar">
+                      <div class="lo-c" data-f="4">
+                        <h2 class="lo-c-name">Método exacto</h2>
+                        <p class="lo-c-line pista">
+                          Busca el óptimo con <b>garantía</b>.
+                        </p>
+                      </div>
+                      <div class="lo-c" data-f="4">
+                        <h2 class="lo-c-name">Heurística</h2>
+                        <p class="lo-c-line pista">
+                          Busca una <b>buena solución</b> sin garantizar el
+                          óptimo.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cierre" data-f="5" data-cue="Mejora">
+                Búsqueda Local: mejorar una solución que ya tenemos.<span
+                  aria-hidden="true"
+                  >→</span
+                >
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-now">Contexto</li>
+                <li class="">Origen e inspiración</li>
+                <li class="">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+
+          <article
+            class="lo-slide"
+            id="etapa-2"
+            aria-labelledby="titulo-2"
+            aria-hidden="true"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">A</span>Búsqueda Local
+                <span class="lo-s-chap">Origen e inspiración</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-2">
+                Una idea sencilla: mejorar lo que ya tenemos
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas equilibradas">
+                <figure
+                  class="lo-c escena"
+                  data-f="1"
+                  data-cue="Origen clásico"
+                >
+                  <figcaption class="lo-c-name">
+                    Antecedentes en el agente viajero
+                  </figcaption>
+                  <p class="lo-c-line">No tiene un único creador.</p>
+                  <div class="cronologia" data-f="2" data-cue="1958 y 1973">
+                    <div>
+                      <svg
+                        viewBox="0 0 108 80"
+                        role="img"
+                        aria-label="Ejemplo de rutas históricas sobre un mapa"
+                      >
+                        <path
+                          class="trazo"
+                          d="M10 15 99 64 95 16 12 64 10 15"
+                          stroke="#3d5a98"
+                          style="stroke-width: 3px"
+                        />
+                        <circle cx="10" cy="15" r="5" fill="#3d5a98" />
+                        <circle cx="95" cy="16" r="5" fill="#3d5a98" />
+                        <circle cx="99" cy="64" r="5" fill="#3d5a98" />
+                        <circle cx="12" cy="64" r="5" fill="#3d5a98" /></svg
+                      ><time datetime="1958">1958</time><b>G. A. Croes</b>
+                      <p class="lo-c-line pista">2-opt</p>
+                    </div>
+                    <div>
+                      <svg
+                        viewBox="0 0 108 80"
+                        role="img"
+                        aria-label="Ejemplo de rutas históricas sobre un mapa"
+                      >
+                        <path
+                          class="trazo"
+                          d="M10 15 95 16 99 64 12 64 10 15"
+                          stroke="#3d5a98"
+                          style="stroke-width: 3px"
+                        />
+                        <circle cx="10" cy="15" r="5" fill="#3d5a98" />
+                        <circle cx="95" cy="16" r="5" fill="#3d5a98" />
+                        <circle cx="99" cy="64" r="5" fill="#3d5a98" />
+                        <circle cx="12" cy="64" r="5" fill="#3d5a98" /></svg
+                      ><time datetime="1973">1973</time><b>Lin y Kernighan</b>
+                      <p class="lo-c-line pista">Mejora de rutas</p>
+                    </div>
+                  </div>
+                </figure>
+                <div class="pistas">
+                  <figure class="lo-c escena" data-f="3" data-cue="Escalador">
+                    <figcaption class="lo-c-name">
+                      Un escalador en la niebla
+                    </figcaption>
+                    <svg
+                      viewBox="0 0 760 365"
+                      role="img"
+                      aria-label="Paisaje de montañas: una persona sube mediante mejoras cercanas y hay otra cima más alta a distancia."
+                    >
+                      <rect width="760" height="365" fill="#e8ece7" />
+                      <path
+                        d="M0 240 120 156 181 183 299 87 408 172 531 68 657 120 760 50v315H0Z"
+                        fill="#d4e1d8"
+                      />
+                      <path
+                        d="M0 323 96 279 169 221 290 136 356 192 436 242 603 88 760 223v142H0Z"
+                        fill="#8ca595"
+                      />
+                      <path
+                        d="M0 365 128 316 290 136 356 192 436 242l-136 81-40 42ZM436 365l167-277 157 135v142Z"
+                        fill="#6f8c7d"
+                      />
+                      <path
+                        d="m42 340 88-35 110-70 92-20 79 34m-298 85 77-48 134-39 94 28"
+                        fill="none"
+                        stroke="#acd0b9"
+                        stroke-width="2"
+                      />
+                      <defs>
+                        <linearGradient id="fog">
+                          <stop stop-color="#f5f4ed" stop-opacity="0" />
+                          <stop offset=".7" stop-color="#f5f4ed" />
+                        </linearGradient>
+                      </defs>
+                      <rect
+                        class="niebla"
+                        x="155"
+                        y="0"
+                        width="605"
+                        height="365"
+                        fill="url(#fog)"
+                      />
+                      <g class="" data-f="3">
+                        <path
+                          class="trazo"
+                          d="M96 279 169 221"
+                          stroke="#fbfaf6"
+                          style="stroke-width: 5px"
+                          stroke-dasharray="7 9"
+                        />
+                        <g class="escalador-inicial">
+                          <use
+                            href="../recursos/escenas.svg#escalador"
+                            x="144"
+                            y="158"
+                            width="45"
+                            height="62"
+                            style="color: #3d5a98"
+                          />
+                        </g>
+                      </g>
+                      <g class="" data-f="4" data-cue="Alrededores">
+                        <ellipse
+                          cx="169"
+                          cy="218"
+                          rx="72"
+                          ry="53"
+                          fill="none"
+                          stroke="#f8f1d6"
+                          stroke-width="4"
+                          stroke-dasharray="10 8"
+                        />
+                      </g>
+                      <g class="" data-f="5" data-cue="Mejora cercana">
+                        <path
+                          class="trazo"
+                          d="M169 221 228 178 267 151"
+                          stroke="#fbfaf6"
+                          style="stroke-width: 5px"
+                          stroke-dasharray="7 9"
+                        />
+                        <use
+                          href="../recursos/escenas.svg#escalador"
+                          x="243"
+                          y="91"
+                          width="45"
+                          height="62"
+                          style="color: #3d5a98"
+                        />
+                      </g>
+                    </svg>
+                  </figure>
+                  <p class="pista-breve pensamiento" data-f="4">
+                    <b>«Solo puedo ver mis alrededores».</b> La niebla limita lo
+                    que observo.
+                  </p>
+                  <p class="pista-breve pensamiento" data-f="5">
+                    <b>«Avanzo hacia una posición mejor».</b> Comparo los pasos
+                    cercanos.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-past">Contexto</li>
+                <li class="is-now">Origen e inspiración</li>
+                <li class="">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+
+          <article
+            class="lo-slide"
+            id="etapa-3"
+            aria-labelledby="titulo-3"
+            aria-hidden="true"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">A</span>Búsqueda Local
+                <span class="lo-s-chap">Qué es y dónde encaja</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-3">
+                Una heurística de mejora y de trayectoria
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas equilibradas">
+                <div class="comparar">
+                  <figure
+                    class="lo-c escena"
+                    data-f="1"
+                    data-cue="Ruta existente"
+                  >
+                    <figcaption class="lo-c-name">Ruta existente</figcaption>
+                    <svg
+                      viewBox="0 0 265 150"
+                      role="img"
+                      aria-label="Dos recorridos distintos por las mismas paradas"
+                    >
+                      <rect width="265" height="150" rx="12" fill="#eef1e8" />
+                      <path
+                        d="M0 103 72 82 185 91 265 58m-61-58-5 150"
+                        fill="none"
+                        stroke="#d7e4e2"
+                        stroke-width="12"
+                      />
+                      <path
+                        class="trazo"
+                        d="M35 65 83 30 225 53 160 105 55 119 35 65"
+                        stroke="#3d5a98"
+                        style="stroke-width: 4px"
+                      />
+                      <rect
+                        x="29"
+                        y="59"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="77"
+                        y="24"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="219"
+                        y="47"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="154"
+                        y="99"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="49"
+                        y="113"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#camion"
+                        x="135"
+                        y="19"
+                        width="52"
+                        height="36"
+                        style="color: #3d5a98"
+                      />
+                    </svg>
+                    <p class="lo-c-line pista">
+                      Partimos de una <b>solución completa</b>.
+                    </p>
+                  </figure>
+                  <figure
+                    class="lo-c escena"
+                    data-f="2"
+                    data-cue="Pequeño cambio"
+                  >
+                    <figcaption class="lo-c-name">Ruta modificada</figcaption>
+                    <svg
+                      viewBox="0 0 265 150"
+                      role="img"
+                      aria-label="Dos recorridos distintos por las mismas paradas"
+                    >
+                      <rect width="265" height="150" rx="12" fill="#eef1e8" />
+                      <path
+                        d="M0 103 72 82 185 91 265 58m-61-58-5 150"
+                        fill="none"
+                        stroke="#d7e4e2"
+                        stroke-width="12"
+                      />
+                      <path
+                        class="trazo"
+                        d="M35 65 83 30 225 53 55 119 160 105 35 65"
+                        stroke="#1f7a4d"
+                        style="stroke-width: 4px"
+                      />
+                      <rect
+                        x="29"
+                        y="59"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="77"
+                        y="24"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="219"
+                        y="47"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="154"
+                        y="99"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <rect
+                        x="49"
+                        y="113"
+                        width="12"
+                        height="12"
+                        rx="3"
+                        fill="#fbfaf6"
+                        stroke="#849887"
+                        stroke-width="2"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#camion"
+                        x="135"
+                        y="88"
+                        width="52"
+                        height="36"
+                        style="color: #3d5a98"
+                      />
+                    </svg>
+                    <p class="lo-c-line pista">
+                      Probamos <b>pequeños cambios</b> y buscamos mejorar.
+                    </p>
+                  </figure>
+                </div>
+                <div class="pistas">
+                  <figure class="lo-c escena" data-f="3" data-cue="Trayectoria">
+                    <figcaption class="lo-c-name">
+                      Una solución que mejora paso a paso
+                    </figcaption>
+                    <svg
+                      viewBox="0 0 650 122"
+                      role="img"
+                      aria-label="Una única solución pasa por tres estados en una trayectoria"
+                    >
+                      <path
+                        class="trazo"
+                        d="M90 63C160 38 211 89 267 62S380 43 430 60 540 53 603 37"
+                        stroke="#3d5a98"
+                        style="stroke-width: 4px"
+                        stroke-dasharray="7 7"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#camion"
+                        x="541"
+                        y="15"
+                        width="63"
+                        height="39"
+                        style="color: #3d5a98"
+                      />
+                      <circle cx="90" cy="63" r="7" fill="#3d5a98" />
+                      <text x="90" y="106" text-anchor="middle">Solución</text>
+                      <circle cx="268" cy="62" r="7" fill="#3d5a98" />
+                      <text x="268" y="106" text-anchor="middle">
+                        Otra versión
+                      </text>
+                      <circle cx="430" cy="60" r="7" fill="#3d5a98" />
+                      <text x="430" y="106" text-anchor="middle">
+                        Versión actual
+                      </text>
+                    </svg>
+                    <p class="lo-c-line pista">
+                      Método de <b>trayectoria</b>: trabajamos con una sola
+                      solución actual.
+                    </p>
+                  </figure>
+                </div>
+              </div>
+              <div class="" data-f="4" data-cue="Dónde encaja">
+                <div class="comparar">
+                  <div class="lo-c acento">
+                    <h2 class="lo-c-name">Heurística · Búsqueda Local</h2>
+                    <p class="lo-c-line pista">
+                      <b>Mejora directa</b> de una solución.
+                    </p>
+                  </div>
+                  <div class="lo-c neutro">
+                    <h2 class="lo-c-name">Metaheurística</h2>
+                    <p class="lo-c-line pista">
+                      <b>Estrategia general</b> para orientar la búsqueda.
+                    </p>
+                    <div class="fila">
+                      <span>Tabú</span> <span>Genético</span>
+                      <span>Colonia de Hormigas</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cierre" data-f="5" data-cue="Relevo">
+                Búsqueda Local: una solución que mejora paso a paso.<small
+                  >Angie Loango · Componentes y funcionamiento</small
+                >
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-past">Contexto</li>
+                <li class="is-past">Origen e inspiración</li>
+                <li class="is-now">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </main>
+    <div class="controlbar">
+      <p>
+        <kbd>←</kbd> <kbd>→</kbd> apariciones · <kbd>N</kbd> notas ·
+        <kbd>F</kbd> pantalla completa
+      </p>
+      <div class="pager">
+        <button id="prevBtn" type="button">← Anterior</button>
+        <strong id="count" aria-live="polite"></strong>
+        <button id="nextBtn" type="button">Siguiente →</button>
+      </div>
+    </div>
+    <p class="ap-cue" id="cue" aria-live="polite"></p>
+    <aside id="notes" class="notes" hidden aria-label="Notas para ensayar">
+      <h2>Guion para ensayar</h2>
+      <section data-notes>
+        <h3>Contexto · 60 s</h3>
+        <ol>
+          <li>
+            <strong>Empresa y destinos.</strong> Una empresa debe entregar
+            paquetes a distintos destinos y volver a la bodega.
+            <em
+              >Señala la bodega, las casas y el carrito. Avanza con «¿Qué ruta
+              es más corta?».</em
+            >
+          </li>
+          <li>
+            <strong>¿Qué ruta es más corta?.</strong> Entre esos mismos destinos
+            hay muchas rutas. ¿Cómo visito todos los lugares y regreso
+            recorriendo la menor distancia posible?
+            <em
+              >Señala los recorridos alternativos y luego el globo. Avanza con
+              «20 ciudades».</em
+            >
+          </li>
+          <li>
+            <strong>20 ciudades.</strong> Al aumentar los destinos, las
+            alternativas crecen muy rápido. Con 20 ciudades y distancias
+            simétricas hay aproximadamente seis por diez a la dieciséis
+            recorridos. Es un problema NP-difícil en general.
+            <em
+              >Sigue la secuencia 5, 10, 20 ciudades. Avanza con «Exacto y
+              heurística».</em
+            >
+          </li>
+          <li>
+            <strong>Exacto y heurística.</strong> Un método exacto busca el
+            óptimo con garantía. Una heurística busca una buena solución, sin
+            garantía de que sea la mejor.
+            <em>Señala garantía y buena solución. Avanza con «Mejora».</em>
+          </li>
+          <li>
+            <strong>Mejora.</strong> Búsqueda Local entra aquí: mejora una
+            solución que ya tenemos.
+            <em
+              >Pasa a su origen después de leer la banda. Pulsa la flecha para
+              pasar a la siguiente sección.</em
+            >
+          </li>
         </ol>
-       </div>
-       <p class="lo-c-line local-small">En las rutas queremos <strong>minimizar la distancia</strong>.</p>
-      </div>
-      <figure class="lo-c local-mountain" data-f="4" data-cue="Un escalador en la niebla solo ve los pasos cercanos">
-       <figcaption class="lo-c-name">Un escalador en la niebla</figcaption>
-       <canvas id="mountainMap" width="960" height="350" role="img" aria-label="Un escalador sube por los pasos cercanos."></canvas>
-       <div class="local-peak-key">
-        <p data-f="5" data-cue="Óptimo local, mejor que sus vecinos"><i></i><span><strong>Óptimo local</strong> Mejor que sus vecinos</span></p>
-        <p data-f="6" data-cue="Óptimo global, mejor de todas las soluciones factibles"><i></i><span><strong>Óptimo global</strong> Mejor de todas las soluciones factibles</span></p>
-       </div>
-       <p class="lo-c-line local-small">En la analogía queremos <strong>maximizar la altura</strong>.</p>
-      </figure>
-     </div>
-     <p class="local-takeaway" data-f="7" data-cue="Ser el mejor entre mis vecinos no significa ser el mejor de todos">Ser el mejor entre mis vecinos no significa ser el mejor de todos.</p>
-    </div>
-    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-past">Problema</li><li class="is-now">Intuición</li><li>Origen</li></ol><span class="local-position"></span></footer>
-   </article>
-
-   <article class="lo-slide" id="origen" aria-labelledby="title-origen" aria-hidden="true">
-    <header>
-     <p class="lo-s-kicker"><span class="lo-s-letter">A</span>Búsqueda Local <span class="lo-s-chap">Origen, clasificación y limitación</span></p>
-     <h1 class="lo-s-title" id="title-origen">De dónde viene y hasta dónde llega</h1>
-    </header>
-    <div class="lo-s-body local-body">
-     <div class="local-history">
-      <div class="lo-c local-history-card" data-f="1" data-cue="Croes en 1958 y Lin–Kernighan en 1973">
-       <h2 class="lo-c-name">Antecedentes en el agente viajero</h2>
-       <ol class="local-timeline">
-        <li><time datetime="1958">1958</time><strong>Croes</strong><span>2-opt</span></li>
-        <li><time datetime="1973">1973</time><strong>Lin–Kernighan</strong><span>Mejora de rutas</span></li>
-       </ol>
-       <p class="lo-c-line">No tiene un único creador.</p>
-      </div>
-      <div class="lo-c local-history-card" data-f="2" data-cue="Heurística de mejora, solución, cambio, mejora">
-       <h2 class="lo-c-name">Heurística de mejora</h2>
-       <div class="local-flow"><span>Solución</span><b aria-hidden="true">→</b><span>Cambio</span><b aria-hidden="true">→</b><span>Mejora</span></div>
-      </div>
-      <div class="lo-c local-history-card" data-f="3" data-cue="Método de trayectoria, una solución actual a la vez">
-       <h2 class="lo-c-name">Método de trayectoria</h2>
-       <ol class="local-trajectory" aria-label="La solución actual pasa de x cero a x uno y luego a x dos">
-        <li>x<sub>0</sub></li><li>x<sub>1</sub></li><li>x<sub>2</sub></li>
-       </ol>
-       <p class="lo-c-line"><strong>Una solución actual a la vez</strong></p>
-      </div>
-     </div>
-     <section class="lo-c local-compare" data-f="4" data-cue="Heurística de mejora: regla concreta. Metaheurística: estrategia general que orienta la exploración.">
-      <h2 class="lo-c-name">Heurística frente a metaheurística</h2>
-      <div class="local-duo">
-       <div><strong>Búsqueda Local · Heurística de mejora</strong><p>Aplica una <b>regla concreta</b>: solo acepta vecinos que mejoran.</p></div>
-       <div><strong>Búsqueda Tabú · Ejemplo de metaheurística</strong><p><b>Estrategia general</b> que <b>orienta la exploración</b>. Tabú usa memoria.</p></div>
-      </div>
-      <figure class="local-escape" data-f="5" data-cue="Local se atasca en la cima cercana. Tabú usa memoria y puede aceptar un paso peor para explorar otra región.">
-       <svg viewBox="0 0 1320 112" role="img" aria-label="Dos recorridos en el mismo paisaje. Local sube hasta la cima cercana y se detiene. Tabú puede bajar temporalmente y explorar otra región, donde hay una cima más alta.">
-        <defs>
-         <path id="comparison-land" d="M26 98 75 85 149 47 204 85 268 91 361 70 486 22 547 60 604 87"/>
-         <path id="comparison-ascent" d="M26 98 75 85 149 47"/>
-        </defs>
-        <rect width="644" height="112" rx="12" fill="#eef1f7"/>
-        <rect x="676" width="644" height="112" rx="12" fill="#fcf4e5"/>
-        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-         <use href="#comparison-land" stroke="#a5b4a9" stroke-width="3"/>
-         <use href="#comparison-ascent" stroke="#3d5a98" stroke-width="5"/>
-         <use href="#comparison-land" x="676" stroke="#a5b4a9" stroke-width="3"/>
-         <use href="#comparison-ascent" x="676" stroke="#a8620a" stroke-width="5"/>
-         <path d="m825 47 55 38 64 6" stroke="#a8620a" stroke-width="5" stroke-dasharray="7 9"/>
-         <path d="m944 91 93-21 125-48m-12 0 12 0-8 10" stroke="#1f7a4d" stroke-width="5"/>
-        </g>
-        <circle cx="149" cy="47" r="10" fill="#3d5a98"/>
-        <path d="M145 47h8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="825" cy="47" r="7" fill="#a8620a"/>
-        <text x="149" y="28" text-anchor="middle" fill="#3d5a98">Óptimo local</text>
-        <text x="873" y="55" fill="#80501c">Paso peor</text>
-        <text x="1124" y="99" fill="#1f6243">Otra región</text>
-       </svg>
-       <figcaption class="local-duo">
-        <span><b>Se atasca</b> · ningún vecino mejora.</span>
-        <span><b>Puede salir del atasco</b> · memoria y un paso temporalmente peor.</span>
-       </figcaption>
-      </figure>
-     </section>
-     <div class="local-takeaway local-handoff" data-f="6" data-cue="Componentes y funcionamiento, continúa Angie Loango">
-      <strong>Componentes y funcionamiento</strong><span>Continúa Angie Loango <b aria-hidden="true">→</b></span>
-     </div>
-    </div>
-    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-past">Problema</li><li class="is-past">Intuición</li><li class="is-now">Origen</li></ol><span class="local-position"></span></footer>
-   </article>
-  </div>
- </div>
-</main>
-
-<div class="controlbar">
- <p><kbd>←</kbd> <kbd>→</kbd> apariciones · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
- <div class="pager">
-  <button id="prevBtn" type="button">← Anterior</button>
-  <strong id="count" aria-live="polite"></strong>
-  <button id="nextBtn" type="button">Siguiente →</button>
- </div>
-</div>
-<p class="local-announcement" id="cue" aria-live="polite"></p>
-
-<aside id="notes" class="notes" hidden aria-label="Notas para ensayar">
- <h2>Guion para ensayar</h2>
- <section data-notes>
-  <h3>1. Problema y necesidad · 55 segundos</h3>
-  <p>Buenos días. Nos correspondió Búsqueda Local. Pensemos en un turno de entregas: hay que pasar por varias casas, tiendas y edificios de la ciudad. El carrito sale del depósito y ya en la primera esquina puede elegir por dónde seguir. Su repartidora se pregunta: «¿Cómo visito todos estos lugares y regreso al inicio recorriendo la menor distancia posible?».</p>
-  <p>Podríamos intentar probar todas las rutas, pero el número de combinaciones crece muchísimo. Por ejemplo, con 20 ciudades podemos tener aproximadamente seis por diez a la dieciséis recorridos distintos.</p>
-  <p>Aquí aparece una diferencia importante: un método exacto busca encontrar una solución con garantía de optimalidad, mientras que una heurística intenta conseguir una buena solución en menos tiempo, aunque no garantice que sea la mejor de todas. Y justamente ahí entra la Búsqueda Local.</p>
-  <ol>
-   <li><b>Destinos.</b> Señala el depósito y los distintos edificios. Avanza con «El carrito sale del depósito…».</li>
-   <li><b>Carrito.</b> Sigue su paso por la primera calle. Avanza con «Su repartidora se pregunta…».</li>
-   <li><b>Volver al inicio.</b> Señala el globo y lee la pregunta. Avanza con «Podríamos intentar probar todas las rutas».</li>
-   <li><b>Combinaciones.</b> Señala 20 y el exponente. Avanza con «Aquí aparece una diferencia importante».</li>
-   <li><b>Garantía.</b> Señala el punto certificado. Avanza con «Mientras que una heurística…».</li>
-   <li><b>Buena solución.</b> Señala el punto encontrado. Avanza con «Y justamente ahí entra…».</li>
-   <li><b>Búsqueda Local.</b> Señala la banda inferior. Avanza con «¿Qué hace este método?».</li>
-  </ol>
- </section>
- <section data-notes hidden>
-  <h3>2. Concepto e intuición · 70 segundos</h3>
-  <p>La Búsqueda Local es una heurística de mejora. Esto significa que parte de una solución que ya existe y trata de mejorarla realizando pequeños cambios.</p>
-  <p>Por ejemplo, si ya tenemos una ruta de entregas, podemos intercambiar el orden de dos ciudades y comprobar si la nueva ruta es más corta. Si mejora, nos quedamos con ella.</p>
-  <p>Para entenderlo, imaginen a una persona subiendo una montaña en medio de la niebla. Esa persona solo puede observar los pasos que tiene cerca y siempre avanza hacia uno mejor.</p>
-  <p>Pero puede ocurrir algo: llega a una cima donde ya no encuentra ningún paso que le permita subir más, aunque exista una montaña más alta en otro lugar. Eso es un óptimo local: una solución que es mejor que sus vecinas, pero no necesariamente la mejor de todo el problema. Esta es una de las principales limitaciones de la Búsqueda Local.</p>
-  <ol>
-   <li><b>Mejora.</b> Señala la definición y el flujo. Avanza con «Por ejemplo, si ya tenemos una ruta de entregas…».</li>
-   <li><b>37.</b> Recorre la fila inicial. Avanza con «Probemos intercambiar dos ciudades».</li>
-   <li><b>D ↔ E, 22.</b> Señala los dos cambios y los costos. Avanza con «Imaginen a una persona subiendo una montaña».</li>
-   <li><b>Niebla.</b> Señala al escalador y sus pasos cercanos. Avanza con «Puede llegar a una cima».</li>
-   <li><b>Vecinos.</b> Señala la cima menor. Avanza con «Aunque exista una montaña más alta».</li>
-   <li><b>Todas.</b> Señala la cima mayor. Recuerda que la altura se maximiza y la distancia se minimiza. Avanza con «Así que ser el mejor entre mis vecinos…».</li>
-   <li><b>Límite.</b> Señala la frase inferior. Avanza con «En cuanto a su origen…».</li>
-  </ol>
- </section>
- <section data-notes hidden>
-  <h3>3. Origen, clasificación y limitación · 55 segundos</h3>
-  <p>En cuanto a su origen, la Búsqueda Local no tiene un único creador. Es una idea clásica de optimización, con antecedentes como el método 2-opt de Croes, publicado en 1958, y el trabajo de Lin–Kernighan, en 1973, aplicados al problema del agente viajero.</p>
-  <p>También es importante saber cómo se clasifica. Es una heurística de mejora: parte de una solución y la modifica para mejorarla. Se considera un método de trayectoria, porque trabaja con una sola solución actual a la vez y trata de mejorarla progresivamente.</p>
-  <p>La Búsqueda Local es una heurística de mejora: aplica una regla concreta, aceptar solo vecinos que mejoren. Una metaheurística es una estrategia más general que orienta la exploración. Por ejemplo, Tabú incorpora memoria. Si Local llega a una cima donde ningún paso cercano mejora, se detiene. Tabú puede aceptar un paso temporalmente peor para salir del atasco e intentar explorar otra región.</p>
-  <p>Con esta idea general, mi compañera Angie Loango les va a explicar cuáles son los componentes de la Búsqueda Local y cómo funciona el algoritmo.</p>
-  <ol>
-   <li><b>1958, 1973.</b> Señala cada hito. Avanza con «También es importante saber cómo se clasifica».</li>
-   <li><b>Solución, cambio, mejora.</b> Recorre el esquema. Avanza con «¿Cuántas soluciones tiene a la vez?».</li>
-   <li><b>Trayectoria.</b> Recorre x₀ → x₁ → x₂. Avanza con «Además, es una heurística».</li>
-   <li><b>Regla concreta, estrategia general.</b> Señala primero la regla de Local y luego la definición de metaheurística. Avanza con «Veamos qué ocurre cuando se agotan las mejoras».</li>
-   <li><b>Atasco, paso peor, otra región.</b> Señala el punto azul, el tramo punteado y luego la flecha verde. Avanza con «Con esta idea general…».</li>
-   <li><b>Angie Loango.</b> Señala el relevo. Avanza para iniciar su bloque.</li>
-  </ol>
- </section>
-</aside>
-<script src="../../shared/canvas.js"></script>
-<script src="diagramas.js"></script>
-<script src="guia.js"></script>
-<script src="../../visor-bridge.js"></script>
-</body>
+      </section>
+      <section data-notes hidden>
+        <h3>Origen e inspiración · 60 s</h3>
+        <ol>
+          <li>
+            <strong>Origen clásico.</strong> Búsqueda Local es una idea clásica
+            en optimización. No tiene un único creador.
+            <em
+              >Señala el encabezado de la línea de tiempo. Avanza con «1958 y
+              1973».</em
+            >
+          </li>
+          <li>
+            <strong>1958 y 1973.</strong> En rutas encontramos antecedentes como
+            el 2-opt de G. A. Croes en 1958 y el trabajo de Lin y Kernighan en
+            1973.
+            <em>Sigue las fechas y los dos mapas. Avanza con «Escalador».</em>
+          </li>
+          <li>
+            <strong>Escalador.</strong> Imaginemos a una persona subiendo una
+            montaña con niebla.
+            <em>Señala al escalador y el camino. Avanza con «Alrededores».</em>
+          </li>
+          <li>
+            <strong>Alrededores.</strong> Solo puede ver los pasos que tiene
+            cerca, porque la niebla le limita la vista.
+            <em>Señala el círculo de visión. Avanza con «Mejora cercana».</em>
+          </li>
+          <li>
+            <strong>Mejora cercana.</strong> Entre lo que ve, avanza hacia una
+            posición mejor. Esa es la intuición del método.
+            <em
+              >Sigue el escalador y pasa a la definición. Pulsa la flecha para
+              pasar a la siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+      <section data-notes hidden>
+        <h3>Qué es y dónde encaja · 60 s</h3>
+        <ol>
+          <li>
+            <strong>Ruta existente.</strong> Partimos de una solución completa
+            que ya visita todos los destinos.
+            <em
+              >Señala el primer carrito y su ruta. Avanza con «Pequeño
+              cambio».</em
+            >
+          </li>
+          <li>
+            <strong>Pequeño cambio.</strong> Probamos un cambio pequeño y
+            buscamos mejorar la solución que teníamos.
+            <em
+              >Compara los mismos destinos en las dos rutas. Avanza con
+              «Trayectoria».</em
+            >
+          </li>
+          <li>
+            <strong>Trayectoria.</strong> Es un método de trayectoria porque
+            lleva una sola solución actual a la vez y la va modificando.
+            <em
+              >Sigue el único vehículo en el esquema. Avanza con «Dónde
+              encaja».</em
+            >
+          </li>
+          <li>
+            <strong>Dónde encaja.</strong> Local es una heurística de mejora
+            directa. Una metaheurística es una estrategia general que orienta la
+            búsqueda; Tabú, Genético y Colonia de Hormigas entran en esa
+            categoría. <em>Señala las dos categorías. Avanza con «Relevo».</em>
+          </li>
+          <li>
+            <strong>Relevo.</strong> Búsqueda Local mejora una solución paso a
+            paso. Ahora Angie Loango explicará sus componentes y su
+            funcionamiento.
+            <em
+              >Señala el relevo y avanza. Pulsa la flecha para pasar a la
+              siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+    </aside>
+    <script src="../../shared/canvas.js"></script>
+    <script src="../aperturas.js"></script>
+    <script src="../../visor-bridge.js"></script>
+  </body>
 </html>

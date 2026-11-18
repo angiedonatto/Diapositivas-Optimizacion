@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500">
   <title>Ciudad de entregas</title>
-  <desc>Calles con cruces y rutas alternativas conectan un depósito, viviendas, un mercado, un hospital, oficinas y una biblioteca.</desc>
+  <desc>Calles con cruces y rutas alternativas conectan un depósito, viviendas, un mercado, un hospital, oficinas, una fábrica y una biblioteca.</desc>
   <defs>
     <g id="tree">
       <ellipse cx="3" cy="10" rx="12" ry="5" fill="#d3dbcb"/>
@@ -37,9 +37,9 @@
     <rect x="616" y="286" width="255" height="185" rx="22"/>
   </g>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M-25 250h970M270-20v250q0 20 21 20m271-270v250q0 20 24 20M315 520V272q0-22-24-22m305 270V272q0-22-22-22M33-16v532m856-532v532M-16 484h952" stroke="#d7d8c9" stroke-width="35"/>
-    <path d="M-25 250h970M270-20v250q0 20 21 20m271-270v250q0 20 24 20M315 520V272q0-22-24-22m305 270V272q0-22-22-22M33-16v532m856-532v532M-16 484h952" stroke="#fbfaf6" stroke-width="30"/>
-    <path d="M-10 250h940M270 0v219M562 0v218M315 500V281M596 500V280M33 0v500m856-500v500M0 484h920" stroke="#d1d2c5" stroke-width="1.5" stroke-dasharray="9 9"/>
+    <path d="M-25 250h970M270-20v250q0 20 21 20m271-270v250q0 20 24 20M315 520V272q0-22-24-22m305 270V272q0-22-22-22M33-16v532m856-532v532M-16 484h952M-16 10h952" stroke="#d7d8c9" stroke-width="35"/>
+    <path d="M-25 250h970M270-20v250q0 20 21 20m271-270v250q0 20 24 20M315 520V272q0-22-24-22m305 270V272q0-22-22-22M33-16v532m856-532v532M-16 484h952M-16 10h952" stroke="#fbfaf6" stroke-width="30"/>
+    <path d="M-10 250h940M270 0v219M562 0v218M315 500V281M596 500V280M33 0v500m856-500v500M0 484h920M0 10h920" stroke="#d1d2c5" stroke-width="1.5" stroke-dasharray="9 9"/>
     <path d="M122 216v24m24-24v24m528-24v24m22-24v24M155 270v18m22-18v18m540-18v18m22-18v18" stroke="#fbfaf6" stroke-width="8"/>
   </g>
   <g stroke="#d0d0c1" stroke-width="2">
@@ -97,7 +97,7 @@
     <path d="M58 76v26m-27-13h50" stroke="#fcf4dc" stroke-width="2"/>
   </g>
 
-  <!-- Edificios de oficinas. -->
+  <!-- Oficinas y fábrica. -->
   <g transform="translate(367 301)">
     <use href="#tree" x="-8" y="105"/>
     <use href="#tree" x="155" y="99"/>
@@ -110,6 +110,9 @@
     <path d="m126 53 18-8v52l-18 10Z" fill="#96ab9d"/>
     <path d="m95 53 18-8h31l-18 8Z" fill="#d5e1d5"/>
     <path d="M47 99h20v15H47Z" fill="#6a889c"/>
+    <path d="M134 72v27h45V73l-13 7V68l-14 8V65z" fill="#ca9f75"/>
+    <path d="M172 50h8v29h-8z" fill="#a87d62"/>
+    <path d="M142 85h8v7h-8zm13 0h8v7h-8z" fill="#f8eed9"/>
   </g>
 
   <!-- Biblioteca. -->
@@ -132,7 +135,7 @@
     <text x="423" y="193">Viviendas</text>
     <text x="722" y="193">Hospital</text>
     <text x="172" y="449">Mercado</text>
-    <text x="451" y="449">Oficinas</text>
+    <text x="451" y="449">Oficinas y fábrica</text>
     <text x="743" y="449">Biblioteca</text>
   </g>
 </svg>

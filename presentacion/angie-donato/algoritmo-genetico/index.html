@@ -1,105 +1,870 @@
 <!doctype html>
 <html lang="es" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Angie Donato · Algoritmo Genético</title>
-<link rel="stylesheet" href="../estilos.css">
-<link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
-<link rel="stylesheet" href="../visuales.css">
-</head>
-<body>
-<header class="topbar">
- <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
- <div class="actions">
-  <a href="../../carolina/algoritmo-genetico/index.html">Análisis crítico · Carolina</a>
-  <a href="../../angie-loango/algoritmo-genetico/index.html">Componentes · Angie Loango</a>
-  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
-  <button id="fullBtn" type="button">Pantalla completa (F)</button>
- </div>
-</header>
-<nav class="methods" aria-label="Escoger algoritmo">
- 
- 
- <button data-method="ga" aria-selected="false"><b>C</b> Algoritmo Genético</button>
- 
-</nav>
-<main class="stage-wrap">
- <div class="slide-viewport" id="stage">
-  <div class="slide-canvas slide-theme" id="donatoCanvas">
-   <article class="lo-slide is-current" aria-live="polite">
-    <header>
-     <p class="lo-s-kicker"><span class="lo-s-letter" id="letter"></span><span id="methodName"></span><span class="lo-s-chap">Fundamentos</span></p>
-     <h1 class="lo-s-title" id="title"></h1>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Angie Donato · Algoritmo Genético</title>
+    <link rel="stylesheet" href="../estilos.css" />
+    <link rel="stylesheet" href="../../shared/tokens.css" />
+    <link rel="stylesheet" href="../../shared/slides.css" />
+    <link rel="stylesheet" href="../../shared/projection.css" />
+    <link rel="stylesheet" href="../visuales.css" />
+    <link rel="stylesheet" href="../aperturas.css" />
+  </head>
+  <body class="apertura">
+    <header class="topbar">
+      <div class="brand">Universidad Externado de Colombia · Optimización</div>
+      <div class="actions">
+        <a href="../../angie-loango/algoritmo-genetico/index.html"
+          >Componentes · Angie Loango</a
+        >
+        <a href="../../carolina/algoritmo-genetico/index.html"
+          >Análisis crítico · Carolina</a
+        >
+        <button
+          id="notesBtn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="notes"
+        >
+          Notas para ensayar (N)
+        </button>
+        <button id="fullBtn" type="button">Pantalla completa (F)</button>
+      </div>
     </header>
-    <div class="lo-s-body">
-     <p class="slide-lead" id="lead"></p>
-     <div class="slide-columns">
-      <section class="lo-c is-key"><h2 class="lo-c-name" id="mini"></h2><p class="slide-quote" id="quote"></p><div id="resource" class="donato-resource"></div><div class="slide-route" id="path"></div></section>
-      <div class="slide-stack" id="facts"></div>
-     </div>
+    <main
+      class="stage-wrap section-deck"
+      data-topic="ga"
+      data-next="../../angie-loango/algoritmo-genetico/index.html"
+    >
+      <div class="slide-viewport" id="stage">
+        <div class="slide-canvas slide-theme" data-algo="ga" id="apCanvas">
+          <article
+            class="lo-slide is-current"
+            id="etapa-1"
+            aria-labelledby="titulo-1"
+            aria-hidden="false"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">C</span>Algoritmo Genético
+                <span class="lo-s-chap">Contexto</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-1">
+                ¿Y si exploramos muchas soluciones al mismo tiempo?
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas">
+                <figure class="lo-c escena" data-f="1" data-cue="Alternativas">
+                  <figcaption class="lo-c-name">
+                    Un problema, muchos recorridos
+                  </figcaption>
+                  <div class="ciudad">
+                    <img
+                      src="../busqueda-local/ciudad.svg"
+                      width="920"
+                      height="500"
+                      alt="Bodega, viviendas, tiendas, hospital, oficinas, fábrica y biblioteca conectados por calles."
+                    />
+                    <svg
+                      viewBox="0 0 920 500"
+                      role="img"
+                      aria-label="Carritos de reparto y rutas alternativas"
+                    >
+                      <g class="" data-f="4" data-cue="Una solución">
+                        <path
+                          class="trazo"
+                          d="M154 206v45h410V10H888v240H154"
+                          stroke="#3d5a98"
+                          style="stroke-width: 5px"
+                          stroke-dasharray="10 8"
+                        />
+                        <use
+                          href="../recursos/escenas.svg#camion"
+                          x="384"
+                          y="220"
+                          width="92"
+                          height="52"
+                          style="color: #3d5a98"
+                        />
+                      </g>
+                      <g class="" data-f="5" data-cue="Población">
+                        <path
+                          class="trazo"
+                          d="M154 206v44H33v234h563V250H154"
+                          stroke="#2c7a3f"
+                          style="stroke-width: 5px"
+                          stroke-dasharray="10 8"
+                        />
+                        <use
+                          href="../recursos/escenas.svg#camion"
+                          x="237"
+                          y="453"
+                          width="80"
+                          height="48"
+                          style="color: #2c7a3f"
+                        />
+                        <path
+                          class="trazo"
+                          d="M154 206v44h735v234H596V250H154"
+                          stroke="#a8620a"
+                          style="stroke-width: 5px"
+                          stroke-dasharray="7 8"
+                        />
+                        <use
+                          href="../recursos/escenas.svg#camion"
+                          x="744"
+                          y="453"
+                          width="80"
+                          height="48"
+                          style="color: #a8620a"
+                        />
+                      </g>
+                    </svg>
+                  </div>
+                  <p class="lo-c-line pista">
+                    Cada vehículo representa un <b>recorrido candidato</b>.
+                  </p>
+                </figure>
+                <div class="pistas">
+                  <div
+                    class="comparacion-metodos"
+                    data-f="2"
+                    data-cue="Garantía y buena solución"
+                  >
+                    <div class="comparar">
+                      <div class="lo-c" data-f="2">
+                        <h2 class="lo-c-name">Método exacto</h2>
+                        <p class="lo-c-line pista">
+                          Busca el óptimo con <b>garantía</b>.
+                        </p>
+                      </div>
+                      <div class="lo-c" data-f="2">
+                        <h2 class="lo-c-name">Heurística</h2>
+                        <p class="lo-c-line pista">
+                          Busca una <b>buena solución</b> sin garantizar el
+                          óptimo.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lo-c acento" data-f="3" data-cue="Metaheurística">
+                    <h2 class="lo-c-name">Metaheurística</h2>
+                    <p class="lo-c-line pista">
+                      <strong>Estrategia general</strong> que orienta la
+                      exploración.
+                    </p>
+                  </div>
+                  <div class="lo-c" data-f="4">
+                    <h2 class="lo-c-name">Trayectoria</h2>
+                    <p class="lo-c-line pista">
+                      <b>Un vehículo</b>: una solución actual.
+                    </p>
+                  </div>
+                  <div class="lo-c acento" data-f="5">
+                    <h2 class="lo-c-name">Población</h2>
+                    <p class="lo-c-line pista">
+                      <b>Varios vehículos</b>: varias soluciones a la vez.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="cierre" data-f="5">
+                Trabajamos con una población.<span aria-hidden="true">→</span>
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-now">Contexto</li>
+                <li class="">Origen e inspiración</li>
+                <li class="">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+
+          <article
+            class="lo-slide"
+            id="etapa-2"
+            aria-labelledby="titulo-2"
+            aria-hidden="true"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">C</span>Algoritmo Genético
+                <span class="lo-s-chap">Origen e inspiración</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-2">
+                John Holland y la evolución natural
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas">
+                <figure
+                  class="lo-c escena"
+                  data-f="2"
+                  data-cue="Individuos distintos"
+                >
+                  <figcaption class="lo-c-name">
+                    Una población que cambia con el tiempo
+                  </figcaption>
+                  <svg
+                    viewBox="0 0 780 430"
+                    role="img"
+                    aria-label="Una población de aves con variación, selección según el entorno y descendencia con características heredadas."
+                  >
+                    <rect width="780" height="430" fill="#eef0e4" />
+                    <path
+                      d="M0 147C148 111 252 178 392 141S633 108 780 139v18H0Zm0 258c211-32 329 16 477-8 119-20 210-21 303 8v25H0Z"
+                      fill="#dbe4d7"
+                    />
+                    <path
+                      d="M30 132h685m-620 150h594m-649 99h700"
+                      stroke="#b8c5aa"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                    />
+                    <g class="" data-f="2">
+                      <text x="35" y="33">Individuos con rasgos distintos</text>
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="57"
+                        y="48"
+                        width="85"
+                        height="76"
+                        style="color: #47795d"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="220"
+                        y="48"
+                        width="85"
+                        height="76"
+                        style="color: #8ba494"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="387"
+                        y="48"
+                        width="85"
+                        height="76"
+                        style="color: #3d5a98"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="554"
+                        y="48"
+                        width="85"
+                        height="76"
+                        style="color: #b48559"
+                      />
+                      <g transform="translate(657 127)" fill="#b68a55">
+                        <ellipse rx="7" ry="3" transform="rotate(-24)" />
+                        <ellipse
+                          cx="15"
+                          cy="-2"
+                          rx="5"
+                          ry="3"
+                          transform="rotate(20)"
+                        />
+                        <ellipse
+                          cx="27"
+                          cy="3"
+                          rx="6"
+                          ry="3"
+                          transform="rotate(-4)"
+                        />
+                      </g>
+                    </g>
+                    <g class="" data-f="3" data-cue="Selección natural">
+                      <path
+                        d="M307 127c99 7 221 7 325 0"
+                        fill="none"
+                        stroke="#2c7a3f"
+                        stroke-width="3"
+                        stroke-dasharray="5 6"
+                      />
+                      <rect
+                        x="213"
+                        y="44"
+                        width="106"
+                        height="92"
+                        rx="13"
+                        fill="none"
+                        stroke="#2c7a3f"
+                        stroke-width="3"
+                      />
+                      <rect
+                        x="381"
+                        y="44"
+                        width="105"
+                        height="92"
+                        rx="13"
+                        fill="none"
+                        stroke="#2c7a3f"
+                        stroke-width="3"
+                      />
+                      <path
+                        d="m290 83 15 5-15 10zm166 0 15 5-15 10z"
+                        fill="#ad7840"
+                      />
+                      <text x="554" y="158">Semillas duras</text>
+                    </g>
+                    <g class="" data-f="4" data-cue="Descendencia">
+                      <text x="35" y="196">Progenitores</text>
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="171"
+                        y="188"
+                        width="81"
+                        height="75"
+                        style="color: #8ba494"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="282"
+                        y="188"
+                        width="81"
+                        height="75"
+                        style="color: #3d5a98"
+                      />
+                      <path
+                        class="trazo"
+                        d="M254 264l92 14 93-14m-93 14 79 55"
+                        stroke="#829e89"
+                        style="stroke-width: 3px"
+                        stroke-dasharray="6 6"
+                      />
+                      <ellipse
+                        cx="438"
+                        cy="277"
+                        rx="54"
+                        ry="13"
+                        fill="#c0a884"
+                      />
+                      <path
+                        d="M410 270c-5-11 0-24 9-26 11 0 15 14 11 24zm25 1c-6-11 0-24 9-25 11 1 14 14 10 24z"
+                        fill="#fbfaf6"
+                      />
+                      <text x="493" y="269">Descendencia</text>
+                    </g>
+                    <g class="" data-f="5" data-cue="Herencia">
+                      <text x="35" y="328">Rasgos heredados</text>
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="358"
+                        y="304"
+                        width="76"
+                        height="69"
+                        style="color: #8ba494"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="437"
+                        y="304"
+                        width="76"
+                        height="69"
+                        style="color: #3d5a98"
+                      />
+                    </g>
+                    <g class="" data-f="6" data-cue="Mutación">
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="519"
+                        y="304"
+                        width="76"
+                        height="69"
+                        style="color: #a8620a"
+                      />
+                      <path
+                        d="m561 308 4-9 4 9 9 2-9 5 1 8-7-6-8 3 4-8-6-5z"
+                        fill="#f5d793"
+                      />
+                      <text x="586" y="363">Variación nueva</text>
+                    </g>
+                    <g class="" data-f="7" data-cue="Generaciones">
+                      <text x="42" y="407">Siguiente generación</text>
+                      <path
+                        class="trazo"
+                        d="M273 402h389m-13-8 13 8-13 8"
+                        stroke="#2c7a3f"
+                        style="stroke-width: 3px"
+                      />
+                    </g>
+                  </svg>
+                </figure>
+                <div class="pistas">
+                  <figure
+                    class="lo-c historia"
+                    data-f="1"
+                    data-cue="Holland, Michigan, 1975"
+                  >
+                    <div class="donato-history">
+                      <div
+                        class="donato-portrait holland"
+                        role="img"
+                        aria-label="Retrato ilustrado de John Holland"
+                      ></div>
+                      <figcaption>
+                        <strong>John Holland · década de 1970</strong
+                        ><span>Universidad de Michigan</span
+                        ><span>Libro de 1975 · Evolución natural de Darwin</span
+                        ><span class="donato-credit">Ilustración generada</span>
+                      </figcaption>
+                    </div>
+                  </figure>
+                  <p class="pista-breve" data-f="2">
+                    <b>Variación.</b> Los individuos tienen rasgos distintos.
+                  </p>
+                  <p class="pista-breve" data-f="3">
+                    <b>Selección natural.</b> Un pico robusto puede ayudar con
+                    semillas duras.
+                  </p>
+                  <p class="pista-breve" data-f="4">
+                    <b>Descendencia.</b> Dos progenitores dan paso a nuevos
+                    individuos.
+                  </p>
+                  <p class="pista-breve" data-f="5">
+                    <b>Herencia.</b> Los descendientes reciben características.
+                  </p>
+                  <p class="pista-breve" data-f="6">
+                    <b>Mutación.</b> Puede aparecer una variación nueva.
+                  </p>
+                  <p class="pista-breve" data-f="7">
+                    <b>Generaciones.</b> La población cambia con el tiempo.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-past">Contexto</li>
+                <li class="is-now">Origen e inspiración</li>
+                <li class="">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+
+          <article
+            class="lo-slide"
+            id="etapa-3"
+            aria-labelledby="titulo-3"
+            aria-hidden="true"
+          >
+            <header>
+              <p class="lo-s-kicker">
+                <span class="lo-s-letter">C</span>Algoritmo Genético
+                <span class="lo-s-chap">Qué es y dónde encaja</span>
+              </p>
+              <h1 class="lo-s-title" id="titulo-3">
+                Una metaheurística poblacional inspirada en la evolución
+              </h1>
+            </header>
+            <div class="lo-s-body">
+              <div class="columnas">
+                <figure class="lo-c escena" data-f="1" data-cue="Individuo">
+                  <figcaption class="lo-c-name">
+                    Soluciones que evolucionan
+                  </figcaption>
+                  <svg
+                    viewBox="0 0 770 410"
+                    role="img"
+                    aria-label="Una solución representada por un individuo, varias candidatas en una población y una generación siguiente."
+                  >
+                    <rect width="770" height="410" fill="#edf1e6" />
+                    <path
+                      d="M24 125h722m-722 133h722"
+                      stroke="#b7c6b8"
+                      stroke-width="2"
+                    />
+                    <g class="" data-f="1">
+                      <text x="32" y="33">Una solución</text>
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="52"
+                        y="41"
+                        width="86"
+                        height="81"
+                        style="color: #3d5a98"
+                      />
+                      <path
+                        class="trazo"
+                        d="M184 80h140m-13-8 13 8-13 8"
+                        stroke="#3d5a98"
+                        style="stroke-width: 3px"
+                      />
+                      <text x="350" y="86">Un individuo</text>
+                    </g>
+                    <g class="" data-f="2" data-cue="Población">
+                      <text x="32" y="163">
+                        Población · soluciones candidatas
+                      </text>
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="47"
+                        y="176"
+                        width="78"
+                        height="73"
+                        style="color: #3d5a98"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="168"
+                        y="176"
+                        width="78"
+                        height="73"
+                        style="color: #47795d"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="290"
+                        y="176"
+                        width="78"
+                        height="73"
+                        style="color: #baa17b"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="413"
+                        y="176"
+                        width="78"
+                        height="73"
+                        style="color: #8ba494"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="531"
+                        y="176"
+                        width="78"
+                        height="73"
+                        style="color: #cf9a63"
+                      />
+                    </g>
+                    <g class="" data-f="3" data-cue="Aptitud">
+                      <rect
+                        x="159"
+                        y="176"
+                        width="94"
+                        height="74"
+                        rx="12"
+                        fill="none"
+                        stroke="#1f7a4d"
+                        stroke-width="3"
+                      />
+                      <text x="645" y="217">Aptitud</text>
+                    </g>
+                    <g class="" data-f="4" data-cue="Generaciones">
+                      <text x="32" y="297">Siguiente generación</text>
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="46"
+                        y="308"
+                        width="76"
+                        height="71"
+                        style="color: #47795d"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="168"
+                        y="308"
+                        width="76"
+                        height="71"
+                        style="color: #5c9680"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="290"
+                        y="308"
+                        width="76"
+                        height="71"
+                        style="color: #baa17b"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="413"
+                        y="308"
+                        width="76"
+                        height="71"
+                        style="color: #5e8b69"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="531"
+                        y="308"
+                        width="76"
+                        height="71"
+                        style="color: #47795d"
+                      />
+                      <path
+                        class="trazo"
+                        d="M690 233v109m-8-13 8 13 8-13"
+                        stroke="#2c7a3f"
+                        style="stroke-width: 3px"
+                      />
+                    </g>
+                  </svg>
+                </figure>
+                <div class="pistas">
+                  <p class="pista-breve" data-f="1">
+                    <b>Individuo.</b> Cada individuo representa una solución.
+                  </p>
+                  <div class="lo-c acento" data-f="2">
+                    <h2 class="lo-c-name">Población</h2>
+                    <p class="lo-c-line pista">
+                      <b>Varias soluciones candidatas</b> a la vez.
+                    </p>
+                  </div>
+                  <p class="pista-breve" data-f="3">
+                    <b>Aptitud.</b> Representa la calidad de una solución.
+                  </p>
+                  <p class="pista-breve" data-f="4">
+                    <b>Generaciones.</b> La población evoluciona entre
+                    generaciones.
+                  </p>
+                  <div
+                    class="lo-c"
+                    data-f="5"
+                    data-cue="Trayectoria y población"
+                  >
+                    <h2 class="lo-c-name">Trayectoria frente a población</h2>
+                    <p class="lo-c-line pista">
+                      <b>Local y Tabú:</b> una solución → otra.
+                    </p>
+                    <svg
+                      viewBox="0 0 380 58"
+                      role="img"
+                      aria-label="A la izquierda, una ruta recorrida por un solo vehículo. A la derecha, varios individuos."
+                    >
+                      <use
+                        href="../recursos/escenas.svg#camion"
+                        x="8"
+                        y="5"
+                        width="78"
+                        height="45"
+                        style="color: #3d5a98"
+                      />
+                      <path
+                        class="trazo"
+                        d="M102 28h47m17-20v40"
+                        stroke="#3d5a98"
+                        style="stroke-width: 3px"
+                        stroke-dasharray="5 6"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="184"
+                        y="3"
+                        width="54"
+                        height="46"
+                        style="color: #47795d"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="244"
+                        y="3"
+                        width="54"
+                        height="46"
+                        style="color: #3d5a98"
+                      />
+                      <use
+                        href="../recursos/escenas.svg#ave"
+                        x="304"
+                        y="3"
+                        width="54"
+                        height="46"
+                        style="color: #b48559"
+                      />
+                    </svg>
+                    <p class="lo-c-line pista">
+                      <b>Genético:</b> una población cambia entre generaciones.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="cierre" data-f="6" data-cue="Relevo">
+                Metaheurística poblacional<small
+                  >Angie Loango · Cromosomas, selección, cruce y mutación</small
+                >
+              </div>
+            </div>
+            <footer class="lo-s-foot">
+              <span>Angie Donato · Fundamentos</span>
+              <ol class="lo-s-prog" aria-label="Etapas">
+                <li class="is-past">Contexto</li>
+                <li class="is-past">Origen e inspiración</li>
+                <li class="is-now">Definición y clasificación</li>
+              </ol>
+              <span class="ap-progress"></span>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </main>
+    <div class="controlbar">
+      <p>
+        <kbd>←</kbd> <kbd>→</kbd> apariciones · <kbd>N</kbd> notas ·
+        <kbd>F</kbd> pantalla completa
+      </p>
+      <div class="pager">
+        <button id="prevBtn" type="button">← Anterior</button>
+        <strong id="count" aria-live="polite"></strong>
+        <button id="nextBtn" type="button">Siguiente →</button>
+      </div>
     </div>
-    <footer class="lo-s-foot"><span>Angie Donato · Apertura</span><span id="handoff"></span><span id="progress"></span></footer>
-   </article>
-  </div>
- </div>
-</main>
-<div class="controlbar">
- <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
- <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
-</div>
-<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
-<script src="../visuales.js"></script>
-<script>
-(function () {
- 'use strict';
- var all={
- ga:{name:'Algoritmo Genético',accent:'#2c7a3f',soft:'#e4f2e7',slides:[
- {title:'¿Y si buscamos con muchas soluciones a la vez?',lead:'Algunos problemas tienen tantas combinaciones que conviene explorar varias alternativas, no una sola trayectoria.',mini:'El problema de exploración',quote:'La idea no es mejorar un único recorrido, sino hacer evolucionar varias posibilidades.',path:['Población','Generación','Nueva población'],facts:[['Exacto','Un método exacto busca garantías de optimalidad, normalmente con un costo computacional mayor en problemas difíciles.'],['Heurística','Encuentra soluciones útiles sin prometer el óptimo global.'],['Metaheurística','Coordina estrategias generales para explorar soluciones y evitar el estancamiento.']],notes:'Buenos días. Nos tocó Algoritmo Genético. En problemas combinatorios como el agente viajero, probar todas las soluciones puede ser inviable. Una heurística busca respuestas útiles sin garantizar el óptimo. Un algoritmo genético va más allá de mejorar una única solución: mantiene varias al mismo tiempo y las va cambiando. Por eso es una metaheurística de tipo poblacional.'},
- {title:'John Holland llevó la evolución a la computación',lead:'En la década de 1970 formalizó los algoritmos genéticos, inspirados en la evolución natural.',mini:'Origen e inspiración',quote:'Las soluciones mejor adaptadas tienden a dejar descendencia; aparecen combinaciones y mutaciones.',path:['Padres','Cruce','Hijos'],facts:[['Pionero','John Holland, trabajos de los años setenta y libro de 1975.'],['Inspiración','La evolución natural: selección, herencia y mutación.'],['Analogía','Cada solución es un individuo; su calidad determina su aptitud.']],notes:'El algoritmo genético fue desarrollado por John Holland en los años setenta, y su libro de 1975 ayudó a formalizarlo. Se inspira en la evolución: los individuos mejor adaptados tienen más posibilidades de reproducirse, los hijos heredan características de los padres y ocasionalmente aparecen mutaciones. En optimización, cada individuo representa una posible solución del problema y una función de aptitud mide qué tan buena es.'},
- {title:'No sigue una ruta: hace evolucionar una población',lead:'En cada generación se seleccionan padres, se combinan y se introducen pequeños cambios para mantener diversidad.',mini:'Dónde encaja',quote:'La exploración ocurre en varias zonas del espacio de soluciones a la vez.',path:['Seleccionar','Cruzar y mutar','Evaluar'],facts:[['Población','Varias soluciones candidatas, en lugar de una sola.'],['Operadores','Selección, cruce y mutación crean nuevas soluciones.'],['Riesgo','La convergencia prematura ocurre si la población pierde diversidad muy pronto.']],handoff:'Continúa Angie Loango: genes y operadores',notes:'Aquí está la diferencia frente a Búsqueda Local y Tabú: aquellas tienen una solución actual; el Genético mantiene una población. Primero evalúa la aptitud de los individuos, luego selecciona candidatos a ser padres, los cruza para crear hijos y puede mutar algunos rasgos. Repite el proceso a lo largo de generaciones. La mutación ayuda a no quedarse con individuos demasiado parecidos. Angie Loango explicará qué son cromosomas, genes y alelos, además de los operadores de selección y cruce.'}
- ]}
- };
- var method='ga',i=0;
- var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
- function render(){
-  var group=all[method],s=group.slides[i];
-  document.getElementById('donatoCanvas').dataset.algo=method;
-  document.getElementById('letter').textContent={local:'A',tabu:'B',ga:'C',aco:'D'}[method];
-  document.getElementById('methodName').textContent=group.name;document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
-  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
-  DonatoVisuals.render(document.getElementById('resource'), method, i);
-  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
-  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='lo-c slide-fact';var number=document.createElement('div');number.className='lo-c-num';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];h.className='lo-c-name';var p=document.createElement('p');p.className='lo-c-line';p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
-  nodes.handoff.textContent=s.handoff||'';nodes.progress.textContent=(i+1)+' / '+group.slides.length;
-  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
-  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
-  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
-  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
- }
- function choose(m){if(!all[m])return;method=m;i=0;render()}
- function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
- function prev(){if(i>0){i--;render()}}
- document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
- document.getElementById('nextBtn').addEventListener('click',next);
- document.getElementById('prevBtn').addEventListener('click',prev);
- document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
- document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
- document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
-  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
-  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
-  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
- });
- var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash&&all[hash[1]]){method=hash[1];i=Number(hash[2])-1}
- render();
-})();
-</script>
-<script src="../../shared/canvas.js"></script>
-<script>SlideCanvas.fit(document.getElementById('stage'), document.getElementById('donatoCanvas'));</script>
-<script src="../../visor-bridge.js"></script>
-</body>
+    <p class="ap-cue" id="cue" aria-live="polite"></p>
+    <aside id="notes" class="notes" hidden aria-label="Notas para ensayar">
+      <h2>Guion para ensayar</h2>
+      <section data-notes>
+        <h3>Contexto · 55 s</h3>
+        <ol>
+          <li>
+            <strong>Alternativas.</strong> Un reparto por la ciudad se puede
+            organizar de muchas maneras; cada recorrido posible es una solución.
+            <em
+              >Señala los destinos y las calles. Avanza con «Garantía y buena
+              solución».</em
+            >
+          </li>
+          <li>
+            <strong>Garantía y buena solución.</strong> El método exacto busca
+            una solución con garantía de optimalidad; una heurística busca una
+            buena solución sin esa garantía.
+            <em>Señala ambas tarjetas. Avanza con «Metaheurística».</em>
+          </li>
+          <li>
+            <strong>Metaheurística.</strong> Una metaheurística propone una
+            estrategia general para orientar la exploración.
+            <em>Señala la tarjeta de estrategia. Avanza con «Una solución».</em>
+          </li>
+          <li>
+            <strong>Una solución.</strong> Un solo vehículo representa una
+            trayectoria: una solución actual a la vez.
+            <em>Sigue el carro azul. Avanza con «Población».</em>
+          </li>
+          <li>
+            <strong>Población.</strong> Al explorar varios recorridos al mismo
+            tiempo trabajamos con una población de soluciones candidatas.
+            <em
+              >Señala los otros dos vehículos y sus colores. Pulsa la flecha
+              para pasar a la siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+      <section data-notes hidden>
+        <h3>Origen e inspiración · 70 s</h3>
+        <ol>
+          <li>
+            <strong>Holland, Michigan, 1975.</strong> John Holland, en la
+            Universidad de Michigan, formalizó la idea en los años setenta y
+            publicó su libro en 1975. La inspiración viene de la evolución
+            natural de Darwin.
+            <em
+              >Señala el retrato y las fechas. Avanza con «Individuos
+              distintos».</em
+            >
+          </li>
+          <li>
+            <strong>Individuos distintos.</strong> Imaginemos una población de
+            aves con rasgos diferentes, en un entorno donde hay cierto alimento
+            disponible.
+            <em
+              >Señala las diferencias visibles y las semillas. Avanza con
+              «Selección natural».</em
+            >
+          </li>
+          <li>
+            <strong>Selección natural.</strong> En ese entorno, un pico robusto
+            puede facilitar abrir semillas duras. Si cambia el alimento, también
+            puede cambiar qué rasgo resulta ventajoso.
+            <em
+              >Señala los individuos enmarcados junto al alimento. Avanza con
+              «Descendencia».</em
+            >
+          </li>
+          <li>
+            <strong>Descendencia.</strong> Los individuos generan descendencia,
+            formando el siguiente grupo.
+            <em
+              >Señala los dos progenitores y el nido. Avanza con «Herencia».</em
+            >
+          </li>
+          <li>
+            <strong>Herencia.</strong> Los descendientes pueden heredar
+            características de sus progenitores.
+            <em
+              >Compara los colores de las dos filas. Avanza con «Mutación».</em
+            >
+          </li>
+          <li>
+            <strong>Mutación.</strong> También puede surgir una pequeña
+            variación nueva.
+            <em
+              >Señala el individuo con el detalle distinto. Avanza con
+              «Generaciones».</em
+            >
+          </li>
+          <li>
+            <strong>Generaciones.</strong> Al repetirse el proceso entre
+            generaciones, la población cambia con el tiempo. Esa es la
+            inspiración para explorar soluciones.
+            <em
+              >Señala la dirección de la flecha. Pulsa la flecha para pasar a la
+              siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+      <section data-notes hidden>
+        <h3>Qué es y dónde encaja · 55 s</h3>
+        <ol>
+          <li>
+            <strong>Individuo.</strong> En el algoritmo genético, cada individuo
+            representa una solución candidata.
+            <em>Señala el individuo aislado. Avanza con «Población».</em>
+          </li>
+          <li>
+            <strong>Población.</strong> El algoritmo trabaja con varias
+            soluciones a la vez: una población.
+            <em>Señala la segunda fila. Avanza con «Aptitud».</em>
+          </li>
+          <li>
+            <strong>Aptitud.</strong> La aptitud representa qué tan buena es
+            cada solución para el problema.
+            <em>Señala el individuo enmarcado. Avanza con «Generaciones».</em>
+          </li>
+          <li>
+            <strong>Generaciones.</strong> La población evoluciona entre
+            generaciones.
+            <em
+              >Sigue la flecha hacia la siguiente fila. Avanza con «Trayectoria
+              y población».</em
+            >
+          </li>
+          <li>
+            <strong>Trayectoria y población.</strong> Local y Tabú suelen
+            trabajar con una sola solución actual. Genético, en cambio, explora
+            varias mediante una población que cambia.
+            <em>Contrasta trayectoria y población. Avanza con «Relevo».</em>
+          </li>
+          <li>
+            <strong>Relevo.</strong> Por eso hablamos de una metaheurística
+            poblacional inspirada en la evolución. Angie Loango explicará
+            cromosomas, selección, cruce y mutación.
+            <em
+              >Señala el relevo y avanza. Pulsa la flecha para pasar a la
+              siguiente sección.</em
+            >
+          </li>
+        </ol>
+      </section>
+    </aside>
+    <script src="../../shared/canvas.js"></script>
+    <script src="../aperturas.js"></script>
+    <script src="../../visor-bridge.js"></script>
+  </body>
 </html>
