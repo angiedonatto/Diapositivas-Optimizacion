@@ -1,0 +1,80 @@
+.tabu-problem { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); align-items: start; }
+.tabu-city { display: block; width: 100%; height: auto; border-radius: 14px; }
+.tabu-stack { display: grid; gap: 11px; }
+.tabu-guide .tabu-card { padding: 13px 17px; gap: 7px; }
+.tabu-card .lo-c-name { font-size: 25px; }
+.tabu-card .lo-c-line { font-size: 20px; }
+.tabu-card .candidate-track { min-height: 20px; }
+.tabu-valley { background: var(--lo-bg); }
+.tabu-valley svg { display: block; width: 100%; max-height: 114px; font: 700 18px system-ui, sans-serif; }
+
+.tabu-maze-layout { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); align-items: start; }
+.tabu-maze { gap: 14px; }
+.tabu-maze figcaption { justify-content: space-between; gap: 14px; }
+.tabu-maze figcaption span { font-size: 19px; font-weight: 650; color: var(--lo-m); }
+.tabu-maze svg { display: block; width: 100%; height: auto; font: 750 19px system-ui, sans-serif; }
+.tabu-maze-key { display: flex; gap: 8px 20px; flex-wrap: wrap; font-size: 19px; }
+.tabu-maze-key span { display: inline-flex; gap: 7px; align-items: center; }
+.tabu-maze-key i { width: 22px; border-top: 3px dashed var(--lo-m); }
+.tabu-maze-key .maze-memory i { border-color: var(--bad); }
+.tabu-maze-key .maze-detour i { border-color: var(--good); border-top-style: solid; }
+.maze-repeat, .maze-memory, .maze-detour { visibility: hidden; }
+#memoria[data-appearance="2"] .maze-repeat,
+#memoria:is([data-appearance="3"], [data-appearance="4"], [data-appearance="5"], [data-appearance="6"]) .maze-memory,
+#memoria:is([data-appearance="4"], [data-appearance="5"], [data-appearance="6"]) .maze-detour { visibility: visible; }
+.maze-walker { transform: translate(399px, 132px); }
+#memoria[data-appearance="2"] .maze-walker { animation: maze-return 1s var(--lo-ease) both; }
+#memoria[data-appearance="3"] .maze-walker { transform: translate(274px, 220px); }
+#memoria[data-appearance="4"] .maze-walker { animation: maze-explore 1.6s linear both; }
+#memoria:is([data-appearance="5"], [data-appearance="6"]) .maze-walker { transform: translate(698px, 63px); }
+@keyframes maze-return {
+  0% { transform: translate(399px, 132px); }
+  52% { transform: translate(274px, 132px); }
+  100% { transform: translate(274px, 220px); }
+}
+@keyframes maze-explore {
+  0% { transform: translate(274px, 220px); }
+  14% { transform: translate(274px, 340px); }
+  46% { transform: translate(530px, 340px); }
+  64% { transform: translate(530px, 190px); }
+  77% { transform: translate(636px, 190px); }
+  92% { transform: translate(636px, 63px); }
+  100% { transform: translate(698px, 63px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #memoria[data-appearance="2"] .maze-walker { animation: none; transform: translate(274px, 220px); }
+  #memoria[data-appearance="4"] .maze-walker { animation: none; transform: translate(698px, 63px); }
+}
+
+.tabu-cue-line { margin: 0; padding: 9px 13px; background: var(--lo-m-soft); border-radius: 10px; font-size: 21px; line-height: 1.25; }
+.tabu-cue-line b { color: var(--lo-m); }
+.tabu-memory-card { background: var(--bad-soft); }
+.tabu-memory-card b { color: var(--bad); }
+.tabu-detour-card { background: var(--good-soft); }
+.tabu-detour-card b { color: var(--good); }
+.tabu-equation { border-color: var(--lo-m); }
+.tabu-equation h2 { color: var(--lo-m); }
+.tabu-costs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.tabu-costs li { position: relative; display: grid; align-content: start; gap: 3px; background: var(--lo-bg); border-radius: 10px; padding: 7px 10px; font-size: 18px; line-height: 1.2; }
+.tabu-costs b { color: var(--lo-ink); font: 750 33px/1.1 var(--lo-mono); }
+.tabu-costs li:nth-child(2) { background: var(--lo-m-soft); }
+.tabu-costs li:nth-child(2) b { color: var(--lo-m); }
+.tabu-costs li:nth-child(3) { background: var(--good-soft); }
+.tabu-costs li:nth-child(3) b { color: var(--good); }
+.tabu-costs li + li::before { content: '→'; position: absolute; left: -14px; top: 15px; color: var(--lo-ink-2); }
+
+.tabu-history { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr); }
+.tabu-glover { padding: 0; justify-content: center; }
+.tabu-glover .donato-history { background: transparent; gap: 16px; padding: 18px; }
+.tabu-glover .donato-portrait { flex-basis: 116px; height: 116px; }
+.tabu-compare .lo-c:first-child { background: var(--local-soft); }
+.tabu-compare .lo-c:last-child { background: var(--tabu-soft); }
+.tabu-summary { font-size: 31px; }
+.tabu-guide .local-handoff { background: var(--lo-bg); color: var(--lo-deep); border-color: var(--lo-sage); }

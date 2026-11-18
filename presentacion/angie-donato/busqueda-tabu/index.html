@@ -1,105 +1,241 @@
 <!doctype html>
 <html lang="es" data-theme="light">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Angie Donato · Búsqueda Tabú</title>
-<link rel="stylesheet" href="../estilos.css">
-<link rel="stylesheet" href="../../shared/tokens.css">
-<link rel="stylesheet" href="../../shared/slides.css">
-<link rel="stylesheet" href="../../shared/projection.css">
-<link rel="stylesheet" href="../visuales.css">
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Angie Donato · Búsqueda Tabú</title>
+ <link rel="stylesheet" href="../estilos.css">
+ <link rel="stylesheet" href="../../shared/tokens.css">
+ <link rel="stylesheet" href="../../shared/slides.css">
+ <link rel="stylesheet" href="../../shared/projection.css">
+ <link rel="stylesheet" href="../busqueda-local/guia.css">
+ <link rel="stylesheet" href="../visuales.css">
+ <link rel="stylesheet" href="guia.css">
 </head>
-<body>
+<body class="local-guide tabu-guide">
 <header class="topbar">
- <div class="brand"><span class="brand-mark">UE</span><span>Universidad Externado de Colombia<small>Optimización · Heurísticas y Metaheurísticas</small></span></div>
+ <div class="brand">Universidad Externado de Colombia · Optimización</div>
  <div class="actions">
-  <a href="../../carolina/busqueda-tabu/index.html">Análisis crítico · Carolina</a>
   <a href="../../angie-loango/busqueda-tabu/index.html">Componentes · Angie Loango</a>
-  <button id="notesBtn" type="button" aria-pressed="false">Notas para ensayar (N)</button>
+  <a href="../../carolina/busqueda-tabu/index.html">Análisis crítico · Carolina</a>
+  <button id="notesBtn" type="button" aria-expanded="false" aria-controls="notes">Notas para ensayar (N)</button>
   <button id="fullBtn" type="button">Pantalla completa (F)</button>
  </div>
 </header>
-<nav class="methods" aria-label="Escoger algoritmo">
- 
- <button data-method="tabu" aria-selected="false"><b>B</b> Búsqueda Tabú</button>
- 
- 
-</nav>
-<main class="stage-wrap">
+
+<main class="stage-wrap section-deck">
  <div class="slide-viewport" id="stage">
-  <div class="slide-canvas slide-theme" id="donatoCanvas">
-   <article class="lo-slide is-current" aria-live="polite">
+  <div class="slide-canvas slide-theme" data-algo="tabu" id="tabuCanvas">
+   <article class="lo-slide is-current" id="problema" aria-labelledby="title-problema">
     <header>
-     <p class="lo-s-kicker"><span class="lo-s-letter" id="letter"></span><span id="methodName"></span><span class="lo-s-chap">Fundamentos</span></p>
-     <h1 class="lo-s-title" id="title"></h1>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú <span class="lo-s-chap">Problema y necesidad</span></p>
+     <h1 class="lo-s-title" id="title-problema">¿Por qué necesitamos Búsqueda Tabú?</h1>
     </header>
-    <div class="lo-s-body">
-     <p class="slide-lead" id="lead"></p>
-     <div class="slide-columns">
-      <section class="lo-c is-key"><h2 class="lo-c-name" id="mini"></h2><p class="slide-quote" id="quote"></p><div id="resource" class="donato-resource"></div><div class="slide-route" id="path"></div></section>
-      <div class="slide-stack" id="facts"></div>
+    <div class="lo-s-body local-body">
+     <div class="local-split tabu-problem">
+      <figure class="lo-c local-city" data-f="1" data-cue="Muchas rutas posibles. Evaluarlas todas puede ser costoso.">
+       <figcaption class="lo-c-name">Muchos destinos, demasiadas rutas</figcaption>
+       <img class="tabu-city" src="../busqueda-local/ciudad.svg" width="920" height="500" alt="Depósito, viviendas, oficinas, mercado, hospital y biblioteca conectados por distintas calles y cruces.">
+       <p class="lo-c-line"><strong>Espacio de soluciones:</strong> visitar todos los destinos y volver al inicio. Revisar cada ruta puede ser costoso.</p>
+      </figure>
+      <div class="tabu-stack">
+       <div class="local-duo" data-f="2" data-cue="Exacto con garantía de optimalidad. Heurística con una buena solución sin garantía global.">
+        <div class="lo-c tabu-card">
+         <div class="candidate-track exact-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+         <h2 class="lo-c-name">Método exacto</h2><p class="lo-c-line">Garantía de optimalidad</p>
+        </div>
+        <div class="lo-c tabu-card">
+         <div class="candidate-track heuristic-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+         <h2 class="lo-c-name">Heurística</h2><p class="lo-c-line">Buena solución, sin garantía del óptimo global</p>
+        </div>
+       </div>
+       <div class="lo-c tabu-card" data-f="3" data-cue="Búsqueda Local: solución actual, vecino mejor, nueva solución.">
+        <h2 class="lo-c-name">Búsqueda Local · pequeños cambios</h2>
+        <div class="local-flow"><span>Solución actual</span><b aria-hidden="true">→</b><span>Vecino mejor</span><b aria-hidden="true">→</b><span>Nueva solución</span></div>
+       </div>
+       <figure class="lo-c tabu-card tabu-valley" data-f="4" data-cue="Óptimo local: no quedan vecinos mejores, aunque más lejos hay menor costo.">
+        <figcaption class="lo-c-name">Se detiene en el óptimo local</figcaption>
+        <svg viewBox="0 0 540 110" role="img" aria-label="El costo baja hasta un valle local. Para llegar al valle más bajo de la derecha, primero se tendría que subir.">
+         <path d="M14 20C69 27 81 65 131 65S196 15 247 17 308 98 373 98 441 49 524 26" fill="none" stroke="#8ca595" stroke-width="4" stroke-linecap="round"/>
+         <circle cx="131" cy="65" r="7" fill="#a8620a"/>
+         <circle cx="373" cy="98" r="7" fill="#1f7a4d"/>
+         <text x="71" y="97" fill="#80501c">Sin vecinos mejores</text>
+         <text x="305" y="65" fill="#1f6243">Menor costo, más lejos</text>
+        </svg>
+       </figure>
+      </div>
+     </div>
+     <p class="local-takeaway" data-f="5" data-cue="¿Y si pudiéramos seguir explorando aunque el siguiente paso fuera peor?">¿Y si pudiéramos seguir explorando aunque el siguiente paso fuera peor? <span aria-hidden="true">→</span></p>
+    </div>
+    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-now">Problema</li><li>Intuición</li><li>Origen</li></ol><span class="local-position"></span></footer>
+   </article>
+
+   <article class="lo-slide" id="memoria" aria-labelledby="title-memoria" aria-hidden="true">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú <span class="lo-s-chap">Concepto e intuición</span></p>
+     <h1 class="lo-s-title" id="title-memoria">La memoria y el laberinto</h1>
+    </header>
+    <div class="lo-s-body local-body">
+     <div class="local-split tabu-maze-layout">
+      <figure class="lo-c tabu-maze" data-f="1" data-cue="Entrada, callejón sin salida y salida. El personaje necesita explorar.">
+       <figcaption class="lo-c-name">Del callejón a la salida <span>Inspiración · memoria humana</span></figcaption>
+       <svg viewBox="0 0 720 408" role="img" id="maze" aria-label="Laberinto con entrada abajo a la izquierda, un callejón en el centro y la salida arriba a la derecha.">
+        <defs>
+         <path id="maze-corridors" d="M0 304H130V220H274V132H410 M130 220V62H210 M55 304V377H208 M274 220V340H530V190H636V63H720 M530 340H664V275H605 M530 190H493V65H365 M274 340H241V288 M636 63H581V117"/>
+         <marker id="maze-arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="m0 0 10 5-10 5z" fill="#a8620a"/></marker>
+         <marker id="maze-arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="m0 0 10 5-10 5z" fill="#1f7a4d"/></marker>
+        </defs>
+        <rect width="720" height="408" rx="16" fill="#e3e8df"/>
+        <g fill="#d6e0d4">
+         <rect x="19" y="19" width="77" height="245" rx="13"/>
+         <rect x="157" y="91" width="79" height="103" rx="12"/>
+         <rect x="310" y="159" width="144" height="149" rx="15"/>
+         <rect x="554" y="211" width="45" height="101" rx="10"/>
+         <rect x="320" y="18" width="137" height="20" rx="9"/>
+         <rect x="686" y="110" width="19" height="273" rx="9"/>
+        </g>
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+         <use href="#maze-corridors" stroke="#9eada0" stroke-width="37"/>
+         <use href="#maze-corridors" stroke="#fbfaf6" stroke-width="31"/>
+         <path d="M6 304H130V220H274V132H407" stroke="#c28951" stroke-width="4.5" stroke-dasharray="6 7"/>
+         <g class="maze-repeat">
+          <path d="M405 140H282V212" stroke="#a8620a" stroke-width="4" marker-end="url(#maze-arrow-amber)"/>
+          <path d="M286 200V144H393" stroke="#a8620a" stroke-width="3" stroke-dasharray="5 5" marker-end="url(#maze-arrow-amber)"/>
+         </g>
+         <g class="maze-memory">
+          <path d="M274 188V132H407" stroke="#a3392c" stroke-width="5" stroke-dasharray="6 7"/>
+          <rect x="209" y="166" width="130" height="30" rx="10" fill="#f8e7e3"/>
+          <text x="274" y="187" text-anchor="middle" fill="#a3392c">Tabú temporal</text>
+          <circle cx="274" cy="209" r="10" fill="#a3392c"/>
+          <path d="m270 205 8 8m0-8-8 8" stroke="#fff" stroke-width="2"/>
+         </g>
+         <g class="maze-detour">
+          <path d="M274 220v120h256V190h106V63h68" stroke="#1f7a4d" stroke-width="5" marker-end="url(#maze-arrow-green)"/>
+          <path d="m268 277 6 11 6-11m111 57 11 6-11 6m132-80 7-11 7 11" stroke="#1f7a4d" stroke-width="3"/>
+         </g>
+        </g>
+        <g fill="#324840">
+         <text x="17" y="280">Entrada</text><text x="337" y="103">Callejón sin salida</text><text x="646" y="31" fill="#1f7a4d">Salida</text>
+        </g>
+        <g class="maze-walker">
+         <circle cx="0" cy="0" r="17" fill="#fbf0df" stroke="#a8620a" stroke-width="2.5"/>
+         <circle cx="0" cy="-6" r="4" fill="#784d23"/>
+         <path d="M0-1v7m-6-4 6-3 6 3M0 5l-5 6m5-6 5 6" fill="none" stroke="#784d23" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+       </svg>
+       <div class="tabu-maze-key"><span><i></i> Camino recorrido</span><span class="maze-memory"><i></i> Evitar por ahora</span><span class="maze-detour"><i></i> Otra ruta</span></div>
+      </figure>
+      <div class="tabu-stack">
+       <p class="tabu-cue-line" data-f="2" data-cue="Sin memoria: retroceder, repetir el camino y quedar en un ciclo."><b>Sin memoria</b> · Retrocedo y puedo repetir el mismo camino.</p>
+       <p class="tabu-cue-line tabu-memory-card" data-f="3" data-cue="Recordar dónde estuve para no volver inmediatamente."><b>Memoria reciente</b> · Recordar dónde estuve para no volver inmediatamente.</p>
+       <p class="tabu-cue-line tabu-detour-card" data-f="4" data-cue="Otra ruta: se aleja temporalmente de la salida para seguir explorando."><b>Otra ruta</b> · Primero me alejo de la salida. Después encuentro cómo llegar.</p>
+       <div class="lo-c tabu-card tabu-equation" data-f="5" data-cue="Búsqueda Local más memoria es Búsqueda Tabú. Puede aceptar movimientos que empeoran temporalmente.">
+        <h2 class="lo-c-name">Búsqueda Local + Memoria = Búsqueda Tabú</h2>
+        <p class="lo-c-line">Puede aceptar movimientos que empeoran temporalmente.</p>
+       </div>
+       <div class="lo-c tabu-card" data-f="6" data-cue="Costo 22, óptimo local. 23, paso permitido peor. 20, mejor solución encontrada después.">
+        <h2 class="lo-c-name">Costos del ejemplo</h2>
+        <ol class="tabu-costs">
+         <li><b>22</b><span>Óptimo local en ese vecindario</span></li>
+         <li><b>23</b><span>Paso permitido que empeora</span></li>
+         <li><b>20</b><span>Mejor solución posterior</span></li>
+        </ol>
+       </div>
+      </div>
      </div>
     </div>
-    <footer class="lo-s-foot"><span>Angie Donato · Apertura</span><span id="handoff"></span><span id="progress"></span></footer>
+    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-past">Problema</li><li class="is-now">Intuición</li><li>Origen</li></ol><span class="local-position"></span></footer>
+   </article>
+
+   <article class="lo-slide" id="origen" aria-labelledby="title-origen" aria-hidden="true">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter">B</span>Búsqueda Tabú <span class="lo-s-chap">Origen y clasificación</span></p>
+     <h1 class="lo-s-title" id="title-origen">Una metaheurística de trayectoria</h1>
+    </header>
+    <div class="lo-s-body local-body">
+     <div class="local-history tabu-history">
+      <figure class="lo-c tabu-glover" data-f="1" data-cue="Fred Glover, 1986: Búsqueda Tabú y el término metaheurística.">
+       <div class="donato-history">
+        <div class="donato-portrait glover" role="img" aria-label="Retrato ilustrado de Fred Glover"></div>
+        <figcaption><strong>1986 · Fred Glover</strong><span>Búsqueda Tabú</span><span>Introduce el término <b>metaheurística</b>.</span><span class="donato-credit">Ilustración generada</span></figcaption>
+       </div>
+      </figure>
+      <div class="lo-c" data-f="2" data-cue="Metaheurística: estrategia que guía la exploración.">
+       <h2 class="lo-c-name">Metaheurística</h2>
+       <p class="lo-c-line">Estrategia que guía la exploración.</p>
+       <div class="local-flow"><span>Memoria</span><b aria-hidden="true">→</b><span>Ampliar la búsqueda</span></div>
+      </div>
+      <div class="lo-c" data-f="3" data-cue="Método de trayectoria: una solución actual a la vez.">
+       <h2 class="lo-c-name">Método de trayectoria</h2>
+       <ol class="local-trajectory" aria-label="La solución actual pasa de x cero a x uno, x dos y x tres"><li>x<sub>0</sub></li><li>x<sub>1</sub></li><li>x<sub>2</sub></li><li>x<sub>3</sub></li></ol>
+       <p class="lo-c-line"><strong>Una solución actual a la vez.</strong></p>
+      </div>
+     </div>
+     <div class="local-duo tabu-compare" data-f="4" data-cue="Local solo acepta mejoras en la versión estudiada. Tabú permite pasos peores y recuerda para evitar ciclos.">
+      <div class="lo-c"><h2 class="lo-c-name">Búsqueda Local</h2><p class="lo-c-line"><strong>Solo acepta mejoras</strong> en la versión estudiada.<br>Puede detenerse en un <strong>óptimo local</strong>.</p></div>
+      <div class="lo-c"><h2 class="lo-c-name">Búsqueda Tabú</h2><p class="lo-c-line">Puede aceptar <strong>movimientos peores</strong>.<br>Utiliza <strong>memoria para evitar ciclos</strong>.</p></div>
+     </div>
+     <p class="local-takeaway tabu-summary" data-f="5" data-cue="Búsqueda Tabú es Búsqueda Local guiada por memoria.">Búsqueda Tabú = Búsqueda Local + Memoria</p>
+     <div class="local-takeaway local-handoff" data-f="6" data-cue="Componentes, memoria y pseudocódigo. Continúa Angie Loango."><strong>Componentes, memoria y pseudocódigo</strong><span>Angie Loango <b aria-hidden="true">→</b></span></div>
+    </div>
+    <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-past">Problema</li><li class="is-past">Intuición</li><li class="is-now">Origen</li></ol><span class="local-position"></span></footer>
    </article>
   </div>
  </div>
 </main>
+
 <div class="controlbar">
- <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
- <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count">1 / 3</strong><button id="nextBtn" type="button">Siguiente →</button></div>
+ <p><kbd>←</kbd> <kbd>→</kbd> apariciones · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
+ <div class="pager"><button id="prevBtn" type="button">← Anterior</button><strong id="count" aria-live="polite"></strong><button id="nextBtn" type="button">Siguiente →</button></div>
 </div>
-<aside id="notes" class="notes" aria-live="polite"><h2>Guion para estudiar (no proyectar)</h2><p id="noteText"></p></aside>
-<script src="../visuales.js"></script>
-<script>
-(function () {
- 'use strict';
- var all={
- tabu:{name:'Búsqueda Tabú',accent:'#a8620a',soft:'#fbf0df',slides:[
- {title:'La Búsqueda Local tiene un problema: puede atascarse',lead:'Cuando ningún vecino es mejor, una búsqueda local estricta se detiene, aunque existan mejores soluciones lejos de allí.',mini:'El problema que queremos superar',quote:'Para encontrar un camino mejor, a veces hay que aceptar un paso peor.',path:['37','22','23','20'],facts:[['Método exacto','Intenta llegar al óptimo con garantía, si dispone del tiempo y los recursos.'],['Heurística','Prioriza encontrar buenas soluciones sin garantizar que sean las mejores.'],['Metaheurística','Añade estrategias para explorar más allá de una mejora inmediata.']],notes:'Buenos días. Nos correspondió Búsqueda Tabú. Recordemos el problema de la Búsqueda Local: solo acepta cambios mejores, por eso puede detenerse en un óptimo local. En el ejemplo compartido, encontrar un costo 22 no implica haber alcanzado el mejor recorrido. La idea de Tabú es justamente no detenerse ahí: a veces conviene aceptar un movimiento que empeora momentáneamente para poder llegar a otra región con mejores soluciones.'},
- {title:'Fred Glover propuso usar memoria para explorar',lead:'La Búsqueda Tabú se introdujo en 1986 como una estrategia para superar el estancamiento.',mini:'Origen e inspiración',quote:'Como salir de un laberinto recordando los caminos por donde ya pasamos.',path:['Recordar','Evitar ciclos','Explorar'],facts:[['Origen','Fred Glover, 1986.'],['Inspiración','La memoria: recordar movimientos recientes para evitar deshacerlos inmediatamente.'],['Clasificación','Metaheurística de trayectoria: avanza con una sola solución actual.']],notes:'Fred Glover propuso la Búsqueda Tabú en 1986. A diferencia de los métodos inspirados en la biología, aquí la intuición es la memoria humana: si estamos en un laberinto, recordar dónde ya estuvimos ayuda a no recorrer las mismas vueltas una y otra vez. Es una metaheurística porque guía una búsqueda local con reglas adicionales, aunque conserva una sola solución actual y la va desplazando por el espacio de posibilidades.'},
- {title:'No olvidar lo mejor, pero sí permitir empeorar',lead:'La solución actual puede empeorar; la mejor solución encontrada se guarda aparte.',mini:'La idea central',quote:'La lista tabú evita regresar inmediatamente por el mismo movimiento.',path:['Actual','Movimiento permitido','Mejor histórica'],facts:[['Lista tabú','Memoria corta de atributos o movimientos recientes.'],['Escape','Puede aceptar un vecino peor para abandonar el óptimo local.'],['Aspiración','Una prohibición puede levantarse si el movimiento mejora el mejor resultado histórico.']],handoff:'Continúa Angie Loango: memoria y pseudocódigo',notes:'La diferencia fundamental frente a la Búsqueda Local es que Tabú no exige mejorar en todos los pasos. Escoge un movimiento permitido aunque el costo suba temporalmente. Pero si aceptara empeorar y luego devolverse, quedaría atrapada en un ciclo. Por eso usa una lista tabú que recuerda movimientos recientes. También conserva la mejor solución histórica, ya que la actual puede ser peor. Angie Loango explicará la tenencia de esa memoria, la aspiración y el pseudocódigo.'}
- ]}
- };
- var method='tabu',i=0;
- var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
- function render(){
-  var group=all[method],s=group.slides[i];
-  document.getElementById('donatoCanvas').dataset.algo=method;
-  document.getElementById('letter').textContent={local:'A',tabu:'B',ga:'C',aco:'D'}[method];
-  document.getElementById('methodName').textContent=group.name;document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
-  nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
-  DonatoVisuals.render(document.getElementById('resource'), method, i);
-  nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
-  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='lo-c slide-fact';var number=document.createElement('div');number.className='lo-c-num';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];h.className='lo-c-name';var p=document.createElement('p');p.className='lo-c-line';p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
-  nodes.handoff.textContent=s.handoff||'';nodes.progress.textContent=(i+1)+' / '+group.slides.length;
-  nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
-  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
-  document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
-  try{history.replaceState(null,'','#'+method+'-'+(i+1))}catch(e){}
- }
- function choose(m){if(!all[m])return;method=m;i=0;render()}
- function next(){if(i<all[method].slides.length-1)i++;else i=0;render()}
- function prev(){if(i>0){i--;render()}}
- document.querySelectorAll('[data-method]').forEach(function(b){b.addEventListener('click',function(){choose(b.dataset.method)})});
- document.getElementById('nextBtn').addEventListener('click',next);
- document.getElementById('prevBtn').addEventListener('click',prev);
- document.getElementById('notesBtn').addEventListener('click',function(){var n=document.getElementById('notes');n.classList.toggle('show');this.setAttribute('aria-pressed',String(n.classList.contains('show')));this.textContent=n.classList.contains('show')?'Ocultar notas (N)':'Notas para ensayar (N)'});
- document.getElementById('fullBtn').addEventListener('click',function(){var s=document.getElementById('stage');if(document.fullscreenElement){document.exitFullscreen()}else if(s.requestFullscreen)s.requestFullscreen()});
- document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))return;
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){next();e.preventDefault()}
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){prev();e.preventDefault()}
-  var names=['local','tabu','ga','aco'];if(['1','2','3','4'].indexOf(e.key)>=0)choose(names[Number(e.key)-1]);
-  if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
-  if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
- });
- var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash&&all[hash[1]]){method=hash[1];i=Number(hash[2])-1}
- render();
-})();
-</script>
+<p class="local-announcement" id="cue" aria-live="polite"></p>
+
+<aside id="notes" class="notes" hidden aria-label="Notas para ensayar">
+ <h2>Guion para ensayar</h2>
+ <section data-notes>
+  <h3>1. Problema y necesidad · 55 segundos</h3>
+  <p>Buenos días. Nos correspondió Búsqueda Tabú. Para entender por qué existe, primero tenemos que recordar un problema que ya conocemos: cuando buscamos la mejor solución entre muchísimas posibilidades, revisar todas las alternativas puede ser demasiado costoso.</p>
+  <p>Un método exacto busca una solución con garantía de optimalidad. En cambio, una heurística intenta encontrar una buena solución sin garantizar que sea la mejor de todas. Por ejemplo, la Búsqueda Local comienza con una solución y realiza pequeños cambios para mejorarla.</p>
+  <p>Pero tiene una limitación: si ninguno de los movimientos cercanos mejora la solución actual, se detiene. Eso significa que puede quedarse atrapada en un óptimo local, aunque exista una solución mejor en otra región. ¿Y si pudiéramos seguir explorando aunque el siguiente paso fuera peor? Ese es el problema que intenta superar la Búsqueda Tabú.</p>
+  <ol>
+   <li><b>Rutas.</b> Señala los destinos y las calles. Avanza con «Recordemos la diferencia entre dos enfoques».</li>
+   <li><b>Garantía y rapidez.</b> Señala ambas tarjetas. Avanza con «Por ejemplo, la Búsqueda Local…».</li>
+   <li><b>Actual, vecino, nueva.</b> Sigue el esquema. Avanza con «Pero tiene una limitación».</li>
+   <li><b>Atasco.</b> Señala el valle del punto ámbar y después el verde. Avanza con «¿Y si pudiéramos seguir explorando…?».</li>
+   <li><b>Un paso peor.</b> Lee la pregunta y cambia de diapositiva con «Imaginemos un laberinto».</li>
+  </ol>
+ </section>
+ <section data-notes hidden>
+  <h3>2. Memoria y laberinto · 70 segundos</h3>
+  <p>La idea de Búsqueda Tabú es diferente: cuando se acaba la mejora inmediata, puede aceptar un movimiento que empeore temporalmente la solución. Su inspiración es la memoria humana. Imaginen que están intentando salir de un laberinto. Llegan a un callejón sin salida y tienen que retroceder.</p>
+  <p>Si no recuerdan por dónde pasaron, podrían repetir los mismos caminos una y otra vez. Si recuerdan los movimientos recientes, pueden evitar volver inmediatamente por el mismo camino y explorar alternativas. A veces eso implica alejarse un poco de la salida antes de encontrar otra ruta.</p>
+  <p>Eso hace la Búsqueda Tabú: incorpora memoria a una búsqueda local. Puede aceptar un paso peor para continuar explorando. En el ejemplo del equipo, 22 es el óptimo local para el vecindario usado. Un paso permitido lleva el costo a 23, y después aparece una solución mejor, de costo 20. El paso temporalmente peor permite seguir buscando.</p>
+  <ol>
+   <li><b>Laberinto.</b> Señala entrada, callejón y salida. Avanza con «Tenemos que retroceder».</li>
+   <li><b>Repetición.</b> Sigue al personaje al volver al cruce. Avanza con «¿Qué cambia si recuerdo por dónde pasé?».</li>
+   <li><b>Memoria.</b> Señala el tramo rojo que se evita temporalmente. Avanza con «Ahora pruebo la otra calle».</li>
+   <li><b>Alternativa.</b> Sigue el giro hacia abajo antes de llegar a la salida. Avanza con «Eso hace la Búsqueda Tabú».</li>
+   <li><b>Local + memoria.</b> Señala la fórmula. Avanza con «En el ejemplo del equipo, se ve así».</li>
+   <li><b>22, 23, 20.</b> Recorre los tres costos con el puntero. Pasa a la siguiente diapositiva con «¿De dónde viene esta idea?».</li>
+  </ol>
+ </section>
+ <section data-notes hidden>
+  <h3>3. Origen y clasificación · 55 segundos</h3>
+  <p>En cuanto a su origen, la Búsqueda Tabú fue propuesta por Fred Glover en 1986. En ese trabajo también introdujo el término metaheurística. Una metaheurística es una estrategia general que orienta la búsqueda para explorar soluciones de forma más amplia. Tabú pertenece a esta categoría porque incorpora mecanismos adicionales a la Búsqueda Local, especialmente la memoria.</p>
+  <p>Además, es un método de trayectoria: trabaja con una sola solución actual a la vez y se desplaza por el espacio de búsqueda. La diferencia es que ahora puede aceptar movimientos que empeoran y recordar movimientos recientes para evitar ciclos.</p>
+  <p>En resumen, Búsqueda Tabú es una búsqueda local guiada por memoria. Ahora Angie Loango les va a explicar cómo funciona esa memoria, sus componentes y el pseudocódigo.</p>
+  <ol>
+   <li><b>Glover, 1986.</b> Señala el retrato, el año y el término. Avanza con «¿Qué es una metaheurística?».</li>
+   <li><b>Guiar.</b> Señala la estrategia de exploración. Avanza con «También es un método de trayectoria».</li>
+   <li><b>Una solución.</b> Recorre x₀ → x₁ → x₂ → x₃. Avanza con «Veamos qué cambia frente a Local».</li>
+   <li><b>Mejora, memoria.</b> Señala las dos tarjetas en orden. Avanza con «En resumen…».</li>
+   <li><b>Local + memoria.</b> Lee la frase de cierre. Avanza con «Ahora Angie Loango…».</li>
+   <li><b>Relevo.</b> Señala «Componentes, memoria y pseudocódigo». Pulsa la flecha para abrir su bloque.</li>
+  </ol>
+ </section>
+</aside>
 <script src="../../shared/canvas.js"></script>
-<script>SlideCanvas.fit(document.getElementById('stage'), document.getElementById('donatoCanvas'));</script>
+<script src="guia.js"></script>
 <script src="../../visor-bridge.js"></script>
 </body>
 </html>
