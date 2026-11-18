@@ -32,24 +32,49 @@
     </header>
     <div class="lo-s-body local-body">
      <div class="local-split problem-split">
-      <figure class="lo-c local-map" data-f="1" data-cue="Visitar cada ciudad y volver a A">
-       <figcaption class="lo-c-name">Visitar cada ciudad y volver al inicio</figcaption>
-       <canvas id="cityMap" width="960" height="500" role="img" aria-label="Mapa del agente viajero. Una ruta enlaza las ciudades A, B, C, D y E, y regresa a A."></canvas>
-       <div class="local-map-key"><span><i></i> Ruta posible</span><span><i></i> Regreso a A</span><strong>Menor distancia total</strong></div>
+      <figure class="lo-c local-city" data-f="1" data-cue="Un turno de entregas: depósito, viviendas, mercado, hospital, oficinas y biblioteca">
+       <figcaption class="lo-c-name">Un turno de entregas por la ciudad</figcaption>
+       <div class="local-city-scene">
+        <img src="ciudad.svg" width="920" height="500" alt="Un depósito, viviendas, un hospital, un mercado, oficinas y una biblioteca, conectados por distintas calles.">
+        <svg class="local-city-cart" viewBox="0 0 920 500" data-f="2" data-cue="El carrito sale del depósito y toma una de las calles" role="img" aria-label="Un carrito azul con paquetes sale del depósito y avanza por una calle de la ciudad.">
+         <path d="M155 205v23q0 22 24 22h263" fill="none" stroke="#3d5a98" stroke-width="5" stroke-dasharray="9 8" stroke-linecap="round"/>
+         <path d="m307 244 11 6-11 6Z" fill="#3d5a98"/>
+         <g class="local-cart-motion">
+          <g transform="translate(432 222)">
+           <ellipse cx="38" cy="48" rx="46" ry="9" fill="#2d473d" opacity=".16"/>
+           <path d="M2 10h49v34H2Z" fill="#3d5a98"/>
+           <path d="m2 10 10-7h42l-3 7Z" fill="#728bb8"/>
+           <path d="M50 16h19l15 16v12H50Z" fill="#5c78aa"/>
+           <path d="M56 21h11l9 10H56Z" fill="#dbe8ee"/>
+           <path d="M9 17h34v20H9Z" fill="#e7ecf7"/>
+           <path d="M16 20h12v14H16Zm15 4h10v10H31Z" fill="#d2ad7c"/>
+           <path d="M22 20v14m14-10v10" stroke="#f8f2df" stroke-width="2"/>
+           <path d="M79 35h5v5h-5Z" fill="#f6dd99"/>
+           <path d="M3 43h81" stroke="#243c35" stroke-width="4"/>
+           <circle cx="17" cy="44" r="8" fill="#243c35"/><circle cx="17" cy="44" r="3" fill="#d9e1da"/>
+           <circle cx="66" cy="44" r="8" fill="#243c35"/><circle cx="66" cy="44" r="3" fill="#d9e1da"/>
+          </g>
+         </g>
+        </svg>
+       </div>
       </figure>
       <div class="local-stack">
-       <div class="lo-c local-count" data-f="2" data-cue="20 ciudades, aproximadamente seis por diez a la dieciséis rutas">
+       <figure class="local-thought" data-f="3" data-cue="¿Cómo visito todos estos lugares y regreso al inicio recorriendo la menor distancia posible?">
+        <img src="repartidora.svg" width="150" height="156" alt="Una repartidora que se lleva la mano a la barbilla mientras piensa.">
+        <blockquote>¿Cómo visito todos estos lugares y regreso al inicio recorriendo la menor distancia posible?</blockquote>
+       </figure>
+       <div class="lo-c local-count" data-f="4" data-cue="20 ciudades, aproximadamente seis por diez a la dieciséis rutas">
         <h2 class="lo-c-name">20 ciudades</h2>
         <p class="local-formula">19!/2 ≈ 6 × 10<sup>16</sup></p>
         <p class="lo-c-line"><strong>Recorridos distintos.</strong> En el caso simétrico, recorrer la misma ruta al revés cuenta una sola vez.</p>
        </div>
        <div class="local-duo">
-        <div class="lo-c local-method" data-f="3" data-cue="Método exacto, garantía de optimalidad">
+        <div class="lo-c local-method" data-f="5" data-cue="Método exacto, garantía de optimalidad">
          <div class="candidate-track exact-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
          <h2 class="lo-c-name">Método exacto</h2>
          <p class="lo-c-line">Solución con garantía de optimalidad</p>
         </div>
-        <div class="lo-c local-method" data-f="4" data-cue="Heurística, buena solución sin garantía global">
+        <div class="lo-c local-method" data-f="6" data-cue="Heurística, buena solución sin garantía global">
          <div class="candidate-track heuristic-track" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
          <h2 class="lo-c-name">Heurística</h2>
          <p class="lo-c-line">Buena solución, sin garantía de óptimo global</p>
@@ -57,7 +82,7 @@
        </div>
       </div>
      </div>
-     <p class="local-takeaway" data-f="5" data-cue="Y aquí entra la Búsqueda Local">Y aquí entra la Búsqueda Local. <span aria-hidden="true">→</span></p>
+     <p class="local-takeaway" data-f="7" data-cue="Y aquí entra la Búsqueda Local">Y aquí entra la Búsqueda Local. <span aria-hidden="true">→</span></p>
     </div>
     <footer class="lo-s-foot local-foot"><span>Angie Donato · Fundamentos</span><ol class="lo-s-prog" aria-label="Secciones"><li class="is-now">Problema</li><li>Intuición</li><li>Origen</li></ol><span class="local-position"></span></footer>
    </article>
@@ -167,11 +192,13 @@
  <h2>Guion para ensayar</h2>
  <section data-notes>
   <h3>1. Problema y necesidad · 55 segundos</h3>
-  <p>Buenos días. Nos correspondió Búsqueda Local. Antes de explicar el algoritmo, pensemos en un problema: una empresa tiene que visitar varias ciudades y regresar al punto de partida recorriendo la menor distancia posible.</p>
+  <p>Buenos días. Nos correspondió Búsqueda Local. Pensemos en un turno de entregas: hay que pasar por varias casas, tiendas y edificios de la ciudad. El carrito sale del depósito y ya en la primera esquina puede elegir por dónde seguir. Su repartidora se pregunta: «¿Cómo visito todos estos lugares y regreso al inicio recorriendo la menor distancia posible?».</p>
   <p>Podríamos intentar probar todas las rutas, pero el número de combinaciones crece muchísimo. Por ejemplo, con 20 ciudades podemos tener aproximadamente seis por diez a la dieciséis recorridos distintos.</p>
   <p>Aquí aparece una diferencia importante: un método exacto busca encontrar una solución con garantía de optimalidad, mientras que una heurística intenta conseguir una buena solución en menos tiempo, aunque no garantice que sea la mejor de todas. Y justamente ahí entra la Búsqueda Local.</p>
   <ol>
-   <li><b>Ciudades.</b> Señala A y sigue el circuito. Avanza con «Podríamos intentar probar todas las rutas».</li>
+   <li><b>Destinos.</b> Señala el depósito y los distintos edificios. Avanza con «El carrito sale del depósito…».</li>
+   <li><b>Carrito.</b> Sigue su paso por la primera calle. Avanza con «Su repartidora se pregunta…».</li>
+   <li><b>Volver al inicio.</b> Señala el globo y lee la pregunta. Avanza con «Podríamos intentar probar todas las rutas».</li>
    <li><b>Combinaciones.</b> Señala 20 y el exponente. Avanza con «Aquí aparece una diferencia importante».</li>
    <li><b>Garantía.</b> Señala el punto certificado. Avanza con «Mientras que una heurística…».</li>
    <li><b>Buena solución.</b> Señala el punto encontrado. Avanza con «Y justamente ahí entra…».</li>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 156">
+  <title>Repartidora pensando</title>
+  <path d="M17 145c1-29 15-54 43-64 16-6 32-5 46 3 22 12 29 34 29 63Z" fill="#e7ecf7"/>
+  <path d="M25 149c3-26 15-43 34-49l32-3c19 9 34 28 35 52Z" fill="#3d5a98"/>
+  <path d="m60 101 11-8h20l11 11-17 44H72Z" fill="#f8f3e4"/>
+  <path d="M54 104 66 99l-3 22 11 27H51l-7-27Z" fill="#5572aa"/>
+  <path d="M95 102l11 8 1 25-13 15H80l13-27Z" fill="#7189b9"/>
+  <path d="M52 83C33 82 35 48 48 31c14-19 44-17 56-4 12 11 12 36 7 57l-16 9-35 2Z" fill="#243c35"/>
+  <path d="M67 85v15c4 9 17 10 25 1l-4-19Z" fill="#c78966"/>
+  <path d="M56 52c4-13 13-17 26-19 9 7 16 7 20 14l-1 19 4 9-7 4c-3 12-10 19-19 19-13-1-21-10-24-21Z" fill="#d49b77"/>
+  <path d="M56 66c-8-5-13 2-10 9 2 5 6 8 12 6" fill="#d49b77"/>
+  <path d="M50 61c-3-21 9-33 32-34 5 7 14 12 24 15l-1 8C87 48 79 44 75 40c-5 10-14 16-25 21Z" fill="#2d473d"/>
+  <path d="M79 58c4-3 8-3 12-2m5 0 4 1" stroke="#61463e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="m83 63 3 1m11 0 3 1m-11 16c3 1 6 1 8 0" fill="none" stroke="#3d302b" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M111 143c-4-15-13-30-22-39-4-4-6-8-5-11 1-4 5-5 8-4l8 6 1-11c0-4 4-5 6-2 4 5 5 13 5 20l7 17 5 22Z" fill="#d49b77"/>
+  <path d="M111 145c-4-8-7-17-10-25l19-7c7 13 13 26 11 36h-18Z" fill="#4d6ca8"/>
+  <path d="M106 121l15-6" stroke="#f8f3e4" stroke-width="3"/>
+</svg>

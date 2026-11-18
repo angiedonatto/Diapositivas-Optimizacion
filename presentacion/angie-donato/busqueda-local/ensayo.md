@@ -6,11 +6,13 @@ Abre el HTML de Búsqueda Local directamente para ensayar. Pulsa **N** para leer
 
 | Diapositiva | Aparición | Frase que digo | Elemento visual |
 |---|---:|---|---|
-| 1 · Problema y necesidad · 55 s | 1 | «Una empresa tiene que visitar varias ciudades y regresar al punto de partida recorriendo la menor distancia posible.» | Apunta a A, recorre las cinco ciudades y sigue el tramo punteado de regreso a A. |
-| 1 | 2 | «Con 20 ciudades podemos tener aproximadamente seis por diez a la dieciséis recorridos distintos.» | Señala 20 y luego el exponente. En el caso simétrico, una ruta y su inversa cuentan una sola vez. |
-| 1 | 3 | «Un método exacto busca encontrar una solución con garantía de optimalidad.» | Tarjeta Método exacto, con el punto certificado en forma de rombo. |
-| 1 | 4 | «Una heurística intenta conseguir una buena solución en menos tiempo, aunque no garantice que sea la mejor de todas.» | Tarjeta Heurística y el candidato encontrado entre opciones no certificadas. |
-| 1 | 5 | «Y aquí entra la Búsqueda Local.» | Banda de transición abajo. |
+| 1 · Problema y necesidad · 55 s | 1 | «Pensemos en un turno de entregas. Hay que visitar casas, tiendas y otros edificios de la ciudad.» | Señala el depósito, las viviendas, el mercado y el hospital. |
+| 1 | 2 | «El carrito sale del depósito. Ya en la primera esquina puede elegir por dónde seguir.» | Sigue al carrito por la calle, desde el depósito. |
+| 1 | 3 | «¿Cómo visito todos estos lugares y regreso al inicio recorriendo la menor distancia posible?» | Señala a la repartidora y su globo. |
+| 1 | 4 | «Con 20 ciudades podemos tener aproximadamente seis por diez a la dieciséis recorridos distintos.» | Señala 20 y luego el exponente. En el caso simétrico, una ruta y su inversa cuentan una sola vez. |
+| 1 | 5 | «Un método exacto busca encontrar una solución con garantía de optimalidad.» | Tarjeta Método exacto, con el punto certificado en forma de rombo. |
+| 1 | 6 | «Una heurística intenta conseguir una buena solución en menos tiempo, aunque no garantice que sea la mejor de todas.» | Tarjeta Heurística y el candidato encontrado entre opciones no certificadas. |
+| 1 | 7 | «Y aquí entra la Búsqueda Local.» | Banda de transición abajo. |
 | 2 · Concepto e intuición · 70 s | 1 | «La Búsqueda Local es una heurística de mejora. Parte de una solución que ya existe y trata de mejorarla realizando pequeños cambios.» | Definición y secuencia de tres pasos. |
 | 2 | 2 | «Por ejemplo, ya tenemos una ruta de entregas.» | Fila A → B → C → D → E → A y costo 37. |
 | 2 | 3 | «Intercambiamos dos ciudades. Si mejora, nos quedamos con ella.» | Resalte de D y E en las dos filas, intercambio D ↔ E y costo 22. |
