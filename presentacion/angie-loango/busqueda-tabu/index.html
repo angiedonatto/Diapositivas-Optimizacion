@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Angie Loango · Búsqueda Tabú</title>
 <link rel="stylesheet" href="../estilos.css">
+<link rel="stylesheet" href="../../shared/projection.css">
 </head>
 <body>
 
@@ -526,6 +527,7 @@
   /* ---------------- Escala del lienzo 16:9 ---------------- */
   function isFull() { return document.fullscreenElement === root; }
   function fit() {
+    if (document.documentElement.classList.contains("projected")) return;
     var bar = root.querySelector('.lo-bar'), head = root.querySelector('.lo-head');
     var availW = $view.clientWidth;
     var availH = isFull()
@@ -580,7 +582,7 @@
     return r.top <= mid && r.bottom >= mid;
   }
   window.addEventListener('keydown', function (e) {
-    if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || !active()) return;
+    if (document.documentElement.classList.contains("projected") || e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || !active()) return;
     var t = e.target;
     if (t && t.matches && t.matches('input, textarea, select, [contenteditable]')) return;
     var ok = true;
@@ -603,6 +605,7 @@
 })();
 
 </script>
+<script src="../../shared/canvas.js"></script>
 <script src="../../visor-bridge.js"></script>
 </body>
 </html>

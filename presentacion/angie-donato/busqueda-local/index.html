@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Angie Donato · Búsqueda Local</title>
 <link rel="stylesheet" href="../estilos.css">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/slides.css">
+<link rel="stylesheet" href="../../shared/projection.css">
 </head>
 <body>
 <header class="topbar">
@@ -23,18 +26,24 @@
  
 </nav>
 <main class="stage-wrap">
- <section class="stage" id="stage" aria-live="polite">
-  <article class="slide">
-   <div class="slide-meta"><span class="pill" id="category"><span class="dot"></span> Apertura</span><span id="eyebrow">ANGIE DONATO · 3 MINUTOS</span></div>
-   <h1 class="title" id="title"></h1>
-   <p class="lead" id="lead"></p>
-   <div class="slide-body">
-    <div class="bigidea"><span class="mini" id="mini"></span><div class="quote" id="quote"></div><div class="path" id="path"></div></div>
-    <div class="detail" id="facts"></div>
-   </div>
-   <div class="bottom"><span>Optimización · Ciencia de Datos · Guion del equipo</span><span class="handoff" id="handoff"></span><span class="progress" id="progress"></span></div>
-  </article>
- </section>
+ <div class="slide-viewport" id="stage">
+  <div class="slide-canvas slide-theme" id="donatoCanvas">
+   <article class="lo-slide is-current" aria-live="polite">
+    <header>
+     <p class="lo-s-kicker"><span class="lo-s-letter" id="letter"></span><span id="methodName"></span><span class="lo-s-chap">Fundamentos</span></p>
+     <h1 class="lo-s-title" id="title"></h1>
+    </header>
+    <div class="lo-s-body">
+     <p class="slide-lead" id="lead"></p>
+     <div class="slide-columns">
+      <section class="lo-c is-key"><h2 class="lo-c-name" id="mini"></h2><p class="slide-quote" id="quote"></p><div class="slide-route" id="path"></div></section>
+      <div class="slide-stack" id="facts"></div>
+     </div>
+    </div>
+    <footer class="lo-s-foot"><span>Angie Donato · Apertura</span><span id="handoff"></span><span id="progress"></span></footer>
+   </article>
+  </div>
+ </div>
 </main>
 <div class="controlbar">
  <p><kbd>←</kbd> <kbd>→</kbd> avanzar · <kbd>1</kbd>–<kbd>4</kbd> cambiar tema · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa</p>
@@ -54,11 +63,14 @@
  var method='local',i=0;
  var nodes={title:document.getElementById('title'),lead:document.getElementById('lead'),mini:document.getElementById('mini'),quote:document.getElementById('quote'),path:document.getElementById('path'),facts:document.getElementById('facts'),handoff:document.getElementById('handoff'),progress:document.getElementById('progress'),count:document.getElementById('count'),note:document.getElementById('noteText')};
  function render(){
-  var group=all[method],s=group.slides[i];document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
+  var group=all[method],s=group.slides[i];
+  document.getElementById('donatoCanvas').dataset.algo=method;
+  document.getElementById('letter').textContent={local:'A',tabu:'B',ga:'C',aco:'D'}[method];
+  document.getElementById('methodName').textContent=group.name;document.documentElement.style.setProperty('--accent',group.accent);document.documentElement.style.setProperty('--soft',group.soft);
   nodes.title.textContent=s.title;nodes.lead.textContent=s.lead;nodes.mini.textContent=s.mini;nodes.quote.textContent=s.quote;
   nodes.path.replaceChildren();s.path.forEach(function(t){var el=document.createElement('span');el.textContent=t;nodes.path.appendChild(el)});
-  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='fact';var number=document.createElement('div');number.className='number';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];var p=document.createElement('p');p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
-  nodes.handoff.textContent=s.handoff||'';nodes.progress.replaceChildren();group.slides.forEach(function(_,n){var v=document.createElement('i');if(n<=i)v.className='on';nodes.progress.appendChild(v)});
+  nodes.facts.replaceChildren();s.facts.forEach(function(item,n){var c=document.createElement('div');c.className='lo-c slide-fact';var number=document.createElement('div');number.className='lo-c-num';number.textContent=String(n+1).padStart(2,'0');var txt=document.createElement('div');var h=document.createElement('h3');h.textContent=item[0];h.className='lo-c-name';var p=document.createElement('p');p.className='lo-c-line';p.textContent=item[1];txt.appendChild(h);txt.appendChild(p);c.appendChild(number);c.appendChild(txt);nodes.facts.appendChild(c)});
+  nodes.handoff.textContent=s.handoff||'';nodes.progress.textContent=(i+1)+' / '+group.slides.length;
   nodes.count.textContent=(i+1)+' / '+group.slides.length;nodes.note.textContent=s.notes;
   document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').textContent=i===group.slides.length-1?'Volver al inicio ↺':'Siguiente →';
   document.querySelectorAll('[data-method]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.method===method))});
@@ -79,10 +91,12 @@
   if(e.key.toLowerCase()==='n')document.getElementById('notesBtn').click();
   if(e.key.toLowerCase()==='f')document.getElementById('fullBtn').click();
  });
- var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash){method=hash[1];i=Number(hash[2])-1}
+ var hash=location.hash.match(/^#(local|tabu|ga|aco)-([123])$/);if(hash&&all[hash[1]]){method=hash[1];i=Number(hash[2])-1}
  render();
 })();
 </script>
+<script src="../../shared/canvas.js"></script>
+<script>SlideCanvas.fit(document.getElementById('stage'), document.getElementById('donatoCanvas'));</script>
 <script src="../../visor-bridge.js"></script>
 </body>
 </html>
